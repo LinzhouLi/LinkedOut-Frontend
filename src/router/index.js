@@ -13,8 +13,9 @@ const routes = [
   { path: '/home',
     component: HomePage,
     children: [
-      { path: '/tweets', component: Tweet },
-      { path: '/recruitments', component: Recruitment },
+      { path: '', redirect: '/home/tweets'},
+      { path: 'tweets', component: Tweet },
+      { path: 'recruitments', component: Recruitment },
     ]
   },
   { path: '/recruitemnt/:rid', component: RecruitmentDetailPage},

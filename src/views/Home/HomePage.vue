@@ -5,7 +5,6 @@
       <user-info-card v-bind="defaultUser"/>
     </el-aside>
     <el-main width="35%">
-      main
       <router-view/>
     </el-main>
     <el-aside id="right-aside" width="36%">

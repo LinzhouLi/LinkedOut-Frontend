@@ -14,11 +14,15 @@ import UserIcon from './UserIcon.vue'
 export default {
   components: { UserIcon },
   props: {
-    userId: {
+    userId: { // 用户统一ID
       type: Number,
       required: true,
     },
-    userName: {
+    userName: { // 真实姓名
+      type: String,
+      required: true,
+    },
+    userType: { // 用户类型
       type: String,
       required: true,
     },
@@ -34,7 +38,7 @@ export default {
   methods: {
     checkUser: function() {
       // TODO
-      console.log("checkUser", this.userId);
+      console.log("checkUser", this.userType, this.userId);
     }
   }
 }

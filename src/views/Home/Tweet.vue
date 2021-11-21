@@ -1,5 +1,9 @@
 <template>
-  <h1>Tweet</h1>
+  <el-container direction="vertical">
+    <el-card>
+      
+    </el-card>
+  </el-container>
 </template>
 
 <script>

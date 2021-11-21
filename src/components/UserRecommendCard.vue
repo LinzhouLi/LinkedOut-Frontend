@@ -50,18 +50,21 @@ export default {
           userId: 101,
           userName: '字节跳动',
           userBriefInfo: '互联网企业',
+          userType: 'enterprise',
           ifFollowing: false
         },
         {
           userId: 102,
           userName: '张三',
           userBriefInfo: '同济大学学生',
+          userType: 'user',
           ifFollowing: false
         },
         {
           userId: 103,
           userName: '李四',
           userBriefInfo: '腾讯公司员工',
+          userType: 'user',
           ifFollowing: false
         },
       ]

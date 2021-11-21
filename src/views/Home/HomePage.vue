@@ -29,8 +29,14 @@ export default {
     return{
       defaultUser: {
         userName: '李林洲',
-        userBriefInfo: '同济大学学生'
+        userBriefInfo: '同济大学学生',
+        userIconUrl: ''
       }
+    }
+  },
+  methods: {
+    loadTweets: function() {
+      console.log(1)
     }
   }
 }

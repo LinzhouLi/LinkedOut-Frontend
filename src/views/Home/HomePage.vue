@@ -1,15 +1,15 @@
 <template>
   <top-nav/>
   <el-container direction="horizontal">
-    <el-aside id="left-aside" width="29%">
+    <div id="left-aside" >
       <user-info-card v-bind="defaultUser"/>
-    </el-aside>
-    <el-main width="35%">
+    </div>
+    <div id="main-part">
       <router-view/>
-    </el-main>
-    <el-aside id="right-aside" width="36%">
+    </div>
+    <div id="right-aside">
       <user-recommend-card/>
-    </el-aside>
+    </div>
   </el-container>
   
 </template>
@@ -44,11 +44,17 @@ export default {
 
 <style scoped>
 #left-aside {
-  padding-left: 13%;
+  width: 23%;
+  padding-left: 11%;
   padding-top: 20px;
 }
 #right-aside {
+  width: 32%;
   padding-right: 13%;
   padding-top: 20px;
+}
+#main-part {
+  width: 45%;
+  padding: 20px;
 }
 </style>

@@ -48,10 +48,8 @@
         </el-col>
       </el-row>
     </el-card>
-    <div >
     <div v-for="(item,index) in tweetList" :key="index">
       <tweet-disp v-bind="item" style="margin-top:20px" /> 
-    </div>
     </div>
   </el-container>
 </template>

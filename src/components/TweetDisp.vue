@@ -6,7 +6,7 @@
       </div>
     </template>
     <div>
-      <div style="padding:20px;"><span v-html="tweetText"/></div>
+      <div style="padding:20px;"><span :id="`text-area-${tweetId}`"/></div>
       <el-carousel :autoplay="false">
         <el-carousel-item v-for="(picUrl,index) in tweetPics" :key="index">
           <el-image :src="picUrl" style="width:100%;" fit="cover" />
@@ -22,6 +22,7 @@
 
 <script>
 import UserBriefDisp from './UserBriefDisp';
+import VditorPreview from 'vditor/dist/method.min';
 
 export default {
   components: { UserBriefDisp },
@@ -36,7 +37,14 @@ export default {
       }
     }
   },
+  mounted() {
+    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.tweetText);
+  },
   props: {
+    tweetId: { // 动态ID
+      type: Number,
+      required: true,
+    },
     userId: { // 用户统一ID
       type: Number,
       required: true,

@@ -76,31 +76,40 @@ export default {
       Plus
     }
   },
+  mounted() {
+    this.tweetInput = document.getElementById('tweet-input');
+    document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+      // 向文本中添加表情
+      let startPos = this.tweetInput.selectionStart;
+      let endPos = this.tweetInput.selectionEnd;
+      this.tweetText = this.tweetText.substring(0, startPos) + event.detail.unicode + this.tweetText.substring(endPos);
+      console.log(event.detail.unicode)
+    });
+  },
   created() {
-    setTimeout(() => {
-      this.tweetInput = document.getElementById('tweet-input');
-      document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
-        // 向文本中添加表情
-        let startPos = this.tweetInput.selectionStart;
-        let endPos = this.tweetInput.selectionEnd;
-        this.tweetText = this.tweetText.substring(0, startPos) + event.detail.unicode + this.tweetText.substring(endPos);
-      });
-    },50);
     let url = require('@/assets/ADimg.jpg');
     let tweet = {
+      tweetId: 0,
       userId: 123,
       userName: '张三',
       userType: 'user',
       userIconUrl: '',
       userBriefInfo: '腾讯员工',
-      tweetText: '1231231231231212312123123123123',
+      tweetText: `# s
+  🥶sdas
+  123123
+  **asdva**
+  ### s`,
       tweetPics: [
         url, url, url
       ]
     };
     for(let i = 0; i < 20; i++) {
-      this.tweetList.push(tweet);
+      let t = JSON.parse(JSON.stringify(tweet));
+      t.tweetId = Math.floor(Math.random()*10000);
+      this.tweetList.push(t);
     }
+    console.log(this.tweetList)
   },
   data() {
     return {

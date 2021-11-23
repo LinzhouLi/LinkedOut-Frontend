@@ -18,7 +18,7 @@ const routes = [
       { path: 'recruitments', component: Recruitment },
     ]
   },
-  { path: '/recruitemnt/:rid', component: RecruitmentDetailPage},
+  { path: '/recruitment/:rid', component: RecruitmentDetailPage},
   { path: '/userinfo/:uid', component: UserInfoPage },
   { path: '/companyinfo/:cid', component: CompanyInfoPage },
 ]

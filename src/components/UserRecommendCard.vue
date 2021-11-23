@@ -7,14 +7,14 @@
           <el-container>
             <user-brief-disp v-bind="user"/>
             <div style="padding:3.5% 0;">
-            <el-button
-              size="mini"
-              :type="buttonType(user.ifFollowing)"
-              style="width:65px"
-              @click="follow(index)"
-            >
-              {{ buttonText(user.ifFollowing) }}
-            </el-button>
+              <el-button
+                size="mini"
+                :type="buttonType(user.ifFollowing)"
+                style="width:65px"
+                @click="follow(index)"
+              >
+                {{ buttonText(user.ifFollowing) }}
+              </el-button>
             </div>
           </el-container>
         </div>

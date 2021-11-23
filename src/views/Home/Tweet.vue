@@ -23,7 +23,7 @@
             <template #reference>
               <el-button :icon="Eleme" size="mini" @click="selectEmoji" circle></el-button>
             </template>
-            <emoji-picker class="light"></emoji-picker>
+            <emoji-picker class="light" id="tweet-emoji-picker"></emoji-picker>
           </el-popover>
         </el-col>
         <el-col :span="3">
@@ -44,7 +44,9 @@
           </el-popover>
         </el-col>
         <el-col :offset="13" :span="4">
-          <el-button size="mini" @click="uploadTweet">发布</el-button>
+          <el-button size="mini" @click="uploadTweet">
+            发布
+          </el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -78,12 +80,11 @@ export default {
   },
   mounted() {
     this.tweetInput = document.getElementById('tweet-input');
-    document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+    document.getElementById('tweet-emoji-picker').addEventListener('emoji-click', event => {
       // 向文本中添加表情
       let startPos = this.tweetInput.selectionStart;
       let endPos = this.tweetInput.selectionEnd;
       this.tweetText = this.tweetText.substring(0, startPos) + event.detail.unicode + this.tweetText.substring(endPos);
-      console.log(event.detail.unicode)
     });
   },
   created() {
@@ -102,14 +103,16 @@ export default {
   ### s`,
       tweetPics: [
         url, url, url
-      ]
+      ],
+      likeNum: 10,
+      isLiked: false,
+      commentNum: 20,
     };
     for(let i = 0; i < 20; i++) {
       let t = JSON.parse(JSON.stringify(tweet));
       t.tweetId = Math.floor(Math.random()*10000);
       this.tweetList.push(t);
     }
-    console.log(this.tweetList)
   },
   data() {
     return {

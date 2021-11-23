@@ -11,7 +11,6 @@
       <user-recommend-card/>
     </div>
   </el-container>
-  
 </template>
 
 <script>

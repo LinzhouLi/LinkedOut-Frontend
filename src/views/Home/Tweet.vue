@@ -1,6 +1,8 @@
 <template>
   <el-container direction="vertical">
+    <!-- 用户发布动态区域 -->
     <el-card>
+      <!-- 输入发布动态的文字内容 -->
       <el-input
         id="tweet-input"
         v-model="tweetText"
@@ -9,6 +11,7 @@
         placeholder="发表动态"
       >
       </el-input>
+      <!-- 图片预览区 -->
       <el-row>
         <el-col :span="6" v-for="(pic, index) in picList" :key="index">
           <el-container>
@@ -17,6 +20,7 @@
           </el-container>
         </el-col>
       </el-row>
+      <!-- 发布动态卡片底部 选择图片/表情/发表按钮 -->
       <el-row style="margin-top:10px">
         <el-col :offset="1" :span="3">
           <el-popover placement="bottom" :width="288" trigger="click">
@@ -51,7 +55,7 @@
       </el-row>
     </el-card>
     <div v-for="(item,index) in tweetList" :key="index">
-      <tweet-disp v-bind="item" style="margin-top:20px" /> 
+      <tweet-disp v-bind="item" /> 
     </div>
   </el-container>
 </template>
@@ -79,11 +83,12 @@ export default {
     }
   },
   mounted() {
-    this.tweetInput = document.getElementById('tweet-input');
+    this.tweetInputDom = document.getElementById('tweet-input');
     document.getElementById('tweet-emoji-picker').addEventListener('emoji-click', event => {
       // 向文本中添加表情
-      let startPos = this.tweetInput.selectionStart;
-      let endPos = this.tweetInput.selectionEnd;
+      this.tweetInputDom.focus();
+      let startPos = this.tweetInputDom.selectionStart;
+      let endPos = this.tweetInputDom.selectionEnd;
       this.tweetText = this.tweetText.substring(0, startPos) + event.detail.unicode + this.tweetText.substring(endPos);
     });
   },
@@ -118,16 +123,16 @@ export default {
     return {
       tweetList: [],
       picList: [],
-      tweetInput: null,
+      tweetInputDom: null,
       showEmojiSelector: false,
-      tweetText: ''
+      tweetText: '',
     }
   },
   methods: {
-    selectEmoji: function() {
-      this.tweetInput.focus();
+    selectEmoji: function() { // 选中动态内容输入区emoji
+      this.tweetInputDom.focus();
     },
-    Addpicture: function(file) {
+    Addpicture: function(file) { // 添加预览图片
       if(this.picList.length < 3) {
         this.picList.push(file);
       }
@@ -136,14 +141,14 @@ export default {
       }
       this.$refs.picUploader.clearFiles();
     },
-    removePicture: function(index) {
+    removePicture: function(index) { // 删除预览图片
       this.picList.splice(index, 1);
     },
-    uploadTweet: function() {
+    uploadTweet: function() { // 上传动态
       // TODO
       console.log('upload')
     },
-    loadTweets: function() {
+    loadTweets: function() { // 加载关注者动态
       // TODO
       console.log(1)
       // let url = require('@/assets/ADimg.jpg');

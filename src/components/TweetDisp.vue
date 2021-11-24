@@ -1,10 +1,12 @@
 <template>
-  <el-card>
+  <el-card style="margin-top:20px">
+    <!-- 动态卡片头部 -->
     <template #header>
       <div style="padding:10px;">
         <user-brief-disp v-bind="user" />
       </div>
     </template>
+    <!-- 动态文字与照片 -->
     <div>
       <div style="padding:5px 15px;"><span :id="`text-area-${tweetId}`"/></div>
       <el-carousel :autoplay="false">
@@ -17,6 +19,7 @@
       发表于{{  }}
     </div>
     <el-divider style="margin: 0px;" />
+    <!-- 卡片底部 点赞/评论/分享 -->
     <el-row style="margin:5px">
       <el-col :span="8">
         <div class="tweet-icon" :id="`like-icon-${tweetId}`" @click="likeTweet" >
@@ -37,6 +40,7 @@
         </div>
       </el-col>
     </el-row>
+    <!-- 动态评论 -->
     <div v-if="commentState">
       <el-divider style="margin: 0px;" />
       <div v-for="(item, index) in commentList" :key="`${tweetId}-${index}`">
@@ -50,6 +54,7 @@
         <el-divider v-if="index!=commentList.length-1" style="margin: 0px 10px 0px 66px;" />
       </div>
       <el-divider style="margin: 0px;" />
+      <!-- 用户评论输入区 -->
       <div style="padding:10px 20px; 0px">
         <el-input
           :id="`my-comment-input-${tweetId}`"
@@ -93,15 +98,50 @@ export default {
     Star,
     Eleme
   },
-  computed: {
-    user() {
-      return {
-        userId: this.userId,
-        userName: this.userName,
-        userType: this.userType,
-        userIconUrl: this.userIconUrl,
-        userBriefInfo: this.userBriefInfo
-      }
+  props: {
+    tweetId: { // 动态ID
+      type: Number,
+      required: true,
+    },
+    userId: { // 用户统一ID
+      type: Number,
+      required: true,
+    },
+    userName: { // 动态发布者真实姓名
+      type: String,
+      required: true,
+    },
+    userType: { // 动态发布者用户类型
+      type: String,
+      required: true,
+    },
+    userIconUrl: { // 动态发布者头像
+      type: String,
+      default: '',
+    },
+    userBriefInfo: { // 动态发布者简短介绍
+      type: String,
+      default: '',
+    },
+    likeNum: { // 点赞数量
+      type: Number,
+      required: true,
+    },
+    isLiked: { // 用户是否点赞此条动态
+      type: Boolean,
+      required: true
+    },
+    commentNum: { // 评论数量
+      type: Number,
+      required: true,
+    },
+    tweetText: { // 动态内容
+      type: String,
+      required: true,
+    },
+    tweetPics: { // 图片url数组
+      type: Array,
+      default: [],
     }
   },
   created() {
@@ -115,50 +155,15 @@ export default {
     this.likeDom = document.getElementById(`like-icon-${this.tweetId}`);
     this.commentDom = document.getElementById(`comment-icon-${this.tweetId}`);
   },
-  props: {
-    tweetId: { // 动态ID
-      type: Number,
-      required: true,
-    },
-    userId: { // 用户统一ID
-      type: Number,
-      required: true,
-    },
-    userName: { // 真实姓名
-      type: String,
-      required: true,
-    },
-    userType: { // 用户类型
-      type: String,
-      required: true,
-    },
-    likeNum: {
-      type: Number,
-      required: true,
-    },
-    isLiked: {
-      type: Boolean,
-      required: true
-    },
-    commentNum: {
-      type: Number,
-      required: true,
-    },
-    userIconUrl: {
-      type: String,
-      default: '',
-    },
-    userBriefInfo: {
-      type: String,
-      default: '',
-    },
-    tweetText: {
-      type: String,
-      required: true,
-    },
-    tweetPics: {
-      type: Array,
-      default: [],
+  computed: {
+    user() {
+      return {
+        userId: this.userId,
+        userName: this.userName,
+        userType: this.userType,
+        userIconUrl: this.userIconUrl,
+        userBriefInfo: this.userBriefInfo
+      }
     }
   },
   data() {
@@ -176,13 +181,13 @@ export default {
     }
   },
   methods: {
-    selectCommentEmoji: function() {
+    selectCommentEmoji: function() { // 选中评论输入区emoji
       this.myCommentInputDom.focus();
     },
-    uploadMyComment: function() {
+    uploadMyComment: function() { // 发表评论
       // TODO
     },
-    likeTweet: function() {
+    likeTweet: function() { // 点赞动态
       if(this.likeState == false) {
         // TODO 点赞
         this.likeDom.style.color = '#409eff';
@@ -194,7 +199,7 @@ export default {
         this.likeState = false
       }
     },
-    getComments: function() {
+    getComments: function() { // 用户点击评论图标, 展示所有评论
       if(this.commentState == false) {
         // TODO 打开评论
         let comment = {
@@ -218,6 +223,7 @@ export default {
           this.myCommentInputDom = document.getElementById(`my-comment-input-${this.tweetId}`)
           document.getElementById(`comment-emoji-picker-${this.tweetId}`).addEventListener('emoji-click', event => {
             // 向文本中添加表情
+            this.myCommentInputDom.focus();
             let startPos = this.myCommentInputDom.selectionStart;
             let endPos = this.myCommentInputDom.selectionEnd;
             this.myCommentText = this.myCommentText.substring(0, startPos) + event.detail.unicode + this.myCommentText.substring(endPos);

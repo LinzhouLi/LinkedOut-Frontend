@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(item,index) in recruimentList" :key="index">
+  <div v-for="(item,index) in recruitmentList" :key="index">
     <recruitment-disp v-bind="item" />
   </div>
 </template>
@@ -8,6 +8,9 @@
 import RecruitmentDisp from '@/components/RecruitmentDisp';
 
 export default {
+  components: {
+    RecruitmentDisp
+  },
   created() {
     let recruitment = {
       recruitmentId: 0,
@@ -28,7 +31,7 @@ export default {
   },
   data() {
     return {
-      recruitmentList: null
+      recruitmentList: []
     }
   }
 }

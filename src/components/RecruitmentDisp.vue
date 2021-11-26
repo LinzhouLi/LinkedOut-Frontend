@@ -1,17 +1,31 @@
 <template>
-  <el-card style="margin-top:20px">
+  <el-card style="margin-bottom:20px">
     <template #header>
       <div style="padding:10px;">
         <user-brief-disp v-bind="user" />
       </div>
     </template>
-    <div>
+    <div class="recruitment-div" @click="checkRecruitment">
+      <h3 class="recruitment-name">{{ recruitmentName }}</h3>
+        <el-row>
+          <el-col :span="16">
+            <div class="recruitment-classification">{{ `职位分类: ${recruitmentType}` }}</div>
+          </el-col>
+          <el-col :span="8">
+            <div class="salary-number"><b>{{ salary }}</b></div>
+          </el-col>
+        </el-row>
     </div>
   </el-card>
 </template>
 
 <script>
+import UserBriefDisp from './UserBriefDisp';
+
 export default {
+  components: {
+    UserBriefDisp
+  },
   props: {
     recruitmentId: { // 招聘信息ID
       type: Number,
@@ -39,7 +53,7 @@ export default {
     },
     recruitmentName: {
       type: String,
-      required: ture,
+      required: true,
     },
     recruitmentType: {
       type: String,
@@ -61,11 +75,33 @@ export default {
       }
     }
   },
+  methods: {
+    checkRecruitment: function() {
+      this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
+    }
+  }
 }
 </script>
 
 <style scoped>
 .el-card {
   --el-card-padding: 0px;
+}
+.recruitment-div {
+  cursor: pointer;
+  padding: 5px 15px 10px;
+}
+.recruitment-name {
+  margin:10px 0px 0px;
+}
+.recruitment-classification {
+  margin-top: 10px;
+  font-size: 14px;
+  color: rgb(122 122 122);
+}
+.salary-number {
+  color: rgb(73 120 206);
+  float: right;
+  font-size: 20px;
 }
 </style>

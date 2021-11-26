@@ -14,20 +14,20 @@
         </el-col>
         <el-col id="menu-area" :offset="10" :span="6">
           <el-menu
-            :default-active="activeMenuIndex"
+            default-active="activeMenuIndex"
             :ellipsis="false"
             mode="horizontal"
-            @select="handleMenuSelect"
+            router
           >
-            <el-menu-item index="1">
+            <el-menu-item index="/home/tweets">
               <el-icon><star /></el-icon>
               动态
             </el-menu-item>
-            <el-menu-item index="2">
+            <el-menu-item index="/home/recruitments">
               <el-icon><briefcase /></el-icon>
               职位
             </el-menu-item>
-            <el-menu-item index="3">
+            <el-menu-item index="/myinfo">
               <el-icon><avatar /></el-icon>
               个人信息
             </el-menu-item>
@@ -49,26 +49,11 @@ export default {
     Briefcase,
     Avatar
   },
-  setup() {
-    const activeMenuIndex = "1";
-    return {
-      activeMenuIndex
-    }
-  },
   data() {
     return {
       logoUrl: require('@/assets/logo.png'),
     }
   },
-  methods: {
-    handleMenuSelect: function(key) {
-      switch(key) {
-        case "1": this.$router.push('/home/tweets');break;
-        case "2": this.$router.push('/home/recruitments');break;
-        case "3": this.$router.push('');break; // TODO
-      }
-    }
-  }
 }
 </script>
 

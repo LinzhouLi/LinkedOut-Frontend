@@ -50,7 +50,7 @@ export default {
           userId: 101,
           userName: '字节跳动',
           userBriefInfo: '互联网企业',
-          userType: 'enterprise',
+          userType: 'company',
           ifFollowing: false
         },
         {
@@ -90,7 +90,7 @@ export default {
       }
     },
     toRecruitmentPage: function() {
-      this.$router.push('/home/recruitments');
+      // this.$router.push('/home/recruitments');
     }
   }
 }

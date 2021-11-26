@@ -6,6 +6,7 @@ import Recruitment from '../views/Home/Recruitment'
 import RecruitmentDetailPage from '../views/RecruitmentDetailPage'
 import UserInfoPage from '../views/UserInfoPage'
 import CompanyInfoPage from '../views/CompanyInfoPage'
+import MyInfoPage from '../views/MyInfoPage'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -18,9 +19,22 @@ const routes = [
       { path: 'recruitments', component: Recruitment },
     ]
   },
-  { path: '/recruitment/:rid', component: RecruitmentDetailPage},
-  { path: '/userinfo/:uid', component: UserInfoPage },
-  { path: '/companyinfo/:cid', component: CompanyInfoPage },
+  { path: '/myinfo', component: MyInfoPage},
+  { 
+    path: '/recruitment/:rid',
+    name: 'recruitment',
+    component: RecruitmentDetailPage
+  },
+  { 
+    path: '/userinfo/:uid',
+    name: 'userinfo',
+    component: UserInfoPage
+  },
+  { 
+    path: '/companyinfo/:cid',
+    name: 'companyinfo',
+    component: CompanyInfoPage
+  },
 ]
 
 const router = createRouter({

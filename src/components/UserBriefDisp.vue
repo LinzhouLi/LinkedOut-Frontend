@@ -1,9 +1,18 @@
 <template>
-  <el-container direction="horizontal" @click="checkUser" style="padding:5px">
-    <user-icon :size="36" :url="userIconUrl" style="cursor:pointer" />
-    <el-container direction="vertical" style="padding-left:10px">
-      <div id="name"><b>{{ userName }}</b></div>
-      <div id="brief-info">{{ userBriefInfo }}</div>
+  <el-container direction="horizontal" style="padding:5px">
+    <user-icon 
+      :size="36" 
+      :url="userIconUrl" 
+      style="cursor:pointer"
+      @click="checkUser"
+    />
+    <el-container 
+      direction="vertical" 
+      style="padding-left:10px"
+      @click="checkUser"
+    >
+      <span class="name"><b>{{ userName }}</b></span>
+      <span class="brief-info">{{ userBriefInfo }}</span>
     </el-container>
   </el-container>
 </template>
@@ -37,19 +46,23 @@ export default {
   },
   methods: {
     checkUser: function() {
-      // TODO
-      console.log("checkUser", this.userType, this.userId);
+      if (this.userType == 'user') {
+        this.$router.push({ name: 'userinfo', params: { uid: this.userId }});
+      }
+      else if(this.userType == 'company') {
+        this.$router.push({ name: 'companyinfo', params: { cid: this.userId }});
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-#name {
+.name {
   font-size: 16px;
   cursor: pointer;
 }
-#brief-info {
+.brief-info {
   font-size: 12px;
   color: rgb(122 122 122);
   cursor: pointer;

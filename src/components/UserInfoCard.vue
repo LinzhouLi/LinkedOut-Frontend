@@ -52,15 +52,14 @@ export default {
     }
   },
   methods: {
-    checkUserInfo: () => {
-      //TODO
-      console.log("checkUserInfo");
+    checkUserInfo: function() {
+      this.$router.push({ path: '/myinfo' });
     },
-    setJobIntention: () => {
+    setJobIntention: function() {
       //TODO
       console.log("setJobIntention");
     },
-    postTweet: () => {
+    postTweet: function() {
       //TODO
       console.log("postTweet");
     }

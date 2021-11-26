@@ -16,7 +16,7 @@ export default {
       recruitmentId: 0,
       userId: 123,
       userName: 'Ailibaba',
-      userType: 'user',
+      userType: 'company',
       userIconUrl: '',
       userBriefInfo: '互联网公司',
       recruitmentTitle: 'xxx前端开发工程师',

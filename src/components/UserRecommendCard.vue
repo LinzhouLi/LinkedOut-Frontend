@@ -99,6 +99,7 @@ export default {
 <style scoped>
 .el-divider {
   margin: 5px;
+  margin: 5px 0px;
 }
 #text-div {
   margin-top: 3px;

@@ -19,7 +19,7 @@ export default {
       userType: 'user',
       userIconUrl: '',
       userBriefInfo: '互联网公司',
-      recruitmentName: 'xxx前端开发工程师',
+      recruitmentTitle: 'xxx前端开发工程师',
       recruitmentType: '前端开发',
       salary: '18-20K',
     };

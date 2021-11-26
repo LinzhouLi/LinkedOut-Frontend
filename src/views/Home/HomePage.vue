@@ -1,16 +1,16 @@
 <template>
   <top-nav/>
-  <el-container direction="horizontal">
-    <div id="left-aside" >
+  <el-row style="margin-top:20px">
+    <el-col :offset="3" :span="4">
       <user-info-card v-bind="defaultUser"/>
-    </div>
-    <div id="main-part">
+    </el-col>
+    <el-col :span="9" style="margin:0px 20px">
       <router-view/>
-    </div>
-    <div id="right-aside">
+    </el-col>
+    <el-col :span="5">
       <user-recommend-card/>
-    </div>
-  </el-container>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -42,18 +42,5 @@ export default {
 </script>
 
 <style scoped>
-#left-aside {
-  width: 23%;
-  padding-left: 11%;
-  padding-top: 20px;
-}
-#right-aside {
-  width: 32%;
-  padding-right: 13%;
-  padding-top: 20px;
-}
-#main-part {
-  width: 45%;
-  padding: 20px;
-}
+
 </style>

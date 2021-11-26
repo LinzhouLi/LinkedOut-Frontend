@@ -20,7 +20,7 @@
         </div>
     </el-card>
     <el-card 
-      :body-style="{ padding: '0px', height: '200px' }" 
+      :body-style="{ padding: '0px', height: '180px' }" 
       style="margin-top:15px; cursor:pointer"
       @click="toRecruitmentPage"
     >

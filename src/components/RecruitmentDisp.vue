@@ -6,7 +6,7 @@
       </div>
     </template>
     <div class="recruitment-div" @click="checkRecruitment">
-      <h3 class="recruitment-name">{{ recruitmentName }}</h3>
+      <h3 class="recruitment-name">{{ recruitmentTitle }}</h3>
         <el-row>
           <el-col :span="16">
             <div class="recruitment-classification">{{ `职位分类: ${recruitmentType}` }}</div>
@@ -51,7 +51,7 @@ export default {
       type: String,
       default: '',
     },
-    recruitmentName: {
+    recruitmentTitle: {
       type: String,
       required: true,
     },

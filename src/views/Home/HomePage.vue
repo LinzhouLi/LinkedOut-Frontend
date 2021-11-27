@@ -17,12 +17,14 @@
 import TopNav from '@/components/TopNav';
 import UserInfoCard from '@/components/UserInfoCard';
 import UserRecommendCard from '@/components/UserRecommendCard';
+import PageFooter from '@/components/PageFooter.vue';
 
 export default {
   components: {
     TopNav,
     UserInfoCard,
-    UserRecommendCard
+    UserRecommendCard,
+    PageFooter
   },
   data() {
     return{

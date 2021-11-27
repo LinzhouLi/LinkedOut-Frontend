@@ -26,14 +26,38 @@
         <div style="margin-top:5px"><span id="text-area"/></div>
       </el-card>
       <!-- 公司位置卡片 -->
-      <el-card style="margin-top:20px">
+      <el-card style="margin-top:20px" :body-style="{ padding: '0px' }">
+        <div style="margin: 15px 20px; display:flex;">
+          <el-icon :size="18"><location-information /></el-icon>
+          <div style="font-size:15px;">{{ location }}</div>
+        </div>
+        <div id="map-container" @click="showFullMap" />
       </el-card>
     </el-col>
     <!-- 页面左部 -->
     <el-col :span="5">
-      <user-recommend-card/>
+      <user-recommend-card :ifFooter="false" />
     </el-col>
   </el-row>
+  <page-footer/>
+
+  <!-- fullMap弹出窗口 -->
+  <el-dialog
+    v-model="ifShowFullMap"
+    width="60%"
+    custom-class="map-dialog"
+    :before-close="fullMapClose"
+    destroy-on-close
+    center
+  >
+    <template #title>
+      <div class="dialog-map-title">
+        <el-icon :size="18"><location-information /></el-icon>
+        <div style="font-size:15px;">{{ location }}</div>
+      </div>
+    </template>
+    <div id="full-map-container" />
+  </el-dialog>
 </template>
 
 <script>
@@ -42,6 +66,9 @@ import UserBriefDisp from '@/components/UserBriefDisp';
 import UserRecommendCard from '@/components/UserRecommendCard';
 import VditorPreview from 'vditor/dist/method.min';
 import '@/assets/vditor.css';
+import AMapLoader from '@amap/amap-jsapi-loader';
+import { LocationInformation } from '@element-plus/icons';
+import PageFooter from '@/components/PageFooter';
 // import Vditor from 'vditor';
 
 export default {
@@ -61,7 +88,9 @@ export default {
   components: {
     TopNav,
     UserRecommendCard,
-    UserBriefDisp
+    UserBriefDisp,
+    LocationInformation,
+    PageFooter
   },
   created() {
     this.recruitmentTitle = '资深前端研发-到综商家';
@@ -74,6 +103,7 @@ export default {
       userIconUrl: '',
       userBriefInfo: '互联网公司',
     }
+    this.location = '上海市长宁区申亚时代广场b'
     this.detailedInfo = `# 职位描述
 ## 招聘方向
 前端、安卓、IOS
@@ -91,7 +121,35 @@ export default {
 2018年9月20日，美团正式在港交所挂牌上市。美团将始终坚持以客户为中心，不断加大在科技研发方面的投入，更好承担社会责任，更多创造社会价值，与广大合作伙伴一起发展共赢。`
   },
   mounted() {
+    // markdown 渲染器
     VditorPreview.preview(document.getElementById('text-area'), this.detailedInfo);
+    // 高德地图
+    AMapLoader.load({ // 地图加载器
+      key: '7b0368f9798bd0bfe3d901a47f90f8f6',
+      plugins: ['AMap.PlaceSearch']
+    }).then((AMap) => {
+      let placeSearch = new AMap.PlaceSearch(); // 创建位置搜索类
+      placeSearch.search(this.location, (status, result) => {
+        if(status == 'complete') {
+          this.pos = result.poiList.pois[0].location; // 搜索结果的第一个
+          this.map = new AMap.Map(document.getElementById('map-container'), { // 创建地图
+            zoom: 17,
+            center: [this.pos.lng, this.pos.lat],
+            zoomEnable: false,
+            dragEnable: false
+          });
+          let marker = new AMap.Marker({ // 创建标点
+            position: [this.pos.lng, this.pos.lat],
+            clickable: false,
+            title: result.poiList.pois[0].name
+          });
+          this.map.add(marker);
+        }
+      })
+    })
+  },
+  beforeDestroy() {
+    this.map.destroy(); // 销毁地图
   },
   data() {
     return {
@@ -101,11 +159,35 @@ export default {
       detailedInfo: '',
       type: '',
       user: null,
+      location: '',
+      map: null,
+      ifShowFullMap: false,
+      fullMap: null,
+      pos: null,
     }
   },
   methods: {
     postResume: function() {
       // TODO
+    },
+    showFullMap: function() {
+      this.ifShowFullMap = true;
+      AMapLoader.load({ 
+        key: '7b0368f9798bd0bfe3d901a47f90f8f6'
+      }).then((AMap) => {
+        this.fullMap = new AMap.Map(document.getElementById('full-map-container'), {
+          zoom: 17,
+          center: [this.pos.lng, this.pos.lat],
+        })
+        let marker = new AMap.Marker({ // 创建标点
+          position: [this.pos.lng, this.pos.lat]
+        });
+        this.fullMap.add(marker);
+      })
+    },
+    fullMapClose: function(done) {
+      this.fullMap.destroy();
+      done();
     }
   }
 }
@@ -130,5 +212,32 @@ export default {
   margin-top: 5px;
   font-size: 13px;
   color: rgb(122 122 122);
+}
+#map-container {
+  height: 150px;
+  cursor: pointer;
+}
+#full-map-container {
+  height: 500px;
+}
+</style>
+
+<style>
+.map-dialog {
+  --el-dialog-padding-primary: 0px;
+}
+.map-dialog .el-dialog__body {
+  padding: 0px;
+}
+.map-dialog .el-dialog__header {
+  padding-bottom: 0px;
+}
+.map-dialog .el-dialog__headerbtn {
+  top: 15px;
+  right: 15px;
+}
+.dialog-map-title {
+  padding: 15px 20px 10px;
+  display:flex;
 }
 </style>

@@ -40,7 +40,7 @@ export default {
     PageFooter
   },
   props: {
-    ifFooter: {
+    ifFooter: { // 是否在推荐关注卡片下面显示PageFooter
       type: Boolean,
       default: true,
     }

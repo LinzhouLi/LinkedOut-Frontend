@@ -13,62 +13,64 @@
 import PostTweet from '@/components/PostTweet';
 import TweetDisp from '@/components/TweetDisp';
 
+let url = require('@/assets/ADimg.jpg');
+let tweet = {
+  tweetId: 0,
+  userId: 123,
+  userName: '张三',
+  userType: 'user',
+  userIconUrl: '',
+  userBriefInfo: '腾讯员工',
+  tweetText: `# s
+🥶sdas
+123123
+**asdva**
+### s`,
+  tweetPics: [
+    url, url, url
+  ],
+  likeNum: 10,
+  isLiked: false,
+  commentNum: 20,
+};
+
 export default {
   components: {
     TweetDisp,
     PostTweet
   },
   created() {
-    let url = require('@/assets/ADimg.jpg');
-    let tweet = {
-      tweetId: 0,
-      userId: 123,
-      userName: '张三',
-      userType: 'user',
-      userIconUrl: '',
-      userBriefInfo: '腾讯员工',
-      tweetText: `# s
-  🥶sdas
-  123123
-  **asdva**
-  ### s`,
-      tweetPics: [
-        url, url, url
-      ],
-      likeNum: 10,
-      isLiked: false,
-      commentNum: 20,
-    };
-    for(let i = 0; i < 20; i++) {
-      let t = JSON.parse(JSON.stringify(tweet));
-      t.tweetId = Math.floor(Math.random()*10000);
-      this.tweetList.push(t);
+    this.loadMoreTweets();
+  },
+  mounted() {
+    window.onscroll = () => {
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop; // 距离顶部的距离
+      let windowHeight = document.documentElement.clientHeight || document.body.clientHeight; // 可视区的高度
+      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 滚动条的总高度
+      console.log( scrollTop, windowHeight, scrollHeight )
+      if(scrollTop + windowHeight >= scrollHeight){ // 加载更多动态
+        if(!this.loadingMoreTweets) {
+          this.loadMoreTweets();
+        }
+      } 
     }
   },
   data() {
     return {
+      loadingMoreTweets: true,
       tweetList: [],
     }
   },
   methods: {
-    loadTweets: function() { // 加载更多动态
+    loadMoreTweets: function() { // 加载更多动态
+      this.loadingMoreTweets = true; // 开始加载
       // TODO
-      console.log(1)
-      // let url = require('@/assets/ADimg.jpg');
-      // let tweet = {
-      //   userId: 123,
-      //   userName: '张三',
-      //   userType: 'user',
-      //   userIconUrl: '',
-      //   userBriefInfo: '腾讯员工',
-      //   tweetText: '1231231231231212312123123123123',
-      //   tweetPics: [
-      //     url, url, url
-      //   ]
-      // };
-      // for(let i = 0; i < 5; i++) {
-      //   this.tweetList.push(tweet);
-      // }
+      for(let i = 0; i < 6; i++) {
+        let t = JSON.parse(JSON.stringify(tweet));
+        t.tweetId = Math.floor(Math.random()*10000);
+        this.tweetList.push(t);
+      }
+      this.loadingMoreTweets = false; // 加载结束
     }
   }
 }

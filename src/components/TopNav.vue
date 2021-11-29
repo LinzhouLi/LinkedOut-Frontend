@@ -14,6 +14,7 @@
         </el-col>
         <el-col class="nav-text-area" :offset="4" :span="6">
           <el-input
+            ref="searchInput"
             v-model="searchKey"
             placeholder="搜索企业或用户"
             clearable
@@ -78,6 +79,7 @@ export default {
           }
         });
         this.searchKey = '';
+        this.$refs.searchInput.blur();
       }
     }
   }

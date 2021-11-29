@@ -219,7 +219,7 @@ export default {
         }
         this.commentState = true;
         this.commentDom.style.color = '#409eff';
-        setTimeout(() => {
+        this.$nextTick(() => { // 确保document刷新后再获取表情选择器
           this.myCommentInputDom = document.getElementById(`my-comment-input-${this.tweetId}`)
           document.getElementById(`comment-emoji-picker-${this.tweetId}`).addEventListener('emoji-click', event => {
             // 向文本中添加表情
@@ -228,7 +228,7 @@ export default {
             let endPos = this.myCommentInputDom.selectionEnd;
             this.myCommentText = this.myCommentText.substring(0, startPos) + event.detail.unicode + this.myCommentText.substring(endPos);
           });
-        }, 10)
+        })
       }
       else {
         // TODO 收起评论

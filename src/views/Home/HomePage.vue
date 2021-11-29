@@ -5,7 +5,7 @@
       <user-info-card v-bind="defaultUser"/>
     </el-col>
     <el-col :span="9" style="margin:0px 20px">
-      <router-view/>
+      <router-view :key="$route.query" />
     </el-col>
     <el-col :span="5">
       <user-recommend-card/>

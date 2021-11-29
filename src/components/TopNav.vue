@@ -2,7 +2,7 @@
   <el-affix>
     <el-card id="top-nav-card" shadow="always" style="border-radius: 0px;">
       <el-row>
-        <el-col id="logo-area" :offset="2" :span="3">
+        <el-col class="nav-text-area" :offset="2" :span="3">
           <el-space>
             <el-col :span="12">
               <el-image :src="logoUrl" style="width: 40px"></el-image>
@@ -12,7 +12,19 @@
             </el-col>
           </el-space>
         </el-col>
-        <el-col id="menu-area" :offset="10" :span="6">
+        <el-col class="nav-text-area" :offset="4" :span="6">
+          <el-input
+            v-model="searchKey"
+            placeholder="搜索企业或用户"
+            clearable
+            @keyup.enter="searchUser"
+          >
+            <template #prefix>
+              <el-icon class="el-input__icon"><search /></el-icon>
+            </template>
+          </el-input>
+        </el-col>
+        <el-col  :span="6">
           <el-menu
             default-active="activeMenuIndex"
             :ellipsis="false"
@@ -41,19 +53,34 @@
 </template>
 
 <script>
-import { Star, Briefcase, Avatar } from "@element-plus/icons";
+import { Star, Briefcase, Avatar, Search } from "@element-plus/icons";
 
 export default {
   components: {
     Star,
     Briefcase,
-    Avatar
+    Avatar,
+    Search
   },
   data() {
     return {
+      searchKey: '',
       logoUrl: require('@/assets/logo.png'),
     }
   },
+  methods: {
+    searchUser: function() {
+      if(!!this.searchKey) {
+        this.$router.push({
+          name: 'search',
+          query: {
+            key: this.searchKey
+          }
+        });
+        this.searchKey = '';
+      }
+    }
+  }
 }
 </script>
 
@@ -61,10 +88,8 @@ export default {
 #top-nav-card :deep(.el-card__body) {
   padding: 0px;
 }
-#logo-area {
+.nav-text-area {
   padding-top: 10px;
 }
-#menu-area {
-  padding-top: 0px;
-}
+
 </style>

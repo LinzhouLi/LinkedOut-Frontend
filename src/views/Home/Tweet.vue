@@ -47,7 +47,6 @@ export default {
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop; // 距离顶部的距离
       let windowHeight = document.documentElement.clientHeight || document.body.clientHeight; // 可视区的高度
       let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 滚动条的总高度
-      console.log( scrollTop, windowHeight, scrollHeight )
       if(scrollTop + windowHeight >= scrollHeight){ // 加载更多动态
         if(!this.loadingMoreTweets) {
           this.loadMoreTweets();

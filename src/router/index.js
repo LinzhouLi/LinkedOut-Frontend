@@ -7,6 +7,7 @@ import RecruitmentDetailPage from '../views/RecruitmentDetailPage'
 import UserInfoPage from '../views/UserInfoPage'
 import CompanyInfoPage from '../views/CompanyInfoPage'
 import MyInfoPage from '../views/MyInfoPage'
+import Search from '../views/Home/Search'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -17,6 +18,7 @@ const routes = [
       { path: '', redirect: '/home/tweets'},
       { path: 'tweets', component: Tweet },
       { path: 'recruitments', component: Recruitment },
+      { path: 'search', name: 'search', component: Search }
     ]
   },
   { path: '/myinfo', component: MyInfoPage},

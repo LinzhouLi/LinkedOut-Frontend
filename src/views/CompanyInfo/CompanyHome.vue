@@ -1,21 +1,47 @@
 <template>
-  <el-card >
+  <el-card style="margin:0px 0px 20px">
     <h1 style="font-size:20px">关于</h1>
     <div style="margin-top:5px"><span id="text-area" style="height:210px"/></div>
     <el-button @click="toDescription">
     查看全部详情
   </el-button>
   </el-card>
-  <el-card>
+  <el-card style="margin:0px 0px 20px">
      <h1 style="font-size:20px">动态</h1>
+     <el-row>
+     <el-col :span="12" v-for="(tweet,index) in tweetList" :key="index" style="width:50%"> 
+           <tweet-brief-info v-bind="tweet" style="margin: 10px 10px 10px 10px"/>
+     </el-col>
+     </el-row>
+     <el-button @click="toTweet">
+      查看全部动态
+     </el-button>
   </el-card>  
+   <el-card>
+     <h1 style="font-size:20px">职位</h1>
+     <el-row>
+     <el-col :span="12" v-for="(recruitment,index) in recruitmentList" :key="index" style="width:50%"> 
+           <recruitment-brief-info v-bind="recruitment" style="margin: 10px 10px 10px 10px"/>
+     </el-col>
+     </el-row>
+     <el-button @click="toRecruitment">
+      查看全部职位
+     </el-button>
+  </el-card>
 </template>
 
 <script>
 import VditorPreview from 'vditor/dist/method.min';
 import '@/assets/vditor.css';
+import TweetBriefInfo from '@/components/TweetBriefInfo'
+import RecruitmentBriefInfo from '@/components/RecruitmentBriefInfo'
+
 
 export default {
+  components:{
+    TweetBriefInfo,
+    RecruitmentBriefInfo
+  },
   created(){
     this.companyDescription = `
 ## 概览
@@ -37,18 +63,56 @@ China,China
 ## 创立时间
 2012
 `
+let url = require('@/assets/ADimg.jpg');
+    let tweet = {
+      tweetId: 0,   
+      tweetText: `# 一级标题一级标题一级标题一级标题
+## 二级标题
+正文
+三四十岁
+ssss`,
+      tweetPics: [
+        url, url, url
+      ],
+      likeNum: 10,
+      commentNum: 20,
+    };
+    for(let i = 0; i < 6; i++) {
+      let t = JSON.parse(JSON.stringify(tweet));
+      t.tweetId = Math.floor(Math.random()*10000);
+      this.tweetList.push(t);
+    }
+    let recruitment = {
+      recruitmentId: 3491,
+      userId: 123,
+      userIconUrl: '',
+      recruitmentTitle: 'xxx前端开发工程师',
+      limit:'上海·1~3年·本科'
+    };
+    for(let i= 0; i < 6;i++) {
+      let r =JSON.parse(JSON.stringify(recruitment));
+      this.recruitmentList.push(r);
+    }
   },
   mounted() {
     VditorPreview.preview(document.getElementById('text-area'), this.companyDescription);
   },
   data(){
     return{
-      companyDescription: ''
+      companyDescription: '',
+      tweetList:[],
+      recruitmentList:[]
     }
   },
   methods:{
     toDescription:function(){
       this.$router.push({path:'companyDescription'})
+    },
+    toTweet: function(){
+      this.$router.push({path:'companyTweet'})
+    },
+    toRecruitment: function(){
+      this.$router.push({path:'companyRecruitment'})
     }
   }
 }
@@ -56,13 +120,13 @@ China,China
 
 <style>
 #text-area{
-       
         word-break:normal; 
         width:auto; 
         display:block; 
         white-space:pre-wrap;
         word-wrap : break-word ;
         overflow: hidden ;
+        text-overflow: ellipsis;
         line-break: auto;
     }
 

@@ -14,25 +14,26 @@
             default-active="activeMenuIndex"
             :ellipsis="false"
             mode="horizontal"
+            style="margin:0px 0px 20px"
             router
           >
-            <el-menu-item :index=this.companyHomeUrl>         
+            <el-menu-item :index="`/companyInfo/${userId}/companyHome`">         
               首页
             </el-menu-item>
-            <el-menu-item :index=this.companyDescriptionUrl>
+            <el-menu-item :index="`/companyInfo/${userId}/companyDescription`">
               关于
             </el-menu-item>
-            <el-menu-item :index=this.companyTweetUrl>
+            <el-menu-item :index="`/companyInfo/${userId}/companyTweet`">
               动态
             </el-menu-item>
-            <el-menu-item :index=this.companyRecruitmentUrl>
+            <el-menu-item :index="`/companyInfo/${userId}/companyRecruitment`">
               在招职位
             </el-menu-item>
           </el-menu>
           
    
       
-        <router-view/>
+        <router-view />
      
     </el-col>
     <!-- 页面左部 -->
@@ -64,38 +65,24 @@ export default {
       email: 'zijietiaodong@email.com'
     },
     this.userId=101
-    this.companyHomeUrl='/companyInfo/'+this.userId.toString()+'/companyHome'
-    this.companyDescriptionUrl='/companyInfo/'+this.userId.toString()+'/companyDescription'
-    this.companyTweetUrl='/companyInfo/'+this.userId.toString()+'/companyTweet'
-    this.companyRecruitmentUrl='/companyInfo/'+this.userId.toString()+'/companyRecruitment'
+  
   },
   data() {
     return{
       companyDescription:'',
       user: null,
       userId: 0,
-      companyHomeUrl: '',
-      companyDescriptionUrl: '',
-      companyTweetUrl:'',
-      companyRecruitmentUrl: ''
+      
     }
   },
   methods: {
-    loadTweets: function() {
-      console.log(1)
-    }
+   
   }
 }
 </script>
 
 <style scoped>
 
-#logo-area {
-  padding-top: 10px;
-}
-#menu-area {
-  padding-top: 0px;
-}
 
 
 </style>

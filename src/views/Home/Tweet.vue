@@ -107,7 +107,7 @@ export default {
   **asdva**
   ### s`,
       tweetPics: [
-        url, url, url
+         url, url, url
       ],
       likeNum: 10,
       isLiked: false,

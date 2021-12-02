@@ -97,6 +97,9 @@ export default {
 .pointer-area {
   cursor: pointer;
 }
+.pointer-area:hover {
+  color: #409eff;
+}
 .text {
   font-size: 15px;
 }

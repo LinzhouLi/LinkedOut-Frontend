@@ -1,5 +1,5 @@
 <template>
-  <el-card style="margin-top:20px">
+  <el-card>
     <!-- 动态卡片头部 -->
     <template #header>
       <div style="padding:10px;">

@@ -11,6 +11,7 @@
       <user-recommend-card/>
     </el-col>
   </el-row>
+  <el-backtop />
 </template>
 
 <script>
@@ -33,11 +34,6 @@ export default {
         userBriefInfo: '同济大学学生',
         userIconUrl: ''
       }
-    }
-  },
-  methods: {
-    loadTweets: function() {
-      console.log(1)
     }
   }
 }

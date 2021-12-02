@@ -1,11 +1,45 @@
 <template>
-  <div v-for="(item,index) in recruitmentList" :key="index">
-    <recruitment-disp v-bind="item" />
-  </div>
+  <el-container direction="vertical">
+    <el-skeleton :loading="loadingInitialRecruitments" animated :count="3">
+      <!-- 加载状态骨架屏 -->
+      <template #template>
+        <el-card style="margin-bottom:20px">
+          <el-skeleton-item variant="h3" style="width:20%" />
+          <el-skeleton-item/>
+          <el-skeleton-item/>
+          <el-skeleton-item style="width:30%"/>
+        </el-card>
+      </template>
+      <!-- 加载完成的招聘信息 -->
+      <template #default>
+        <div v-for="(item,index) in recruitmentList" :key="index">
+          <recruitment-disp style="margin-bottom:20px" v-bind="item" />
+        </div>
+      </template>
+    </el-skeleton>
+    <!-- 没有招聘信息时的页面底部 -->
+    <div v-if="loadAll">
+      <el-divider style="margin: -5px 0px;" />
+      <div 
+        class="refresh-div" 
+        @click="reloadInitialRecruitments"
+        style="margin: 20px 0px"
+      >
+      没有更多招聘信息了, 点击刷新 :)
+      </div>
+    </div>
+    <!-- 正在加载更多招聘信息时的页面底部 -->
+    <div v-if="loadingMoreRecruitments">
+      <el-row justify="center" style="margin: -5px 0px 20px;">
+        <el-icon :size="20" class="is-loading"><loading /></el-icon>
+      </el-row>
+    </div>
+  </el-container>
 </template>
 
 <script>
 import RecruitmentDisp from '@/components/RecruitmentDisp';
+import { Loading } from '@element-plus/icons';
 
 let recruitment = {
   recruitmentId: 0,
@@ -21,10 +55,11 @@ let recruitment = {
 
 export default {
   components: {
-    RecruitmentDisp
+    RecruitmentDisp,
+    Loading
   },
   created() {
-    this.loadMoreRecruitments();
+    this.reloadInitialRecruitments();
   },
   mounted() {
     window.onscroll = () => {
@@ -32,7 +67,7 @@ export default {
       let windowHeight = document.documentElement.clientHeight || document.body.clientHeight; // 可视区的高度
       let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 滚动条的总高度
       if(scrollTop + windowHeight >= scrollHeight){ // 加载更多招聘信息
-        if(!this.loadingMoreRecruitments) {
+        if(!this.loadingInitialRecruitments && !this.loadingMoreRecruitments && !this.loadAll) {
           this.loadMoreRecruitments();
         }
       } 
@@ -40,24 +75,52 @@ export default {
   },
   data() {
     return {
-      loadingMoreRecruitments: true,
-      recruitmentList: []
+      loadingInitialRecruitments: true, // 是否正在加载初始招聘信息
+      loadingMoreRecruitments: false, // 是否正在加载更多招聘信息
+      recruitmentList: [], // 是否加载结束
+      loadAll: false
     }
   },
   methods: {
-    loadMoreRecruitments: function() {
-      this.loadingMoreRecruitments = true;
-      for(let i = 0; i < 10; i++) {
-        let t = JSON.parse(JSON.stringify(recruitment));
-        t.recruitmentId = Math.floor(Math.random()*10000);
-        this.recruitmentList.push(t);
-      }
-      this.loadingMoreRecruitments = false;
+    reloadInitialRecruitments: function() { // 加载初始招聘信息
+      this.recruitmentList = []; // 清空招聘列表
+      this.loadAll = false;
+      this.loadingInitialRecruitments = true; // 开始加载
+      // TODO
+      setTimeout(() => {
+        for(let i = 0; i < 15; i++) {
+          let t = JSON.parse(JSON.stringify(recruitment));
+          t.recruitmentId = Math.floor(Math.random()*10000);
+          this.recruitmentList.push(t);
+        }
+        this.loadingInitialRecruitments = false; // 加载结束
+      }, 2000)
+    },
+    loadMoreRecruitments: function() { // 加载更多招聘信息
+      this.loadingMoreRecruitments = true; // 开始加载
+      setTimeout(() => {
+        for(let i = 0; i < 8; i++) {
+          let t = JSON.parse(JSON.stringify(recruitment));
+          t.recruitmentId = Math.floor(Math.random()*10000);
+          this.recruitmentList.push(t);
+        }
+        this.loadingMoreRecruitments = false;
+        this.loadAll = true; // 去掉
+      }, 2000)
     }
   }
 }
 </script>
 
 <style scoped>
-
+.refresh-div {
+  font-size: 14px;
+  color: rgb(122 122 122);
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+}
+.refresh-div:hover {
+  color: #409eff;
+}
 </style>

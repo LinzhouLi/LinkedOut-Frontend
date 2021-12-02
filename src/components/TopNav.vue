@@ -27,7 +27,7 @@
         </el-col>
         <el-col  :span="6">
           <el-menu
-            default-active="activeMenuIndex"
+            :default-active="currentMenu"
             :ellipsis="false"
             mode="horizontal"
             router
@@ -63,10 +63,19 @@ export default {
     Avatar,
     Search
   },
+  created() {
+    this.currentMenu = this.$route.path;
+  },
   data() {
     return {
+      currentMenu: '',
       searchKey: '',
       logoUrl: require('@/assets/logo.png'),
+    }
+  },
+  watch: {
+    $route(e) {
+      this.currentMenu = e.path;
     }
   },
   methods: {
@@ -93,5 +102,4 @@ export default {
 .nav-text-area {
   padding-top: 10px;
 }
-
 </style>

@@ -9,7 +9,7 @@
 
       <!-- 详情、动态、在招职位卡片 -->
      
-     
+        <el-affix offset="63">
           <el-menu 
             default-active="activeMenuIndex"
             :ellipsis="false"
@@ -31,7 +31,7 @@
             </el-menu-item>
           </el-menu>
           
-   
+        </el-affix>
       
         <router-view />
      

@@ -25,7 +25,7 @@
             </template>
           </el-input>
         </el-col>
-        <el-col  :span="6">
+        <el-col :offset="1" :span="5">
           <el-menu
             :default-active="currentMenu"
             :ellipsis="false"

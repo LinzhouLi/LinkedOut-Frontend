@@ -4,7 +4,31 @@
     <el-col :offset="3" :span="12" style="margin-right:20px">
       <!-- 个人信息卡片-->
       <el-card style="margin-bottom:20px">
-        <user-detailed-card v-bind="user"/>
+       <el-container direction="horizontal"  style="padding:5px">
+         <el-col :span="18">
+           <user-icon 
+             :size="100" 
+             :url="user.userIconUrl" 
+             style="cursor:pointer"
+           />
+           <div id="userName">{{user.userName}}</div>
+           <div id="briefInfo">{{user.briefInfo}}</div>
+           <div id="livePlace">所在地：{{user.livePlace}}</div>
+           <el-container direction="horizontal" id="buttons">
+             <el-button>关注</el-button>
+           </el-container>
+         </el-col>
+         <el-col style="margin-top:100px">
+           <el-container direction="horizontal" style="cursor:pointer" @click="toEducation">
+             <user-icon :size="50"/>
+             <h2 style="font-size:18px; margin-left:10px">{{workExperienceList[0].enterprise}}</h2>
+           </el-container>
+           <el-container direction="horizontal" style="margin-top: 10px; cursor:pointer" @click="toWork">
+             <user-icon :size="50"/>
+             <h2 style="font-size:18px; margin-left:10px">{{educationExperienceList[0].college}}</h2>
+           </el-container>
+         </el-col>
+       </el-container>
       </el-card>
       <el-card style="margin-bottom: 20px">
         <h1 style="font-size:20px">动态</h1>
@@ -18,12 +42,12 @@
         </el-button>
       </el-card>
       <el-card>
-        <h1 style="font-size:20px">工作经历</h1>
+        <h1 style="font-size:20px" id="work">工作经历</h1>
         <div v-for="(workExperience,index) in workExperienceList" :key="index">
           <work-experience v-bind="workExperience" style="margin: 10px 10px 10px 10px"/> 
           <el-divider/>
         </div> 
-        <h1 style="font-size:20px">教育经历</h1>
+        <h1 style="font-size:20px" id="education">教育经历</h1>
         <div v-for="(educationExperience,index) in educationExperienceList" :key="index">
           <education-experience v-bind="educationExperience" style="margin: 10px 10px 10px 10px"/> 
           <el-divider/>
@@ -38,9 +62,9 @@
 </template>
 
 <script>
-import TopNav from '@/components/TopNav';
-import UserRecommendCard from '@/components/UserRecommendCard';
-import UserDetailedCard from '@/components/UserDetailedCard'
+import TopNav from '@/components/TopNav'
+import UserIcon from '@/components/UserIcon'
+import UserRecommendCard from '@/components/UserRecommendCard'
 import TweetBriefInfo from '@/components/TweetBriefInfo'
 import WorkExperience from '@/components/WorkExperience'
 import EducationExperience from '@/components/EducationExperience'
@@ -49,8 +73,8 @@ import EducationExperience from '@/components/EducationExperience'
 export default {
   components: {
     TopNav,
+    UserIcon,
     UserRecommendCard,
-    UserDetailedCard,
     TweetBriefInfo,
     WorkExperience,
     EducationExperience
@@ -119,13 +143,33 @@ ssss`,
     }
   },
   methods: {
-   
+   toWork: function(){
+     document.getElementById("work").scrollIntoView()
+   },
+   toEducation: function(){
+     document.getElementById("education").scrollIntoView()
+   }
   }
 }
 </script>
 
 <style scoped>
-
+#userName {
+  font-size: 23px;
+  font-weight: 650;
+  margin: 5px 0px 10px;
+}
+#briefInfo {
+  font-size: 15px;
+  color: rgb(122 122 122);
+  margin: 0px 0px 10px;
+}
+#livePlace{
+  font-size: 15px;
+}
+#buttons{
+  margin: 15px 0px 0px 0px;
+}
 
 
 </style>

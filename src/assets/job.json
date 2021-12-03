@@ -1,0 +1,144 @@
+[
+    {
+        "value":"技术",
+        "label":"技术",
+        "disabled": true,
+        "children":
+        [
+            {
+                "value":"后端开发",
+                "label":"后端开发",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"Java", "label":"Java", "disabled": false},
+                    {"value":"C++", "label":"C++", "disabled": false},
+                    {"value":"PHP", "label":"PHP", "disabled": false},
+                    {"value":"C", "label":"C", "disabled": false},
+                    {"value":"C#", "label":"C#", "disabled": false},
+                    {"value":"Python", "label":"Python", "disabled": false}
+                ]
+            },
+            {
+                "value":"移动开发",
+                "label":"移动开发",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"HTML5", "label":"HTML5", "disabled": false},
+                    {"value":"Android", "label":"Android", "disabled": false},
+                    {"value":"iOS", "label":"iOS", "disabled": false},
+                    {"value":"JavaScript", "label":"JavaScript", "disabled": false}
+                ]
+            },
+            {
+                "value":"测试",
+                "label":"测试",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"测试工程师", "label":"测试工程师", "disabled": false},
+                    {"value":"自动化测试", "label":"自动化测试", "disabled": false},
+                    {"value":"性能测试", "label":"性能测试", "disabled": false},
+                    {"value":"游戏测试", "label":"游戏测试", "disabled": false},
+                    {"value":"渗透测试", "label":"渗透测试", "disabled": false}
+                ]
+            }
+        ]
+    },
+    {
+        "value":"运营",
+        "label":"运营",
+        "disabled": true,
+        "children":
+        [
+            {
+                "value":"运营",
+                "label":"运营",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"用户运营", "label":"用户运营", "disabled": false},
+                    {"value":"产品运营", "label":"产品运营", "disabled": false},
+                    {"value":"活动运营", "label":"活动运营", "disabled": false},
+                    {"value":"网站运营", "label":"网站运营", "disabled": false},
+                    {"value":"电商运营", "label":"电商运营", "disabled": false},
+                    {"value":"直播运营", "label":"直播运营", "disabled": false}
+                ]
+            },
+            {
+                "value":"编辑",
+                "label":"编辑",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"文案策划", "label":"文案策划", "disabled": false},
+                    {"value":"采编", "label":"采编", "disabled": false},
+                    {"value":"网站编辑", "label":"网站编辑", "disabled": false},
+                    {"value":"主编", "label":"主编", "disabled": false}
+                ]
+            },
+            {
+                "value":"客服",
+                "label":"客服",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"售前客服", "label":"售前客服", "disabled": false},
+                    {"value":"售后客服", "label":"售后客服", "disabled": false},
+                    {"value":"网络客服", "label":"网络客服", "disabled": false},
+                    {"value":"客服专员", "label":"客服专员", "disabled": false},
+                    {"value":"电话客服", "label":"电话客服", "disabled": false}
+                ]
+            }
+        ]
+    },
+    {
+        "value":"市场",
+        "label":"市场",
+        "disabled": true,
+        "children":
+        [
+            {
+                "value":"政府事务",
+                "label":"政府事务",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"政府关系", "label":"政府关系", "disabled": false},
+                    {"value":"政策研究", "label":"政策研究", "disabled": false},
+                    {"value":"企业党建", "label":"企业党建", "disabled": false}
+                ]
+            },
+            {
+                "value":"公关媒介",
+                "label":"公关媒介",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"媒介经理", "label":"媒介经理", "disabled": false},
+                    {"value":"品牌公关", "label":"品牌公关", "disabled": false},
+                    {"value":"媒介策划", "label":"媒介策划", "disabled": false},
+                    {"value":"媒介专员", "label":"媒介专员", "disabled": false}
+                ]
+            },
+            {
+                "value":"广告",
+                "label":"广告",
+                "disabled": true,
+                "children":
+                [
+                    {"value":"广告创意设计", "label":"广告创意设计", "disabled": false},
+                    {"value":"美术指导", "label":"美术指导", "disabled": false},
+                    {"value":"策划经理", "label":"策划经理", "disabled": false},
+                    {"value":"广告文案", "label":"广告文案", "disabled": false},
+                    {"value":"广告制作", "label":"广告制作", "disabled": false},
+                    {"value":"广告审核", "label":"广告审核", "disabled": false},
+                    {"value":"媒介投放", "label":"媒介投放", "disabled": false}
+                ]
+            }
+        ]
+    }
+
+
+]

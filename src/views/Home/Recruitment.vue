@@ -1,5 +1,21 @@
 <template>
   <el-container direction="vertical">
+    <!-- 分割线 -->
+    <el-row>
+      <el-col :offset="1" :span="19">
+        <el-divider style="margin: 18px 0px;"/>
+      </el-col>
+      <el-col :span="4">
+        <div 
+          class="refresh-div"
+          @click="reloadInitialRecruitments" 
+          style="margin:8px 10px 0px; display: flex;"
+        >
+          <el-icon :size="20"><refresh-right /></el-icon>
+          <div>刷新</div>
+        </div>
+      </el-col>
+    </el-row>
     <el-skeleton :loading="loadingInitialRecruitments" animated :count="3">
       <!-- 加载状态骨架屏 -->
       <template #template>
@@ -39,7 +55,7 @@
 
 <script>
 import RecruitmentDisp from '@/components/RecruitmentDisp';
-import { Loading } from '@element-plus/icons';
+import { Loading, RefreshRight } from '@element-plus/icons';
 
 let recruitment = {
   recruitmentId: 0,
@@ -56,7 +72,8 @@ let recruitment = {
 export default {
   components: {
     RecruitmentDisp,
-    Loading
+    Loading,
+    RefreshRight
   },
   created() {
     this.reloadInitialRecruitments();

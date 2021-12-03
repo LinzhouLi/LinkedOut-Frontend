@@ -8,9 +8,10 @@
       <router-view :key="$route.query" />
     </el-col>
     <el-col :span="5">
-      <user-recommend-card/>
+      <user-recommend-card :ifFooter="!footerDisp" />
     </el-col>
   </el-row>
+  <page-footer v-if="footerDisp"/>
   <el-backtop />
 </template>
 
@@ -29,6 +30,7 @@ export default {
   },
   data() {
     return{
+      footerDisp: false,
       defaultUser: {
         userName: '李林洲',
         userBriefInfo: '同济大学学生',

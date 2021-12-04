@@ -1,5 +1,5 @@
 <template>
-  <el-card style="margin-bottom:20px">
+  <el-card>
     <template #header>
       <div style="padding:10px;">
         <user-brief-disp v-bind="user" />

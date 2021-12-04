@@ -26,25 +26,21 @@
     >
       <el-image :src="ADimgUrl" fit="cover"/>
     </el-card>
-    <page-footer v-if="ifFooter" />
+    <div style="margin-top:20px;">
+      <el-container style="margin:0px 26%">
+        <el-image :src="logoUrl" style="width: 21px"></el-image>
+        <div style="font-size:10px">LinkedOut © 2021</div>
+      </el-container>
+    </div>
+    <div id="text-div">同济大学软件工程课程项目</div>
   </el-affix>
 </template>
 
 <script>
-import UserBriefDisp from './UserBriefDisp.vue';
-import PageFooter from './PageFooter.vue';
+import UserBriefDisp from '@/components/UserBriefDisp.vue';
 
 export default {
-  components: { 
-    UserBriefDisp,
-    PageFooter
-  },
-  props: {
-    ifFooter: { // 是否在推荐关注卡片下面显示PageFooter
-      type: Boolean,
-      default: true,
-    }
-  },
+  components: { UserBriefDisp },
   data() {
     return {
       ADimgUrl: require('@/assets/ADimg.jpg'),
@@ -104,5 +100,11 @@ export default {
 .el-divider {
   margin: 5px;
   margin: 5px 0px;
+}
+#text-div {
+  margin-top: 3px;
+  text-align: center;
+  font-size: 10px;
+  color: rgb(122 122 122);
 }
 </style>

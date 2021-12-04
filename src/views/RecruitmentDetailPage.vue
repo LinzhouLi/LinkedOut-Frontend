@@ -69,22 +69,8 @@ import '@/assets/vditor.css';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { LocationInformation } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter';
-// import Vditor from 'vditor';
 
 export default {
-  // mounted() {
-  //   console.log(this.$route.params.rid);
-  //   this.editor = new Vditor('text-area', {
-  //     width: 500,
-  //     height: 500,
-  //     toolbar: ['emoji', 'br', 'bold', '|', 'line'],
-  //     cache: {
-  //       enable: false,
-  //     },
-  //     blur: value => { console.log(value) },
-  //     mode: "wysiwyg"
-  //   })
-  // },
   components: {
     TopNav,
     UserRecommendCard,
@@ -103,7 +89,7 @@ export default {
       userIconUrl: '',
       userBriefInfo: '互联网公司',
     }
-    this.location = '上海市长宁区申亚时代广场b'
+    this.location = '同济大学嘉定校区20号楼'
     this.detailedInfo = `# 职位描述
 ## 招聘方向
 前端、安卓、IOS

@@ -89,7 +89,7 @@ export default {
       userIconUrl: '',
       userBriefInfo: '互联网公司',
     }
-    this.location = '上海市长宁区申亚时代广场b'
+    this.location = '同济大学嘉定校区20号楼'
     this.detailedInfo = `# 职位描述
 ## 招聘方向
 前端、安卓、IOS

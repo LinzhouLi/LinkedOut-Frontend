@@ -58,9 +58,12 @@
 </template>
 
 <script>
-import PostTweet from '@/components/PostTweet';
+import 'emoji-picker-element';
+import { Eleme, PictureFilled, Plus, CloseBold } from '@element-plus/icons';
+import { ElMessage } from 'element-plus';
 import TweetDisp from '@/components/TweetDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
+import PostTweet from '@/components/PostTweet';
 
 let url = require('@/assets/ADimg.jpg');
 let tweet = {
@@ -111,6 +114,10 @@ export default {
       loadingMoreTweets: false, // 是否正在加载更多动态
       loadAll: false, // 是否加载结束
       tweetList: [],
+      picList: [],
+      tweetInputDom: null,
+      showEmojiSelector: false,
+      tweetText: '',
     }
   },
   methods: {

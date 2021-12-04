@@ -1,11 +1,13 @@
 <template>
-  <h1>UserInfo</h1>
+  动态
 </template>
 
 <script>
+export default {
 
+}
 </script>
 
-<style scoped>
+<style>
 
 </style>

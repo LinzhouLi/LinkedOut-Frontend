@@ -32,7 +32,8 @@ export default {
       defaultUser: {
         userName: '李林洲',
         userBriefInfo: '同济大学学生',
-        userIconUrl: ''
+        userIconUrl: '',
+        userType: 'company'
       }
     }
   }

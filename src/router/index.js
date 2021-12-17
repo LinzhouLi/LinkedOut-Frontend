@@ -12,6 +12,7 @@ import CompanyTweet from '../views/CompanyInfo/CompanyTweet'
 import CompanyRecruitment from '../views/CompanyInfo/CompanyRecruitment'
 import MyInfoPage from '../views/MyInfoPage'
 import Search from '../views/Home/Search'
+import PostRecruitmentPage from '../views/PostRecruitmentPage'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -36,17 +37,22 @@ const routes = [
     name: 'userinfo',
     component: UserInfoPage
   },
-  
-  { path: '/companyInfo/:cid',
-  name: 'companyinfo',
-  component: CompanyInfoPage,
-  children: [
-    { path: 'companyHome', component: CompanyHome},
-    { path: 'companyDescription', component: CompanyDescription },
-    { path: 'companyTweet', component: CompanyTweet },
-    { path: 'companyRecruitment', component: CompanyRecruitment }
-  ]
-},
+  { 
+    path: '/companyInfo/:cid',
+    name: 'companyinfo',
+    component: CompanyInfoPage,
+    children: [
+      { path: 'companyHome', component: CompanyHome},
+      { path: 'companyDescription', component: CompanyDescription },
+      { path: 'companyTweet', component: CompanyTweet },
+      { path: 'companyRecruitment', component: CompanyRecruitment }
+    ]
+  },
+  {
+    path: '/postRecruitment',
+    name: 'postRecruitment',
+    component: PostRecruitmentPage
+  }
 ]
 
 const router = createRouter({

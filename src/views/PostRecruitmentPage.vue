@@ -62,7 +62,7 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import PageFooter from '@/components/PageFooter';
 import Vditor from 'vditor';
 import '@/assets/vditor.css';
-import { ElNotification } from 'element-plus';
+import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
 
 export default {
   components: {
@@ -159,17 +159,27 @@ export default {
     submit: function() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          // TODO
-
-          ElNotification({
-            title: 'Success',
-            message: '发布成功!',
-            type: 'success',
-          })
-          setTimeout(() => {
+          ElMessageBox.confirm(
+            '确认职位信息准确无误, 发布后不可撤销!',
+            '发布此职位?',
+            {
+              confirmButtonText: '确认',
+              cancelButtonText: '取消',
+              type: 'warning',
+            }
+          )
+          .then(() => {
+            // TODO
+            ElNotification({
+              title: 'Success',
+              message: '发布成功!',
+              type: 'success',
+            })
             this.$router.push('/home');
-          }, 300)
-          
+          })
+          .catch(() => {
+            return false
+          })          
         } else {
           ElNotification({
             title: 'Error',

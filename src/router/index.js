@@ -4,7 +4,9 @@ import HomePage from '../views/Home/HomePage'
 import Tweet from '../views/Home/Tweet'
 import Recruitment from '../views/Home/Recruitment'
 import RecruitmentDetailPage from '../views/RecruitmentDetailPage'
-import UserInfoPage from '../views/UserInfoPage'
+import UserInfoPage from '../views/UserInfo/UserInfoPage'
+import UserTweet from '../views/UserInfo/UserTweet'
+import UserHome from '../views/UserInfo/UserHome'
 import CompanyInfoPage from '../views/CompanyInfo/CompanyInfoPage'
 import CompanyHome from '../views/CompanyInfo/CompanyHome'
 import CompanyDescription from '../views/CompanyInfo/CompanyDescription'
@@ -35,18 +37,23 @@ const routes = [
   { 
     path: '/userinfo/:uid',
     name: 'userinfo',
-    component: UserInfoPage
+    component: UserInfoPage,
+    redirect: { name: '/userinfo/:uid/home' },
+    children: [
+      { path: 'home', name:'/userinfo/:uid/home', component: UserHome },
+      { path: 'tweets', component: UserTweet },
+    ]
   },
   { 
-    path: '/companyInfo/:cid',
+    path: '/companyinfo/:cid',
     name: 'companyinfo',
     component: CompanyInfoPage,
-    redirect: { name: '/companyInfo/:cid/companyHome' },
+    redirect: { name: '/companyinfo/:cid/home' },
     children: [
-      { path: 'companyHome', name:'/companyInfo/:cid/companyHome', component: CompanyHome },
-      { path: 'companyDescription', component: CompanyDescription },
-      { path: 'companyTweet', component: CompanyTweet },
-      { path: 'companyRecruitment', component: CompanyRecruitment }
+      { path: 'home', name:'/companyinfo/:cid/home', component: CompanyHome },
+      { path: 'description', component: CompanyDescription },
+      { path: 'tweets', component: CompanyTweet },
+      { path: 'recruitments', component: CompanyRecruitment }
     ]
   },
   {

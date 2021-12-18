@@ -10,7 +10,7 @@
               <el-button
                 size="mini"
                 :type="buttonType(user.ifFollowing)"
-                style="width:65px"
+                style="width:65px; padding:0px"
                 @click="follow(index)"
               >
                 {{ buttonText(user.ifFollowing) }}
@@ -33,6 +33,7 @@
 <script>
 import UserBriefDisp from '@/components/UserBriefDisp.vue';
 import PageFooter from './PageFooter.vue';
+import { ElNotification } from 'element-plus';
 
 export default {
   components: { 
@@ -85,11 +86,17 @@ export default {
       // TODO
       const user = this.userRecommendList[index];
       if(user.ifFollowing) { // 已关注
-        console.log(user.userId, '已关注, 将此用户取关');
+        ElNotification({
+          title: '取关成功',
+          type: 'success',
+        });
         this.userRecommendList[index].ifFollowing = false;
       }
       else { // 未关注
-        console.log(user.userId, '未关注, 关注此用户');
+        ElNotification({
+          title: '关注成功',
+          type: 'success',
+        });
         this.userRecommendList[index].ifFollowing = true;
       }
     },

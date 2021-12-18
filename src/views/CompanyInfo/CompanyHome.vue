@@ -1,5 +1,5 @@
 <template>
-  <el-card style="margin:0px 0px 20px">
+  <el-card style="margin-top:20px">
     <template #header>
       <span style="font-size:18px"><b>关于</b></span>
     </template>
@@ -8,7 +8,7 @@
       <el-button type="text" class="button" @click="toDescription">查看全部信息</el-button>
     </el-row>
   </el-card>
-  <el-card style="margin:0px 0px 20px">
+  <el-card style="margin-top:20px">
     <template #header>
       <span style="font-size:18px"><b>动态</b></span>
     </template>
@@ -21,7 +21,7 @@
       <el-button type="text" class="button" @click="toTweet">查看全部动态</el-button>
     </el-row>
   </el-card>  
-   <el-card>
+   <el-card style="margin-top:20px">
     <template #header>
       <span style="font-size:18px"><b>职位</b></span>
     </template>
@@ -112,13 +112,13 @@ ssss`,
   },
   methods:{
     toDescription:function(){
-      this.$router.push({ path:'companyDescription' })
+      this.$router.push({ path:'description' })
     },
     toTweet: function(){
-      this.$router.push({ path:'companyTweet' })
+      this.$router.push({ path:'tweets' })
     },
     toRecruitment: function(){
-      this.$router.push({ path:'companyRecruitment' })
+      this.$router.push({ path:'recruitments' })
     }
   }
 }

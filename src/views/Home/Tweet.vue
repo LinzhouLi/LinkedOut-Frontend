@@ -59,8 +59,6 @@
 
 <script>
 import 'emoji-picker-element';
-import { Eleme, PictureFilled, Plus, CloseBold } from '@element-plus/icons';
-import { ElMessage } from 'element-plus';
 import TweetDisp from '@/components/TweetDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';

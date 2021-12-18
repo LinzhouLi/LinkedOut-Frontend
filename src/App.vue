@@ -1,5 +1,5 @@
 <template>
-  <router-view/>
+  <router-view :key="JSON.stringify($route.params)" />
 </template>
 
 <style>

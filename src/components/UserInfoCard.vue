@@ -7,7 +7,7 @@
       <div id="name" @click="checkUserInfo"><b>{{ userName }}</b></div>
       <div id="brief-info" @click="checkUserInfo">{{ userBriefInfo }}</div>
       <el-divider/>
-      <el-row v-if="userType=='company'" class="pointer-area" @click="setJobIntention">
+      <el-row v-if="userType=='user'" class="pointer-area" @click="setJobIntention">
         <el-col :offset="2" :span="10">
           <div class="text">求职意向</div>
         </el-col>

@@ -1,61 +1,58 @@
 <template>
   <el-container direction="vertical">
     <!-- 用户发布动态区域 -->
-    <el-card>
-      <!-- 输入发布动态的文字内容 -->
-      <el-input
-        id="tweet-input"
-        v-model="tweetText"
-        :autosize="{ minRows: 2, maxRows: 6 }"
-        type="textarea"
-        placeholder="发表动态"
+    <post-tweet/>
+    <!-- 分割线 -->
+    <el-row style="margin-bottom: -20px;">
+      <el-col :offset="1" :span="19">
+        <el-divider style="margin: 18px 0px;"/>
+      </el-col>
+      <el-col :span="4">
+        <div 
+          class="refresh-div"
+          @click="reloadInitialTweets" 
+          style="margin:8px 10px 0px; display: flex;"
+        >
+          <el-icon :size="20"><refresh-right /></el-icon>
+          <div>刷新</div>
+        </div>
+      </el-col>
+    </el-row>
+    <!-- 关注者动态展示区域 -->
+    <el-skeleton :loading="loadingInitialTweets" animated :count="1">
+      <!-- 加载状态骨架屏 -->
+      <template #template>
+        <el-card style="margin-top: 20px">
+          <el-skeleton-item style="width:60%" />
+          <el-skeleton-item/>
+          <el-skeleton-item/>
+          <el-skeleton-item style="width:30%"/>
+          <el-skeleton-item variant="image" style="height:300px; margin-top:15px;" />
+        </el-card>
+      </template>
+      <!-- 加载完成的动态 -->
+      <template #default>
+        <div v-for="(item,index) in tweetList" :key="index">
+          <tweet-disp style="margin-top:20px" v-bind="item" /> 
+        </div>
+      </template>
+    </el-skeleton>
+    <!-- 没有动态时的页面底部 -->
+    <div v-if="loadAll">
+      <el-divider style="margin: 15px 0px;" />
+      <div 
+        class="refresh-div" 
+        @click="reloadInitialTweets"
+        style="margin: 20px 0px"
       >
-      </el-input>
-      <!-- 图片预览区 -->
-      <el-row>
-        <el-col :span="6" v-for="(pic, index) in picList" :key="index">
-          <el-container>
-            <el-image class="img-preview" :src="pic.url" fit="contain"/>
-            <el-icon class="img-cross" @click="removePicture(index)"><close-bold /></el-icon>
-          </el-container>
-        </el-col>
+      没有更多动态了, 点击刷新 :)
+      </div>
+    </div>
+    <!-- 正在加载更多动态时的页面底部 -->
+    <div v-if="loadingMoreTweets">
+      <el-row justify="center" style="margin: 20px 0px;">
+        <el-icon :size="20" class="is-loading"><loading /></el-icon>
       </el-row>
-      <!-- 发布动态卡片底部 选择图片/表情/发表按钮 -->
-      <el-row style="margin-top:10px">
-        <el-col :offset="1" :span="3">
-          <el-popover placement="bottom" :width="288" trigger="click">
-            <template #reference>
-              <el-button :icon="Eleme" size="mini" @click="selectEmoji" circle></el-button>
-            </template>
-            <emoji-picker class="light" id="tweet-emoji-picker"></emoji-picker>
-          </el-popover>
-        </el-col>
-        <el-col :span="3">
-          <el-popover placement="bottom" :width="146" trigger="click">
-            <template #reference>
-              <el-button :icon="PictureFilled" size="mini" circle></el-button>
-            </template>
-            <el-upload
-              action=""
-              ref="picUploader"
-              list-type="picture-card"
-              :auto-upload="false"
-              :show-file-list="false"
-              :on-change="Addpicture"
-            >
-              <el-icon><plus /></el-icon>
-            </el-upload>
-          </el-popover>
-        </el-col>
-        <el-col :offset="13" :span="4">
-          <el-button size="mini" @click="uploadTweet">
-            发布
-          </el-button>
-        </el-col>
-      </el-row>
-    </el-card>
-    <div v-for="(item,index) in tweetList" :key="index">
-      <tweet-disp v-bind="item" /> 
     </div>
   </el-container>
 </template>
@@ -65,62 +62,57 @@ import 'emoji-picker-element';
 import { Eleme, PictureFilled, Plus, CloseBold } from '@element-plus/icons';
 import { ElMessage } from 'element-plus';
 import TweetDisp from '@/components/TweetDisp';
+import { Loading, RefreshRight } from '@element-plus/icons';
+import PostTweet from '@/components/PostTweet';
+
+let url = require('@/assets/ADimg.jpg');
+let tweet = {
+  tweetId: 0,
+  userId: 123,
+  userName: '张三',
+  userType: 'user',
+  userIconUrl: '',
+  userBriefInfo: '腾讯员工',
+  tweetText: `# s
+🥶sdas
+123123
+**asdva**
+### s`,
+  tweetPics: [
+    url, url, url
+  ],
+  likeNum: 10,
+  isLiked: false,
+  commentNum: 20,
+};
 
 export default {
   components: {
-    Eleme,
-    PictureFilled,
-    Plus,
-    CloseBold,
-    ElMessage,
-    TweetDisp
-  },
-  setup() {
-    return {
-      Eleme,
-      PictureFilled,
-      Plus
-    }
-  },
-  mounted() {
-    this.tweetInputDom = document.getElementById('tweet-input');
-    document.getElementById('tweet-emoji-picker').addEventListener('emoji-click', event => {
-      // 向文本中添加表情
-      this.tweetInputDom.focus();
-      let startPos = this.tweetInputDom.selectionStart;
-      let endPos = this.tweetInputDom.selectionEnd;
-      this.tweetText = this.tweetText.substring(0, startPos) + event.detail.unicode + this.tweetText.substring(endPos);
-    });
+    TweetDisp,
+    PostTweet,
+    Loading,
+    RefreshRight
   },
   created() {
-    let url = require('@/assets/ADimg.jpg');
-    let tweet = {
-      tweetId: 0,
-      userId: 123,
-      userName: '张三',
-      userType: 'user',
-      userIconUrl: '',
-      userBriefInfo: '腾讯员工',
-      tweetText: `# s
-  🥶sdas
-  123123
-  **asdva**
-  ### s`,
-      tweetPics: [
-         url, url, url
-      ],
-      likeNum: 10,
-      isLiked: false,
-      commentNum: 20,
-    };
-    for(let i = 0; i < 20; i++) {
-      let t = JSON.parse(JSON.stringify(tweet));
-      t.tweetId = Math.floor(Math.random()*10000);
-      this.tweetList.push(t);
+    this.reloadInitialTweets();
+  },
+  mounted() {
+    window.onscroll = () => {
+      let scrollTop = document.documentElement.scrollTop || document.body.scrollTop; // 距离顶部的距离
+      let windowHeight = document.documentElement.clientHeight || document.body.clientHeight; // 可视区的高度
+      let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight; // 滚动条的总高度
+      if(scrollTop + windowHeight >= scrollHeight){ // 滚动条滚动至底部
+        if(!this.loadingInitialTweets && !this.loadingMoreTweets && !this.loadAll) { // 不能正在加载或已加载结束
+          this.loadMoreTweets();
+        }
+      } 
     }
   },
   data() {
     return {
+      loadingInitialTweets: true, // 是否正在加载初始动态
+      loadingMoreTweets: false, // 是否正在加载更多动态
+      loadAll: false, // 是否加载结束
       tweetList: [],
       picList: [],
       tweetInputDom: null,
@@ -129,60 +121,47 @@ export default {
     }
   },
   methods: {
-    selectEmoji: function() { // 选中动态内容输入区emoji
-      this.tweetInputDom.focus();
-    },
-    Addpicture: function(file) { // 添加预览图片
-      if(this.picList.length < 3) {
-        this.picList.push(file);
-      }
-      else {
-        ElMessage.error('最多上传3张图片!');
-      }
-      this.$refs.picUploader.clearFiles();
-    },
-    removePicture: function(index) { // 删除预览图片
-      this.picList.splice(index, 1);
-    },
-    uploadTweet: function() { // 上传动态
+    reloadInitialTweets: function() { // 加载初始动态
+      this.tweetList = []; // 清空动态列表
+      this.loadAll = false;
+      this.loadingInitialTweets = true; // 开始加载
       // TODO
-      console.log('upload')
+      setTimeout(() => {
+        for(let i = 0; i < 12; i++) {
+          let t = JSON.parse(JSON.stringify(tweet));
+          t.tweetId = Math.floor(Math.random()*10000);
+          this.tweetList.push(t);
+        }
+        this.loadingInitialTweets = false; // 加载结束
+      }, 2000)
     },
-    loadTweets: function() { // 加载关注者动态
+    loadMoreTweets: function() { // 加载更多动态
+      this.loadingMoreTweets = true; // 开始加载
       // TODO
-      console.log(1)
-      // let url = require('@/assets/ADimg.jpg');
-      // let tweet = {
-      //   userId: 123,
-      //   userName: '张三',
-      //   userType: 'user',
-      //   userIconUrl: '',
-      //   userBriefInfo: '腾讯员工',
-      //   tweetText: '1231231231231212312123123123123',
-      //   tweetPics: [
-      //     url, url, url
-      //   ]
-      // };
-      // for(let i = 0; i < 5; i++) {
-      //   this.tweetList.push(tweet);
-      // }
+      setTimeout(() => {
+        for(let i = 0; i < 6; i++) {
+          let t = JSON.parse(JSON.stringify(tweet));
+          t.tweetId = Math.floor(Math.random()*10000);
+          this.tweetList.push(t);
+        }
+        this.loadingMoreTweets = false; // 加载结束
+        this.loadAll = true; // 去掉
+      }, 2000)
+      
     }
   }
 }
 </script>
 
 <style scoped>
-emoji-picker {
-  --emoji-size: 1rem;
+.refresh-div {
+  font-size: 14px;
+  color: rgb(122 122 122);
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
 }
-.img-preview {
-  margin: 10px 5px 10px 10px;
-}
-.img-cross {
-  margin-top:10px;
-}
-.img-cross:hover {
+.refresh-div:hover {
   color: #409eff;
-  margin-top:10px;
 }
 </style>

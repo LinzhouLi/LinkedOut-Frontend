@@ -13,7 +13,7 @@
     <el-row>
       <el-col :span="6" v-for="(pic, index) in picList" :key="index">
         <el-container>
-          <el-image class="img-preview" :src="pic.url" fit="contain"/>
+          <el-image class="img-preview" :src="pic" fit="contain"/>
           <el-icon class="img-cross" @click="removePicture(index)"><close-bold /></el-icon>
         </el-container>
       </el-col>
@@ -28,22 +28,17 @@
           <emoji-picker class="light" id="tweet-emoji-picker"></emoji-picker>
         </el-popover>
       </el-col>
+      <!-- 选择图片 -->
       <el-col :span="3">
-        <el-popover placement="bottom" :width="146" trigger="click">
-          <template #reference>
-            <el-button :icon="PictureFilled" size="mini" circle></el-button>
-          </template>
-          <el-upload
-            action=""
-            ref="picUploader"
-            list-type="picture-card"
-            :auto-upload="false"
-            :show-file-list="false"
-            :on-change="Addpicture"
-          >
-            <el-icon><plus /></el-icon>
-          </el-upload>
-        </el-popover>
+        <el-upload
+          action=""
+          ref="picUploader"
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-change="Addpicture"
+        >
+          <el-button :icon="PictureFilled" size="mini" circle></el-button>
+        </el-upload>
       </el-col>
       <el-col :offset="13" :span="4">
         <el-button size="mini" @click="uploadTweet">
@@ -67,11 +62,16 @@ export default {
     CloseBold,
     ElMessage
   },
-    setup() {
+  setup () {
     return {
       Eleme,
-      PictureFilled,
-      Plus
+      PictureFilled
+    }
+  },
+  created() {
+    this.imgReader = new FileReader();
+    this.imgReader.onload = (event) => {
+      this.picList.push(event.target.result);
     }
   },
   mounted() {
@@ -86,6 +86,8 @@ export default {
   },
   data() {
     return {
+      imgPopoverVisible: true,
+      imgReader: null,
       picList: [],
       tweetInputDom: null,
       showEmojiSelector: false,
@@ -98,7 +100,9 @@ export default {
     },
     Addpicture: function(file) { // 添加预览图片
       if(this.picList.length < 3) {
-        this.picList.push(file);
+        this.imgPopoverVisible = false;
+        this.imgReader.readAsDataURL(file.raw);
+        URL.revokeObjectURL(file.url);
       }
       else {
         ElMessage.error('最多上传3张图片!');
@@ -110,6 +114,7 @@ export default {
     },
     uploadTweet: function() { // 上传动态
       // TODO
+      console.log(this.picList);
       console.log('upload')
     },
   }

@@ -11,6 +11,7 @@ import CompanyDescription from '../views/CompanyInfo/CompanyDescription'
 import CompanyTweet from '../views/CompanyInfo/CompanyTweet'
 import CompanyRecruitment from '../views/CompanyInfo/CompanyRecruitment'
 import MyInfoPage from '../views/MyInfoPage'
+import Search from '../views/Home/Search'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -21,6 +22,7 @@ const routes = [
       { path: '', redirect: '/home/tweets'},
       { path: 'tweets', component: Tweet },
       { path: 'recruitments', component: Recruitment },
+      { path: 'search', name: 'search', component: Search }
     ]
   },
   { path: '/myinfo', component: MyInfoPage},

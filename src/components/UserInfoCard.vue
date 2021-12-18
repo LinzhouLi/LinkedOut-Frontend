@@ -26,16 +26,20 @@
       </el-row>
     </el-card>
   </el-affix>
+
+  <job-intention-dialog :visible="showDialog" @close="showDialog=false" />
 </template>
 
 <script>
 import UserIcon from './UserIcon.vue';
 import { ArrowRight } from '@element-plus/icons';
+import JobIntentionDialog from './JobIntentionDialog.vue';
 
 export default {
   components: { 
     UserIcon,
-    ArrowRight
+    ArrowRight,
+    JobIntentionDialog
   },
   props: {
     userName: {
@@ -51,13 +55,17 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      showDialog: false
+    }
+  },
   methods: {
     checkUserInfo: function() {
       this.$router.push({ path: '/myinfo' });
     },
     setJobIntention: function() {
-      //TODO
-      console.log("setJobIntention");
+      this.showDialog = true;
     },
     postTweet: function() {
       //TODO
@@ -91,6 +99,9 @@ export default {
 }
 .pointer-area {
   cursor: pointer;
+}
+.pointer-area:hover {
+  color: #409eff;
 }
 .text {
   font-size: 15px;

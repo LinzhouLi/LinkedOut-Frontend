@@ -5,6 +5,7 @@ import Tweet from '../views/Home/Tweet'
 import Recruitment from '../views/Home/Recruitment'
 import RecruitmentDetailPage from '../views/RecruitmentDetailPage'
 import UserInfoPage from '../views/UserInfoPage'
+import ModifyUserInfo from '../views/ModifyUserInfo'
 import CompanyInfoPage from '../views/CompanyInfo/CompanyInfoPage'
 import CompanyHome from '../views/CompanyInfo/CompanyHome'
 import CompanyDescription from '../views/CompanyInfo/CompanyDescription'
@@ -36,7 +37,11 @@ const routes = [
     name: 'userinfo',
     component: UserInfoPage
   },
-  
+  {
+    path: '/modifyUserInfo/:uid',
+    name: 'modifyUserInfo',
+    component: ModifyUserInfo
+  },
   { path: '/companyInfo/:cid',
   name: 'companyinfo',
   component: CompanyInfoPage,

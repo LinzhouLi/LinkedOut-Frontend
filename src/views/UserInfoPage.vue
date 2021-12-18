@@ -16,6 +16,7 @@
            <div id="livePlace">所在地：{{user.livePlace}}</div>
            <el-container direction="horizontal" id="buttons">
              <el-button>关注</el-button>
+             <el-button @click="toModifyUserInfo">修改个人信息</el-button>
            </el-container>
          </el-col>
          <el-col style="margin-top:100px">
@@ -107,6 +108,7 @@ ssss`,
       this.tweetList.push(t);
     }
     let workExperience = {
+      modifiable: false,
       workExperienceId: 0,
       position: 'Java开发工程师',
       enterprise: '字节跳动',
@@ -120,6 +122,7 @@ ssss`,
       this.workExperienceList.push(w);
     }
     let educationExperience = {
+      modifiable: false,
       educationExperienceId: 0,
       college: '同济大学',
       major: '软件工程',
@@ -133,6 +136,11 @@ ssss`,
       this.educationExperienceList.push(e);
     }
     
+  },
+  mounted(){
+    this.axios
+      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
+      .then(response => (this.info = response))
   },
   data() {
     return{
@@ -148,6 +156,9 @@ ssss`,
    },
    toEducation: function(){
      document.getElementById("education").scrollIntoView()
+   },
+   toModifyUserInfo: function(){
+     this.$router.push({ name: 'modifyUserInfo', params: { uid: this.user.userId }});
    }
   }
 }

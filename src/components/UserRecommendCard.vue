@@ -26,21 +26,25 @@
     >
       <el-image :src="ADimgUrl" fit="cover"/>
     </el-card>
-    <div style="margin-top:20px;">
-      <el-container style="margin:0px 26%">
-        <el-image :src="logoUrl" style="width: 21px"></el-image>
-        <div style="font-size:10px">LinkedOut © 2021</div>
-      </el-container>
-    </div>
-    <div id="text-div">同济大学软件工程课程项目</div>
+    <page-footer v-if="ifFooter" />
   </el-affix>
 </template>
 
 <script>
 import UserBriefDisp from '@/components/UserBriefDisp.vue';
+import PageFooter from './PageFooter.vue';
 
 export default {
-  components: { UserBriefDisp },
+  components: { 
+    UserBriefDisp,
+    PageFooter
+  },
+  props: {
+    ifFooter: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       ADimgUrl: require('@/assets/ADimg.jpg'),

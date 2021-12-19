@@ -17,7 +17,7 @@
             style="margin:0px 0px 20px"
             router
           >
-            <el-menu-item :index="`/companyInfo/${userId}/companyHome`">         
+            <el-menu-item :index="`/companyInfo/${userId}/companyHome`" v-model="num">         
               首页
             </el-menu-item>
             <el-menu-item :index="`/companyInfo/${userId}/companyDescription`">

@@ -10,13 +10,13 @@
     <div>
       <div style="padding:5px 15px;"><span :id="`text-area-${tweetId}`"/></div>
       <el-carousel :autoplay="false">
-        <el-carousel-item v-for="(picUrl,index) in tweetPics" :key="index">
+        <el-carousel-item v-for="(picUrl,index) in pictureList" :key="index">
           <el-image :src="picUrl" style="width:100%;" fit="cover" />
         </el-carousel-item>
       </el-carousel>
     </div>
     <div class="tweet-time">
-      发表于{{  }}
+      发表于{{recordTime}}
     </div>
     <el-divider style="margin: 0px;" />
     <!-- 卡片底部 点赞/评论/分享 -->
@@ -89,6 +89,8 @@ import 'emoji-picker-element';
 import UserBriefDisp from './UserBriefDisp';
 import VditorPreview from 'vditor/dist/method.min';
 import { Share, ChatLineSquare, Star, Eleme } from '@element-plus/icons';
+import {addLikes,deleteLikes,getAllComments,addComment} from '@/apis/tweet.js';
+import { localeContextKey } from 'element-plus';
 
 export default {
   components: { 
@@ -123,11 +125,14 @@ export default {
       type: String,
       default: '',
     },
-    likeNum: { // 点赞数量
+    simpleUserInfo:{
+      type:Object,
+    },
+    praiseNum: { // 点赞数量
       type: Number,
       required: true,
     },
-    isLiked: { // 用户是否点赞此条动态
+    like_state: { // 用户是否点赞此条动态
       type: Boolean,
       required: true
     },
@@ -135,32 +140,36 @@ export default {
       type: Number,
       required: true,
     },
-    tweetText: { // 动态内容
+    contents: { // 动态内容
       type: String,
       required: true,
     },
-    tweetPics: { // 图片url数组
+    pictureList: { // 图片url数组
       type: Array,
       default: [],
+    },
+    recordTime: { // 图片url数组
+      type: String,
+      dafault:''
     }
   },
   created() {
-    this._likeNum = this.likeNum;
+    this._likeNum = this.praiseNum;
     this._commentNum = this.commentNum;
-    this.likeState = this.isLiked;
+    this.likeState = this.like_state;
     this.Eleme = Eleme;
   },
   mounted() {
-    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.tweetText);
+    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.contents);
     this.likeDom = document.getElementById(`like-icon-${this.tweetId}`);
     this.commentDom = document.getElementById(`comment-icon-${this.tweetId}`);
   },
   computed: {
     user() {
       return {
-        userId: this.userId,
-        userName: this.userName,
-        userType: this.userType,
+        userId: this.unifiedId,
+        userName: this.simpleUserInfo.true_name,
+        userType: this.simpleUserInfo.user_type,
         userIconUrl: this.userIconUrl,
         userBriefInfo: this.userBriefInfo
       }
@@ -184,24 +193,47 @@ export default {
     selectCommentEmoji: function() { // 选中评论输入区emoji
       this.myCommentInputDom.focus();
     },
-    uploadMyComment: function() { // 发表评论
+    uploadMyComment:async function() { // 发表评论
       // TODO
+      const date=new Date()
+      const params={
+      unifiedId:localStorage.getItem('unifiedId'),
+      tweetId:this.tweetId,
+      recordTime:date.toJSON(),
+      content:this.myCommentText,
+      }
+      console.log(params);
+      const resp=await addComment(params);
+      console.log(resp);
     },
-    likeTweet: function() { // 点赞动态
+    likeTweet: async function() { // 点赞动态
+    const params={unifiedId:localStorage.getItem('unifiedId'),tweetId:this.tweetId};
       if(this.likeState == false) {
         // TODO 点赞
         this.likeDom.style.color = '#409eff';
         this.likeState = true;
+        const resp=await addLikes(params);
+
+        this._likeNum=resp.data.data;
+        // this._likeNum++;
       }
       else {
         // TODO 取赞
         this.likeDom.style.color = '';
-        this.likeState = false
+        this.likeState = false;
+        const resp=await deleteLikes(params);
+        console.log(resp);
+        this._likeNum=resp.data.data;
       }
     },
-    getComments: function() { // 用户点击评论图标, 展示所有评论
+    getComments: async function() { // 用户点击评论图标, 展示所有评论
       if(this.commentState == false) {
         // TODO 打开评论
+        // s\是
+
+        const resp=await getAllComments({tweetId:this.tweetId});
+
+        //不确定数据类型的格式
         let comment = {
           user: {
             tweetId: 0,

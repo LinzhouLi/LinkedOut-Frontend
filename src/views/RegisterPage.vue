@@ -95,9 +95,9 @@ export default {
         userType:this.model.userType
       }
       try{
-        console.log(params);
+      
       const resp=await userRegister(params);
-      console.log(resp);
+     
         this.$message.success('注册成功！');
         //localStorage.setItem()
         setTimeout(()=>{this.$router.push('/login')},2000)
@@ -114,7 +114,7 @@ export default {
       this.loadingCode = true;
       try {
         const resp = await getEmailCode({mail:this.model.email});
-        console.log(resp);
+
         this.validateCode=resp.data.data;
       } catch (e) {
         console.log(e);

@@ -39,7 +39,7 @@
 
 <script>
 import TopNav from '@/components/TopNav';
-import { getEmailCode,userLogin } from '@/apis/users.js';
+import { userLogin } from '@/apis/users.js';
 import {LoginRules as Rules} from '@/utils/loginPage';
 
 // import { Search } from '@element/icons-vue'
@@ -65,7 +65,6 @@ export default {
       }
       try{
       const resp=await userLogin(params);
-      console.log(resp);
         this.$message.success('登陆成功！');
         const {unifiedId,userType}=resp.data.data;
         localStorage.setItem("unifiedId",unifiedId)
@@ -79,18 +78,6 @@ export default {
         this.loading=false;
       }
 
-    },
-    async sendCode() {
-      // 拿到code
-      this.loadingCode = true;
-      try {
-        const resp = await getEmailCode({mail:this.model.email});
-        console.log(resp);
-      } catch (e) {
-        console.log(e);
-      }finally{
-        this.loadingCode=false;
-      }
     },
   },
   components: {

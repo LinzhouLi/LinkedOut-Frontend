@@ -1,18 +1,21 @@
 <template>
   <el-container direction="horizontal" style="padding:5px">
+    <div class="avatarContainer">
     <user-icon 
       :size="36" 
       :url="userIconUrl" 
       style="cursor:pointer"
       @click="checkUser"
     />
+    </div>
+
     <el-container 
       direction="vertical" 
       style="padding-left:10px"
       @click="checkUser"
     >
-      <span class="name"><b>{{ userName }}</b></span>
-      <span class="brief-info">{{ userBriefInfo }}</span>
+      <div class="name"><b>{{ userName }}</b></div>
+      <div class="brief-info">{{ userBriefInfo }}</div>
     </el-container>
   </el-container>
 </template>
@@ -63,8 +66,11 @@ export default {
   cursor: pointer;
 }
 .brief-info {
-  font-size: 12px;
+  font-size: 10px;
   color: rgb(122 122 122);
   cursor: pointer;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

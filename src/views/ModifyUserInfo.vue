@@ -16,7 +16,7 @@
            <div style="margin-top: 10px; margin-left:140px" v-if="modifyUserName">
              <el-input v-model="userNameInput" placeholder="请输入新姓名"/>
              <el-row style="margin-top: 30px">
-               <el-button @click="saveUserName" type="primary" :disabled="isUserNameEmpty()" size="mini">
+               <el-button @click="saveUserName" type="primary" :disabled="userNameInput==''" size="mini">
                  保存
                </el-button>
                <el-button @click="modifyUserName=false; userNameInput=''" size="mini">
@@ -36,7 +36,7 @@
             <div style="margin-top: 10px; margin-left:140px" v-if="modifyBriefInfo">
              <el-input v-model="briefInfoInput" placeholder="请输入新简介"/>
              <el-row style="margin-top: 30px">
-               <el-button @click="saveBriefInfo" type="primary" :disabled="isBriefInfoEmpty()" size="mini">
+               <el-button @click="saveBriefInfo" type="primary" :disabled="briefInfo==''" size="mini">
                  保存
                </el-button>
                <el-button @click="modifyBriefInfo=false; briefInfoInput=''" size="mini">
@@ -56,7 +56,7 @@
            <div style="margin-top: 10px; margin-left:118px" v-if="modifyLivePlace">
               <el-input v-model="livePlaceInput" placeholder="请输入新所在地"/>
              <el-row style="margin-top: 30px">
-               <el-button @click="saveLivePlace" type="primary" :disabled="isLivePlaceEmpty()" size="mini">
+               <el-button @click="saveLivePlace" type="primary" :disabled="livePlaceInput==''" size="mini">
                  保存
                </el-button>
                <el-button @click="modifyLivePlace=false; livePlaceInput=''" size="mini">
@@ -187,7 +187,6 @@
 import TopNav from '@/components/TopNav'
 import UserIcon from '@/components/UserIcon'
 import UserRecommendCard from '@/components/UserRecommendCard'
-import TweetBriefInfo from '@/components/TweetBriefInfo'
 import WorkExperience from '@/components/WorkExperience'
 import EducationExperience from '@/components/EducationExperience'
 
@@ -197,7 +196,6 @@ export default {
     TopNav,
     UserIcon,
     UserRecommendCard,
-    TweetBriefInfo,
     WorkExperience,
     EducationExperience
   },
@@ -209,25 +207,6 @@ export default {
       briefInfo: '同济大学学生',
       livePlace: '上海'
     };
-    let url = require('@/assets/ADimg.jpg');
-    let tweet = {
-      tweetId: 0,   
-      tweetText: `# 一级标题一级标题一级标题一级标题
-## 二级标题
-正文
-三四十岁
-ssss`,
-      tweetPics: [
-        url, url, url
-      ],
-      likeNum: 10,
-      commentNum: 20,
-    };
-    for(let i = 0; i < 6; i++) {
-      let t = JSON.parse(JSON.stringify(tweet));
-      t.tweetId = Math.floor(Math.random()*10000);
-      this.tweetList.push(t);
-    }
     let workExperience = {
       modifiable: true,
       workExperienceId: 0,
@@ -274,7 +253,6 @@ ssss`,
       modifyLivePlace: false,
       workDialogVisible: false,
       educationDialogVisible: false,
-      tweetList:[],
       workExperienceList:[],
       educationExperienceList:[],
       workForm: {
@@ -365,12 +343,6 @@ ssss`,
     }
   },
   methods: {
-   toWork: function(){
-     document.getElementById("work").scrollIntoView()
-   },
-   toEducation: function(){
-     document.getElementById("education").scrollIntoView()
-   },
    saveUserName: function(){//保存用户名字
      this.user.userName=this.userNameInput
      this.userNameInput=''
@@ -385,21 +357,6 @@ ssss`,
      this.user.livePlace=this.livePlaceInput
      this.livePlaceInput=''
      this.modifyLivePlace=false
-   },
-   isUserNameEmpty: function(){
-     if(this.userNameInput=='')
-       return true
-     else return false
-   },
-   isBriefInfoEmpty: function(){
-     if(this.briefInfoInput=='')
-       return true
-     else return false
-   },
-   isLivePlaceEmpty: function(){
-     if(this.livePlaceInput=='')
-       return true
-     else return false
    },
    submitWorkForm(formName) {
       this.$refs[formName].validate((valid) => {

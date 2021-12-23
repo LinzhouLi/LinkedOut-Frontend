@@ -11,6 +11,7 @@
     <el-container direction="horizontal" id="buttons">
         <el-button>关注</el-button>
         <el-button @click="jump">访问网站</el-button>
+        <el-button @click="modify">修改企业信息</el-button>
     </el-container>
   </el-container>
   
@@ -52,6 +53,10 @@ export default {
     jump(){
         let url = 'http://'+this.contactWay;
         window.open(url);
+    },
+    modify(){
+      this.$emit('modify',this.userId)
+      console.log("modify")
     }
   }
 }

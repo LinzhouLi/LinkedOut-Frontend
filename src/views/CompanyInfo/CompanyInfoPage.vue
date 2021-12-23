@@ -4,7 +4,7 @@
     <el-col :offset="3" :span="12" style="margin-right:20px">
       <!-- 公司信息卡片-->
       <el-card>
-        <company-info-card v-bind="user"/>
+        <company-info-card v-bind="user" @modify="toModifyCompanyInfo"/>
       </el-card>
 
       <!-- 详情、动态、在招职位卡片 -->
@@ -76,7 +76,9 @@ export default {
     }
   },
   methods: {
-   
+    toModifyCompanyInfo(){
+      this.$router.push({ name: 'modifyCompanyInfo', params: { cid: this.user.userId }})
+    }
   }
 }
 </script>

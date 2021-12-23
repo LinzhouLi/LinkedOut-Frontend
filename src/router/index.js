@@ -6,6 +6,7 @@ import Recruitment from '../views/Home/Recruitment'
 import RecruitmentDetailPage from '../views/RecruitmentDetailPage'
 import UserInfoPage from '../views/UserInfoPage'
 import ModifyUserInfo from '../views/ModifyUserInfo'
+import ModifyCompanyInfo from '../views/ModifyCompanyInfo'
 import CompanyInfoPage from '../views/CompanyInfo/CompanyInfoPage'
 import CompanyHome from '../views/CompanyInfo/CompanyHome'
 import CompanyDescription from '../views/CompanyInfo/CompanyDescription'
@@ -41,6 +42,11 @@ const routes = [
     path: '/modifyUserInfo/:uid',
     name: 'modifyUserInfo',
     component: ModifyUserInfo
+  },
+  {
+    path: '/modifyCompanyInfo/:cid',
+    name: 'modifyCompanyInfo',
+    component: ModifyCompanyInfo
   },
   { path: '/companyInfo/:cid',
   name: 'companyinfo',

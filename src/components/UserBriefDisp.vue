@@ -23,10 +23,12 @@
 <script>
 import UserIcon from './UserIcon.vue'
 
+
+
 export default {
   components: { UserIcon },
   props: {
-    userId: { // 用户统一ID
+    unifiedId: { // 用户统一ID
       type: Number,
       required: true,
     },
@@ -49,11 +51,14 @@ export default {
   },
   methods: {
     checkUser: function() {
-      if (this.userType == 'user') {
-        this.$router.push({ name: 'userinfo', params: { uid: this.userId }});
+      console.log(this.$props)
+      console.log(this.userType)
+      //userType存疑
+      if (this.userType == 'user'||1) {
+        this.$router.push({ name: 'userinfo', params: { uid: this.unifiedId }});
       }
       else if(this.userType == 'company') {
-        this.$router.push({ name: 'companyinfo', params: { cid: this.userId }});
+        this.$router.push({ name: 'companyinfo', params: { cid: this.unifiedId }});
       }
     }
   }

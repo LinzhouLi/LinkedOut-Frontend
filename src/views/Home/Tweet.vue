@@ -130,10 +130,10 @@ export default {
       const unifiedId=localStorage.getItem("unifiedId");
       const params={unifiedId,momentId:0} //Todo
       const resp=await getOtherTweet(params);
-      console.log(resp,'12312312312')
+
       this.tweetList=resp.data.data;
       this.tweetsSum=resp.data.data.length;
-      console.log(this.tweetList,'213123')
+
       this.loadingInitialTweets = false;
     },
     loadMoreTweets:async function() { // 加载更多动态

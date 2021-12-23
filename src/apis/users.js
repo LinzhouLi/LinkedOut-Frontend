@@ -17,8 +17,9 @@ export function userLogin(params){
     return user.get('/user',{params})//
 }
 
+//获取用户个人信息
 export function getUserInfo(params){
-    return user.get('/userinfo',{params})
+    return user.get('/user/userinfo',{params})
 }
 
 //获取企业用户信息
@@ -26,9 +27,9 @@ export function getEnterpriseInfo(params){
     return user.get('/enterpriseinfo',{params})
 }
 
-//用户信息维护
-export function putUserInfo(params){
-    return user.put('/userinfo',params)
+//用户个人信息维护
+export function updateUserInfo(params){
+    return user.post('/user/userinfo',params,{params})
 }
 
 export function putEnterpriseInfo(params){
@@ -40,7 +41,7 @@ export function upLoadUserImage(params){
 }
 
 export function userSearch(params){
-    return user.get('/search/truename',{params})
+    return user.get('/user/search',{params})
 }
 
 //教育经历 增删改查
@@ -57,6 +58,7 @@ export function updateUserEduBackground(params){
     return user.put('/user/edu',params)
 }
 
+//查询教育经历
 export function getUserEduBackground(params){
     return user.get('/user/edu',{params})
 }
@@ -68,6 +70,8 @@ export function postUserJobBackground(params){
     return user.post('/user/edu',params)
 }
 
+
+//查询工作经历
 export function getUserJobBackground(params){
     return user.get('/user/edu',{params})
 }

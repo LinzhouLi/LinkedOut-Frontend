@@ -16,7 +16,8 @@ export function getCompanyAllPosition(params){
     return recruit.get('/recruit/position/all',{params})
 }
 
-export function getRecommendPosition(params){
+//用户查看推荐岗位
+export function getRecommendPositions(params){
     return recruit.get('/recruit/position/recommend',{params})
 }
 

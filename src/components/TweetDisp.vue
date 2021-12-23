@@ -16,7 +16,7 @@
       </el-carousel>
     </div>
     <div class="tweet-time">
-      发表于{{recordTime}}
+      发表于{{getProperTimeString(recordTime)}}
     </div>
     <el-divider style="margin: 0px;" />
     <!-- 卡片底部 点赞/评论/分享 -->
@@ -47,10 +47,16 @@
         <div style="margin:10px 0px">
           <div class="comment-area">
             <user-brief-disp v-bind="item.user"/>
-            <div class="comment-time">发表于{{ item.commentTime }}</div>
+            <div class="comment-time">发表于{{ getProperTimeString(item.recordTime) }}</div>
+            <el-button size="mini" type="text" 
+            v-show="item.unifiedId==this.unifiedId" 
+            class="comment-delete-button"
+            @click="deleteComment(item)">删除</el-button>
           </div>
-          <div style="padding-left:66px">{{ item.commentText }}</div>
-        </div>
+        <div style="padding-left:66px">{{ item.contents }}</div>
+        
+      </div>
+      
         <el-divider v-if="index!=commentList.length-1" style="margin: 0px 10px 0px 66px;" />
       </div>
       <el-divider style="margin: 0px;" />
@@ -89,8 +95,9 @@ import 'emoji-picker-element';
 import UserBriefDisp from './UserBriefDisp';
 import VditorPreview from 'vditor/dist/method.min';
 import { Share, ChatLineSquare, Star, Eleme } from '@element-plus/icons';
-import {addLikes,deleteLikes,getAllComments,addComment} from '@/apis/tweet.js';
+import {addLikes,deleteLikes,getAllComments,addComment,deleteComment} from '@/apis/tweet.js';
 import { localeContextKey } from 'element-plus';
+import {getProperTimeString} from '@/utils/utils.js'
 
 export default {
   components: { 
@@ -187,6 +194,7 @@ export default {
       myCommentText: '',
       myCommentInputDom: null,
       Eleme: null,
+      unifiedId:'',
     }
   },
   methods: {
@@ -199,12 +207,20 @@ export default {
       const params={
       unifiedId:localStorage.getItem('unifiedId'),
       tweetId:this.tweetId,
-      recordTime:date.toJSON(),
-      content:this.myCommentText,
+      contents:this.myCommentText,
       }
-      console.log(params);
-      const resp=await addComment(params);
-      console.log(resp);
+
+
+      const resp1=await addComment(params);
+      if(resp1.data.code==='success'){
+        this.myCommentText='',
+        this.commentState=false
+        this.$message.success('发送成功');
+      }
+      // // this.getComments()
+      // console.log(resp1,'resp111111');
+
+
     },
     likeTweet: async function() { // 点赞动态
     const params={unifiedId:localStorage.getItem('unifiedId'),tweetId:this.tweetId};
@@ -227,28 +243,24 @@ export default {
       }
     },
     getComments: async function() { // 用户点击评论图标, 展示所有评论
+       this.unifiedId=localStorage.getItem('unifiedId');
       if(this.commentState == false) {
         // TODO 打开评论
         // s\是
 
         const resp=await getAllComments({tweetId:this.tweetId});
 
-        //不确定数据类型的格式
-        let comment = {
-          user: {
-            tweetId: 0,
-            userId: 123,
-            userName: '张三',
-            userType: 'user',
-            userIconUrl: '',
-            userBriefInfo: '腾讯员工',
-          },
-          commentText: '21342134😀😀😀',
-          commentTime: '2021-11-23 17:10'
-        }
-        for(let i = 0; i < 8; i++) {
-          this.commentList.push(comment);
-        }
+
+        this.commentList=resp.data.data;
+
+       console.log(this.commentList,'123213123213')
+        //不确定数据类型的格式  todo 需要加更多的参数
+        this.commentList.forEach(e=>{
+          e.user={
+            userName:e.simpleUserInfo.true_name,
+            userType:e.simpleUserInfo.user_type,
+          }
+        })
         this.commentState = true;
         this.commentDom.style.color = '#409eff';
         this.$nextTick(() => { // 确保document刷新后再获取表情选择器
@@ -267,6 +279,17 @@ export default {
         this.commentDom.style.color = '';
         this.commentState = false
         this.commentList = []
+      }
+    },
+    getProperTimeString:getProperTimeString,
+    deleteComment:async function(item){
+      console.log(item);
+      const resp=await deleteComment({unifiedId:this.unifiedId,tweetId:this.tweetId,floor:item.floor})
+      console.log(resp);
+      if(resp.status===200){
+        this.commentState=false
+        this.$message.success('删除成功');
+        //todo 评论数量更新问题
       }
     }
   }
@@ -301,12 +324,15 @@ export default {
   color: rgba(0,0,0,0.4);
 }
 .comment-time {
-  padding-top: 23px;
+  /* padding-top: 23px; */
   font-size: 12px;
   color: rgba(0,0,0,0.4);
 }
 .comment-area {
   padding: 5px 15px;
   display: flex;
+}
+.comment-delete-button{
+
 }
 </style>

@@ -11,11 +11,17 @@
              :url="user.userIconUrl" 
              style="cursor:pointer"
            />
-           <div id="userName">{{user.userName}}</div>
-           <div id="briefInfo">{{user.briefInfo}}</div>
-           <div id="livePlace">所在地：{{user.livePlace}}</div>
+           <div id="userName">{{user.userName||"未命名"}}</div>
+           <!-- <div id="briefInfo">{{user.briefInfo}}</div> -->
+           <!-- <div id="livePlace">所在地：{{user.livePlace}}</div> -->
+           <div id="phoneNum">电话：{{user.phoneNum}}</div>
+           <div id="age">年龄：{{user.age}}</div>
+
+
            <el-container direction="horizontal" id="buttons">
-             <el-button>关注</el-button>
+             <el-button v-if="this.user.isSubscribed!==0" @click="deleteFollow">已经关注</el-button>
+             <el-button v-else @click="updateFollow">关注</el-button>
+
            </el-container>
          </el-col>
          <el-col style="margin-top:100px">
@@ -68,6 +74,8 @@ import UserRecommendCard from '@/components/UserRecommendCard'
 import TweetBriefInfo from '@/components/TweetBriefInfo'
 import WorkExperience from '@/components/WorkExperience'
 import EducationExperience from '@/components/EducationExperience'
+import {getUserInfo,getUserJobBackground,getUserEduBackground} from '@/apis/users.js'
+import {updateFollow,deleteFollow,getSelfTweet} from '@/apis/tweet.js'
 
 
 export default {
@@ -79,7 +87,8 @@ export default {
     WorkExperience,
     EducationExperience
   },
-  created() {
+  created:async function(){
+
     this.user = {
       userId: 102,
       userName: '张三',
@@ -136,6 +145,7 @@ ssss`,
   },
   data() {
     return{
+      pageOwnerId:'',
       user: null,
       tweetList:[],
       workExperienceList:[],
@@ -148,7 +158,42 @@ ssss`,
    },
    toEducation: function(){
      document.getElementById("education").scrollIntoView()
+   },
+   updateFollow:async function(){
+     console.log(this.pageOwnerId)
+     const resp=await updateFollow({unifiedId:localStorage.getItem('unifiedId')
+     ,subscribeId:this.pageOwnerId})
+     this.user.isSubscribed=1;
+   },
+   deleteFollow:async function(){
+      console.log(this.pageOwnerId)
+     const resp=await deleteFollow({unifiedId:localStorage.getItem('unifiedId')
+     ,subscribeId:this.pageOwnerId})
+     this.user.isSubscribed=0;
    }
+  },
+  mounted:async function(){
+    this.pageOwnerId=this.$route.params.uid;
+    const unifiedId=localStorage.getItem('unifiedId');
+    const params={uid:localStorage.getItem('unifiedId'),sid:this.pageOwnerId}
+    const resp=await getUserInfo(params);
+    this.user=resp.data.data;
+
+
+    //获取工作经历
+    const resp2= await getUserJobBackground({unifiedId});
+
+    this.workExperienceList=resp2.data.data; 
+
+    //获取教育经历
+    const resp3=await getUserEduBackground({unifiedId});
+
+    this.EducationExperienceList=resp3.data.data; //教育经历
+
+    //获取动态
+    const resp4=await getSelfTweet({visitorId:unifiedId,intervieweeId:this.pageOwnerId,momentId:0});
+    console.log(resp4,'resp4=============')
+    this.tweetList=resp4.data.data.slice(0,6);
   }
 }
 </script>

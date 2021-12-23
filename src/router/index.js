@@ -35,7 +35,7 @@ const routes = [
     component: RecruitmentDetailPage
   },
   { 
-    path: '/userinfo/:uid',
+    path: '/userhomepage/:uid',
     name: 'userinfo',
     component: UserInfoPage
   },

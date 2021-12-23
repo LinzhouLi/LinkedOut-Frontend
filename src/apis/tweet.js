@@ -33,6 +33,7 @@ export function deleteLikes(params){
     return tweet.delete('/tweet/likes',{params})
 }
 
+//获取个人界面的动态
 export function getSelfTweet(params){
     return tweet.get('/tweet/self',{params})
 }
@@ -52,6 +53,7 @@ export function addComment(params){
     return tweet.post('/tweet/comment',params,{params})//存疑
 }
 
+//删除评论
 export function deleteComment(params){
     return tweet.delete('/tweet/comment/',{params})//存疑
 }

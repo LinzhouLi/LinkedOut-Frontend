@@ -7,7 +7,7 @@
     <el-container direction="vertical" style="margin:0px 0px 0px 5px">
     <span :id="`text-area-${tweetId}`" style="overflow:hidden" class="tweetText"/>
     <div class="small-text">
-       点赞（{{likeNum}})·评论（{{commentNum}}）
+       点赞（{{praiseNum}})·评论（{{commentNum}}）
     </div>
   
     </el-container>
@@ -31,7 +31,7 @@ props: {
       type: Number,
       required: true
     },
-    tweetText: { 
+    contents: { 
       type: String,
       required: true
     },
@@ -39,7 +39,7 @@ props: {
       type: Array,
       default:[]
     },
-    likeNum: {
+    praiseNum: {
       type: Number,
       required: true
     },
@@ -54,7 +54,7 @@ props: {
     }
   },
 mounted() {
-    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.tweetText);
+    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.contents);
  
   },
   

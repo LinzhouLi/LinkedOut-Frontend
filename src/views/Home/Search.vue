@@ -45,6 +45,7 @@
 <script>
 import UserBriefDisp from '../../components/UserBriefDisp.vue';
 import { RefreshRight } from '@element-plus/icons';
+import {userSearch} from '@/apis/users.js'
 
 let user = {
   userId: 123,
@@ -71,17 +72,21 @@ export default {
     }
   },
   methods: {
-    search() {
+    search:async function(){
       this.resultList = [];
       this.searching = true;
-      setTimeout(() => {
-        for(let i = 0; i < 8; i++) {
-          let t = JSON.parse(JSON.stringify(user));
-          t.userId = Math.floor(Math.random()*10000);
-          this.resultList.push(t);
-        }
-        this.searching = false;
-      }, 2000);
+      const resp=await userSearch({str:this.searchKey});
+      console.log(resp,'123123123')
+      this.resultList=resp.data.data;
+      this.searching=false;
+      // setTimeout(() => {
+      //   for(let i = 0; i < 8; i++) {
+      //     let t = JSON.parse(JSON.stringify(user));
+      //     t.userId = Math.floor(Math.random()*10000);
+      //     this.resultList.push(t);
+      //   }
+      //   this.searching = false;
+      // }, 2000);
     }
   }
 }

@@ -30,23 +30,17 @@
           <el-input v-model="form.enterprise" placeholder="例如:微软"></el-input>
         </el-form-item>
               
-        <el-form-item label="开始时间" prop="startTime" required>
-          <el-date-picker
-          v-model="form.startTime"
-          type="month"
-          placeholder="请选择开始时间"
-          >
-          </el-date-picker>
+        <el-form-item label="起止时间" prop="times" required>
+        <el-date-picker
+        v-model="form.times"
+        type="monthrange"
+        range-separator="至"
+        start-placeholder="请选择开始时间"
+        end-placeholder="请选择结束时间"
+        value-format="YYYY年DD月">
+        </el-date-picker>
         </el-form-item>
-              
-        <el-form-item label="结束时间" prop="endTime" required>
-          <el-date-picker
-          v-model="form.endTime"
-          type="month"
-          placeholder="请选择结束时间"
-          >
-          </el-date-picker>
-        </el-form-item>       
+
         <el-form-item label="描述" prop="description">
            <el-input v-model="form.description" type="textarea"></el-input>
            </el-form-item>
@@ -72,6 +66,7 @@ export default {
           enterprise: '',
           startTime: '',
           endTime: '',
+          times:[],
           description: ''
         },
         rules: {
@@ -89,22 +84,15 @@ export default {
             trigger: 'change',
           },
         ],
-        startTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择开始时间',
-            trigger: 'change',
-          },
+        times: [
+           {
+             type: 'array',
+             fields: {
+               0: {type: 'string', required: true, message: '请选择起止时间'},
+               1: {type: 'string', required: true, message: '请选择起止时间'}
+             }
+           }
         ],
-        endTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择结束时间',
-            trigger: 'change',
-          },
-        ]
       },
       }
     },
@@ -153,6 +141,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.form.startTime=this.form.times[0]
+          this.form.endTime=this.form.times[1]
           alert('工作经历修改成功!')
           this.$emit('modify',this.form)
           this.dialogVisible=false

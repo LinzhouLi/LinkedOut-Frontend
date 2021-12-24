@@ -97,23 +97,16 @@
               <el-form-item label="公司" prop="enterprise" required>
                 <el-input v-model="workForm.enterprise" placeholder="例如:微软"></el-input>
               </el-form-item>
-              
-              <el-form-item label="开始时间" prop="startTime" required>
+
+              <el-form-item label="起止时间" prop="times" required>
                <el-date-picker
-                v-model="workForm.startTime"
-                type="month"
-                placeholder="请选择开始时间"
-               >
-               </el-date-picker>
-              </el-form-item>
-              
-              <el-form-item label="结束时间" prop="endTime" required>
-               <el-date-picker
-                v-model="workForm.endTime"
-                type="month"
-                placeholder="请选择结束时间"
-               >
-               </el-date-picker>
+              v-model="workForm.times"
+              type="monthrange"
+              range-separator="至"
+               start-placeholder="请选择开始时间"
+                end-placeholder="请选择结束时间"
+                value-format="YYYY年DD月">
+              </el-date-picker>
               </el-form-item>
                
               <el-form-item label="描述" prop="description">
@@ -146,22 +139,15 @@
                </el-select>
               </el-form-item>
               
-              <el-form-item label="开始时间" prop="startTime" required>
+               <el-form-item label="起止时间" prop="times" required>
                <el-date-picker
-                v-model="educationForm.startTime"
-                type="month"
-                placeholder="请选择开始时间"
-               >
-               </el-date-picker>
-              </el-form-item>
-              
-              <el-form-item label="结束时间" prop="endTime" required>
-               <el-date-picker
-                v-model="educationForm.endTime"
-                type="month"
-                placeholder="请选择结束时间"
-               >
-               </el-date-picker>
+              v-model="educationForm.times"
+              type="monthrange"
+              range-separator="至"
+               start-placeholder="请选择开始时间"
+                end-placeholder="请选择结束时间"
+                value-format="YYYY年DD月">
+              </el-date-picker>
               </el-form-item>
 
               <el-form-item>
@@ -258,6 +244,7 @@ export default {
       workForm: {
         position: '',
         enterprise: '',
+        times:[],
         startTime: '',
         endTime: '',
         description: ''
@@ -267,7 +254,8 @@ export default {
         major: '',
         degree: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        times:[]
       },
       workFormRules: {
         position: [
@@ -275,31 +263,24 @@ export default {
             required: true,
             message: '请输入职位',
             trigger: 'change',
-          },
+          }
         ],
         enterprise: [
           {
             required: true,
             message: '请输入公司名',
             trigger: 'change',
-          },
+          }
         ],
-        startTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择开始时间',
-            trigger: 'change',
-          },
+        times: [
+           {
+             type: 'array',
+             fields: {
+               0: {type: 'string', required: true, message: '请选择起止时间'},
+               1: {type: 'string', required: true, message: '请选择起止时间'}
+             }
+           }
         ],
-        endTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择结束时间',
-            trigger: 'change',
-          },
-        ]
       },
       educationFormRules: {
         college: [
@@ -323,21 +304,14 @@ export default {
             trigger: 'change',
           },
         ],
-        startTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择开始时间',
-            trigger: 'change',
-          },
-        ],
-        endTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择结束时间',
-            trigger: 'change',
-          },
+        times: [
+           {
+             type: 'array',
+             fields: {
+               0: {type: 'string', required: true, message: '请选择起止时间'},
+               1: {type: 'string', required: true, message: '请选择起止时间'}
+             }
+           }
         ],
       },
     }
@@ -361,6 +335,8 @@ export default {
    submitWorkForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.workForm.startTime=this.workForm.times[0]
+          this.workForm.endTime=this.workForm.times[1]
           alert('工作经历添加成功!')
           this.workExperienceList.push(this.workForm)
           this.workDialogVisible=false
@@ -372,6 +348,8 @@ export default {
     submitEducationForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.educationForm.startTime=this.educationForm.times[0]
+          this.educationForm.endTime=this.educationForm.times[1]
           alert('教育经历添加成功!')
           this.educationExperienceList.push(this.educationForm)
           this.educationDialogVisible=false

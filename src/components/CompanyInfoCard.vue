@@ -67,6 +67,10 @@ export default {
     jump(){
         let url = 'http://'+this.contactWay;
         window.open(url);
+    },
+    modify(){
+      this.$emit('modify',this.userId)
+      console.log("modify")
     }
   }
 }

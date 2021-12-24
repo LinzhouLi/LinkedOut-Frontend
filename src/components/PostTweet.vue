@@ -53,6 +53,7 @@
 import 'emoji-picker-element';
 import { Eleme, PictureFilled, Plus, CloseBold } from '@element-plus/icons';
 import { ElMessage } from 'element-plus';
+import {addTweet} from '@/apis/tweet.js';
 
 export default {
   components: {
@@ -112,10 +113,18 @@ export default {
     removePicture: function(index) { // 删除预览图片
       this.picList.splice(index, 1);
     },
-    uploadTweet: function() { // 上传动态
-      // TODO
-      console.log(this.picList);
-      console.log('upload')
+    uploadTweet:async function() { // 上传动态
+      // TODO 发布动态文件传输的问题
+      let date=new Date();
+      const trueDate=date.toJSON().split('T')[0]+' '+date.toJSON().split('T')[1].split('Z')[0]
+      const params={
+        unifiedId:localStorage.getItem("unifiedId"),
+        content:this.tweetText,
+        recordTime:trueDate,
+        //files:this.picList,
+        // files:this. //todo 图片如何传
+      }
+      const resp=await addTweet(params);
     },
   }
 }

@@ -34,6 +34,17 @@
 import UserBriefDisp from '@/components/UserBriefDisp.vue';
 import PageFooter from './PageFooter.vue';
 import { ElNotification } from 'element-plus';
+import { getRecommentList,updateFollow,deleteFollow } from '@/apis/tweet.js';
+
+
+// briefInfo: "我太蓝了"
+// password: "xiaolan"
+// pictureUrl: "xiaolan.jpg"
+// subscribeNum: 0
+// trueName: "蓝蓝"
+// unifiedId: 6
+// userName: "小蓝"
+// userType: 1
 
 export default {
   components: { 
@@ -52,9 +63,9 @@ export default {
       logoUrl: require('@/assets/logo.png'),
       userRecommendList: [
         {
-          userId: 101,
+          unifiedId: 101,
           userName: '字节跳动',
-          userBriefInfo: '互联网企业',
+          briefInfo: '互联网企业',
           userType: 'company',
           ifFollowing: false
         },
@@ -82,26 +93,56 @@ export default {
     buttonText: (flag) => {
       return flag ? '已关注' : '关注';
     },
-    follow: function(index) {
+    follow: async function(index) {
       // TODO
       const user = this.userRecommendList[index];
-      if(user.ifFollowing) { // 已关注
-        ElNotification({
-          title: '取关成功',
-          type: 'success',
-        });
-        this.userRecommendList[index].ifFollowing = false;
+      const myUnifiedId=localStorage.getItem("unifiedId");
+      if(user.ifFollowing) { 
+        const params={unifiedId:myUnifiedId,subscribeId:user.unifiedId}
+        try{
+          const resp=await deleteFollow(params);
+        if(resp.status===200){
+          ElNotification({
+            title: '取关成功',
+            type: 'success',
+          });
+          this.userRecommendList[index].ifFollowing =false;
+        }
+        }catch(e){
+          console.log(e);
+        }
       }
       else { // 未关注
-        ElNotification({
-          title: '关注成功',
-          type: 'success',
-        });
-        this.userRecommendList[index].ifFollowing = true;
+        const params={unifiedId:myUnifiedId,subscribeId:user.unifiedId}
+        try{
+          const resp=await updateFollow(params);
+        if(resp.status===200){
+          ElNotification({
+            title: '关注成功',
+            type: 'success',
+          });
+          this.userRecommendList[index].ifFollowing = true;
+        }
+        }catch(e){
+          console.log(e);
+        }
+  
       }
     },
     toRecruitmentPage: function() {
       // this.$router.push('/home/recruitments');
+    }
+  },
+  mounted:async function(){
+    const unifiedId=localStorage.getItem("unifiedId");
+    try{
+        const resp=await getRecommentList({unifiedId});
+        const recommendList=resp.data.data;
+        this.userRecommendList=recommendList; 
+    }catch(e){
+      console.log(e)
+    }finally{
+      
     }
   }
 }

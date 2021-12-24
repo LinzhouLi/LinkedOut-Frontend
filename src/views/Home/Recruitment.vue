@@ -56,6 +56,7 @@
 <script>
 import RecruitmentDisp from '@/components/RecruitmentDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
+import {getRecommendPositions} from '@/apis/recruit.js';
 
 let recruitment = {
   recruitmentId: 0,
@@ -99,10 +100,15 @@ export default {
     }
   },
   methods: {
-    reloadInitialRecruitments: function() { // 加载初始招聘信息
+    reloadInitialRecruitments: async function() { // 加载初始招聘信息
       this.recruitmentList = []; // 清空招聘列表
       this.loadAll = false;
       this.loadingInitialRecruitments = true; // 开始加载
+
+      const params={unifiedId:localStorage.getItem('unifiedId')};
+      const resp=await getRecommendPositions(params);
+      console.log(resp,'123123')
+      // console.log(resp);
       // TODO
       setTimeout(() => {
         for(let i = 0; i < 15; i++) {

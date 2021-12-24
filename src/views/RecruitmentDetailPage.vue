@@ -33,6 +33,27 @@
         </div>
         <div id="map-container" @click="showFullMap" />
       </el-card>
+      <!-- 职位申请人卡片 -->
+      <el-card v-if="ifSelf" style="margin-top:20px" :body-style="{ padding: '0px' }">
+        <template #header>
+          <div><b>职位申请人</b></div>
+        </template>
+        <el-row>
+          <el-col :span=12 v-for="(user, index) in candidates" :key="index">
+            <el-container style="padding:5px 10px">
+              <user-brief-disp v-bind="user"/>
+              <el-button 
+                type="text" 
+                size="mini"
+                style="padding-right:10px"
+                @click="openUrl(user.resume)"
+              >
+                查看简历
+              </el-button>
+            </el-container>
+          </el-col>
+        </el-row>
+      </el-card>
     </el-col>
     <!-- 页面左部 -->
     <el-col :span="5">
@@ -79,6 +100,7 @@ export default {
     PageFooter
   },
   created() {
+    this.ifSelf = true;
     this.recruitmentTitle = '资深前端研发-到综商家';
     this.salary = '20-40K·15薪';
     this.limit = '上海 · 1-3年 · 本科';
@@ -88,6 +110,19 @@ export default {
       userType: 'company',
       userIconUrl: '',
       userBriefInfo: '互联网公司',
+    }
+    let candidate = {
+      userId: 123,
+      userName: '张三',
+      userType: 'user',
+      userIconUrl: '',
+      userBriefInfo: '前字节员工',
+      resume: 'https://www.baidu.com'
+    }
+    for(let i = 0; i < 8; i++) {
+      let t = JSON.parse(JSON.stringify(candidate));
+      t.userId = Math.floor(Math.random()*10000);
+      this.candidates.push(t);
     }
     this.location = '同济大学嘉定校区20号楼'
     this.detailedInfo = `# 职位描述
@@ -139,6 +174,8 @@ export default {
   },
   data() {
     return {
+      candidates: [],
+      ifSelf: false,
       recruitmentTitle: '',
       salary: '',
       limit: '',
@@ -153,6 +190,9 @@ export default {
     }
   },
   methods: {
+    openUrl: function(url) {
+      window.open(url, "_blank");
+    },
     postResume: function() {
       // TODO
     },

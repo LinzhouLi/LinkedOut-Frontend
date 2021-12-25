@@ -25,7 +25,7 @@
 
 <script>
 import _ from "lodash";
-
+import {updateUserInfo} from '@/apis/users.js'
 export default {
   props: {
     visible: {
@@ -62,9 +62,12 @@ export default {
       });
       return items;
     },
-    submit: function() {
+    submit: async function() {
       // TODO
       console.log(this.selectedJobs)
+      const params={trueName:'nametest1',unifiedId:localStorage.getItem("unifiedId")};
+      const resp=await updateUserInfo(params);
+      console.log(resp);
       this.$emit('close');
     }
   }

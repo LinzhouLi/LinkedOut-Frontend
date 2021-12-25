@@ -1,6 +1,6 @@
 <template>
    <el-container direction="horizontal">
-       <el-col span="5">
+       <el-col :span="2">
     <user-icon/>
     </el-col>
     <el-container direction="vertical" style="margin:0px 0px 0px 20px">

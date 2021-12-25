@@ -1,18 +1,21 @@
 <template>
   <el-container direction="horizontal" style="padding:5px">
+    <div class="avatarContainer">
     <user-icon 
       :size="36" 
       :url="userIconUrl" 
       style="cursor:pointer"
       @click="checkUser"
     />
+    </div>
+
     <el-container 
       direction="vertical" 
       style="padding-left:10px"
       @click="checkUser"
     >
-      <span class="name"><b>{{ userName }}</b></span>
-      <span class="brief-info">{{ userBriefInfo }}</span>
+      <div class="name"><b>{{ userName }}</b></div>
+      <div class="brief-info">{{ userBriefInfo }}</div>
     </el-container>
   </el-container>
 </template>
@@ -20,10 +23,12 @@
 <script>
 import UserIcon from './UserIcon.vue'
 
+
+
 export default {
   components: { UserIcon },
   props: {
-    userId: { // 用户统一ID
+    unifiedId: { // 用户统一ID
       type: Number,
       required: true,
     },
@@ -46,11 +51,14 @@ export default {
   },
   methods: {
     checkUser: function() {
-      if (this.userType == 'user') {
-        this.$router.push({ name: 'userinfo', params: { uid: this.userId }});
+      console.log(this.$props)
+      console.log(this.userType)
+      //userType存疑
+      if (this.userType == 'user'||1) {
+        this.$router.push({ name: 'userinfo', params: { uid: this.unifiedId }});
       }
       else if(this.userType == 'company') {
-        this.$router.push({ name: 'companyinfo', params: { cid: this.userId }});
+        this.$router.push({ name: 'companyinfo', params: { cid: this.unifiedId }});
       }
     }
   }
@@ -63,8 +71,11 @@ export default {
   cursor: pointer;
 }
 .brief-info {
-  font-size: 12px;
+  font-size: 10px;
   color: rgb(122 122 122);
   cursor: pointer;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

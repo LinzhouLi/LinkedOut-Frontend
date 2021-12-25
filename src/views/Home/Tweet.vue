@@ -59,11 +59,10 @@
 
 <script>
 import 'emoji-picker-element';
-import { Eleme, PictureFilled, Plus, CloseBold } from '@element-plus/icons';
-import { ElMessage } from 'element-plus';
 import TweetDisp from '@/components/TweetDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';
+import {getOtherTweet} from '@/apis/tweet.js'
 
 let url = require('@/assets/ADimg.jpg');
 let tweet = {
@@ -96,7 +95,7 @@ export default {
   created() {
     this.reloadInitialTweets();
   },
-  mounted() {
+  mounted:async function(){
     window.onscroll = () => {
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop; // 距离顶部的距离
       let windowHeight = document.documentElement.clientHeight || document.body.clientHeight; // 可视区的高度
@@ -118,36 +117,32 @@ export default {
       tweetInputDom: null,
       showEmojiSelector: false,
       tweetText: '',
+      tweetsSum:0,
     }
   },
   methods: {
-    reloadInitialTweets: function() { // 加载初始动态
+    reloadInitialTweets:async function() { // 加载初始动态
       this.tweetList = []; // 清空动态列表
       this.loadAll = false;
       this.loadingInitialTweets = true; // 开始加载
-      // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 12; i++) {
-          let t = JSON.parse(JSON.stringify(tweet));
-          t.tweetId = Math.floor(Math.random()*10000);
-          this.tweetList.push(t);
-        }
-        this.loadingInitialTweets = false; // 加载结束
-      }, 2000)
+      const unifiedId=localStorage.getItem("unifiedId");
+      const params={unifiedId,momentId:0} //Todo
+      const resp=await getOtherTweet(params);
+
+      this.tweetList=resp.data.data;
+      this.tweetsSum=resp.data.data.length;
+
+      this.loadingInitialTweets = false;
     },
-    loadMoreTweets: function() { // 加载更多动态
+    loadMoreTweets:async function() { // 加载更多动态
       this.loadingMoreTweets = true; // 开始加载
       // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 6; i++) {
-          let t = JSON.parse(JSON.stringify(tweet));
-          t.tweetId = Math.floor(Math.random()*10000);
-          this.tweetList.push(t);
-        }
-        this.loadingMoreTweets = false; // 加载结束
-        this.loadAll = true; // 去掉
-      }, 2000)
+      const unifiedId=localStorage.getItem("unifiedId");
+      const params={unifiedId,momentId:this.tweetsSum} //Todo
+      const resp=await getOtherTweet(params);
+      this.tweetList=[...this.tweetList,...resp.data.data];
       
+      this.loadingInitialTweets = false;
     }
   }
 }

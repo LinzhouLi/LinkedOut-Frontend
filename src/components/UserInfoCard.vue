@@ -7,9 +7,17 @@
       <div id="name" @click="checkUserInfo"><b>{{ userName }}</b></div>
       <div id="brief-info" @click="checkUserInfo">{{ userBriefInfo }}</div>
       <el-divider/>
-      <el-row class="pointer-area" @click="setJobIntention">
+      <el-row v-if="userType=='user'" class="pointer-area" @click="setJobIntention">
         <el-col :offset="2" :span="10">
           <div class="text">求职意向</div>
+        </el-col>
+        <el-col :offset="10" :span="2">
+          <el-icon class="arrow-icon" :size="20"><arrow-right /></el-icon>
+        </el-col>
+      </el-row>
+      <el-row v-if="userType=='company'" class="pointer-area" @click="postRecruitmentInfo">
+        <el-col :offset="2" :span="10">
+          <div class="text">发布职位</div>
         </el-col>
         <el-col :offset="10" :span="2">
           <el-icon class="arrow-icon" :size="20"><arrow-right /></el-icon>
@@ -53,6 +61,10 @@ export default {
     userBriefInfo: {
       type: String,
       required: true
+    },
+    userType: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -66,6 +78,9 @@ export default {
     },
     setJobIntention: function() {
       this.showDialog = true;
+    },
+    postRecruitmentInfo: function() {
+      this.$router.push({ path: '/postRecruitment' });
     },
     postTweet: function() {
       //TODO

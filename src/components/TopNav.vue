@@ -2,7 +2,7 @@
   <el-affix>
     <el-card id="top-nav-card" shadow="always" style="border-radius: 0px;">
       <el-row>
-        <el-col class="nav-text-area" :offset="2" :span="3">
+        <el-col class="nav-text-area" :offset="2" :span="3" @click="$router.push('/home')">
           <el-space>
             <el-col :span="12">
               <el-image :src="logoUrl" style="width: 40px"></el-image>
@@ -101,5 +101,6 @@ export default {
 }
 .nav-text-area {
   padding-top: 10px;
+  cursor: pointer;
 }
 </style>

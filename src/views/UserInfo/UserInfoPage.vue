@@ -2,7 +2,7 @@
   <top-nav/>
   <el-row style="margin-top:20px">
     <el-col :offset="3" :span="12" style="margin-right:20px">
-      <!-- 公司信息卡片-->
+      <!-- 个人信息卡片-->
       <el-card :body-style="{ padding: 0 }">
         <el-row style="padding:20px">
           <el-col :span="21">
@@ -17,13 +17,7 @@
               <el-container direction="vertical" style="margin-left:5px">
               <div id="userName">{{ user.userName }}</div>
               <div id="briefInfo">{{ user.briefInfo }}</div>
-              <div style="display:flex">
-                <el-icon :size="16"><connection /></el-icon>
-                <div style="font-size: 13px">
-                  官方网站:&nbsp;
-                  <a :href="`https://${user.contactWay}`">{{ user.contactWay }}</a>
-                </div>
-              </div>
+              <div id="livePlace">位置:&nbsp;{{ user.livePlace }}</div>
               </el-container>
             </el-row>
           </el-col>
@@ -46,69 +40,86 @@
           mode="horizontal"
           router
         >
-          <el-menu-item :index="`/companyinfo/${userId}/home`">         
-            首页
+          <el-menu-item :index="`/userinfo/${userId}/home`">         
+            个人信息
           </el-menu-item>
-          <el-menu-item :index="`/companyinfo/${userId}/description`">
-            关于
-          </el-menu-item>
-          <el-menu-item :index="`/companyinfo/${userId}/tweets`">
+          <el-menu-item :index="`/userinfo/${userId}/tweets`">
             动态
-          </el-menu-item>
-          <el-menu-item :index="`/companyinfo/${userId}/recruitments`">
-            职位
           </el-menu-item>
         </el-menu>
       </el-card>
-
+      <!-- <el-card style="margin-bottom:20px">
+       <el-container direction="horizontal"  style="padding:5px">
+         <el-col :span="18">
+           <user-icon 
+             :size="100" 
+             :url="user.userIconUrl" 
+             style="cursor:pointer"
+           />
+           <div id="userName">{{user.userName}}</div>
+           <div id="briefInfo">{{user.briefInfo}}</div>
+           <div id="livePlace">所在地：{{user.livePlace}}</div>
+           <el-container direction="horizontal" id="buttons">
+             <el-button>关注</el-button>
+           </el-container>
+         </el-col>
+         <el-col style="margin-top:100px">
+           <el-container direction="horizontal" style="cursor:pointer" @click="toEducation">
+             <user-icon :size="50"/>
+             <h2 style="font-size:18px; margin-left:10px">{{workExperienceList[0].enterprise}}</h2>
+           </el-container>
+           <el-container direction="horizontal" style="margin-top: 10px; cursor:pointer" @click="toWork">
+             <user-icon :size="50"/>
+             <h2 style="font-size:18px; margin-left:10px">{{educationExperienceList[0].college}}</h2>
+           </el-container>
+         </el-col>
+       </el-container>
+      </el-card> -->
+      
       <router-view />
-    
     </el-col>
-    <!-- 页面左部 -->
+
     <el-col :span="5">
       <user-recommend-card :ifFooter="false" />
     </el-col>
   </el-row>
-  <page-footer/>
+  <page-footer />
 </template>
 
 <script>
 import TopNav from '@/components/TopNav';
+import UserIcon from '@/components/UserIcon';
 import UserRecommendCard from '@/components/UserRecommendCard';
-import CompanyInfoCard from '@/components/CompanyInfoCard';
-import UserIcon from '@/components/UserIcon.vue';
-import { Connection } from '@element-plus/icons';
-import PageFooter from '@/components/PageFooter.vue';
+import PageFooter from '../../components/PageFooter.vue';
 import { ElNotification } from 'element-plus';
 
 export default {
   components: {
-    UserIcon,
-    Connection,
     TopNav,
+    UserIcon,
     UserRecommendCard,
-    CompanyInfoCard,
     PageFooter
   },
   created() {
     this.user = {
-      userId: 101,
-      userName: '字节跳动',
+      userId: 102,
+      userName: '张三',
       userIconUrl: '',
-      briefInfo: '互联网企业',
-      contactWay: 'www.bytedance.com',
-      email: 'zijietiaodong@email.com',
+      briefInfo: '同济大学学生',
+      livePlace: '上海',
       ifFollowing: false
-    },
+    };
     this.currentMenu = this.$route.path;
-    this.userId = this.$route.params['cid']; // 获取页面参数
+    this.userId = this.$route.params['uid']; // 获取页面参数
   },
   data() {
     return{
       currentMenu: '',
-      companyDescription:'',
       user: null,
       userId: 0,
+      tweetList:[],
+      workExperienceList:[],
+      educationExperienceList:[]
     }
   },
   watch: {
@@ -117,6 +128,12 @@ export default {
     }
   },
   methods: {
+    toWork: function(){
+      document.getElementById("work").scrollIntoView()
+    },
+    toEducation: function(){
+      document.getElementById("education").scrollIntoView()
+    },
     buttonType: (flag) => {
       return flag ? 'primary' : '';
     },
@@ -155,7 +172,16 @@ export default {
   color: rgb(122 122 122);
   margin: 0px 0px 10px;
 }
+#livePlace {
+  font-size: 15px;
+}
+#buttons {
+  margin: 15px 0px 0px 0px;
+}
 .el-menu--horizontal>.el-menu-item {
   height: 45px;
+}
+.el-divider {
+  margin: 10px;
 }
 </style>

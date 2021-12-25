@@ -1,32 +1,38 @@
 <template>
-  <el-card style="margin:0px 0px 20px">
-    <h1 style="font-size:20px">关于</h1>
+  <el-card style="margin-top:20px">
+    <template #header>
+      <span style="font-size:18px"><b>关于</b></span>
+    </template>
     <div style="margin-top:5px"><span id="text-area" style="height:210px"/></div>
-    <el-button @click="toDescription">
-    查看全部详情
-  </el-button>
+    <el-row justify="start">
+      <el-button type="text" class="button" @click="toDescription">查看全部信息</el-button>
+    </el-row>
   </el-card>
-  <el-card style="margin:0px 0px 20px">
-     <h1 style="font-size:20px">动态</h1>
-     <el-row>
-     <el-col :span="12" v-for="(tweet,index) in tweetList" :key="index" style="width:50%"> 
-           <tweet-brief-info v-bind="tweet" style="margin: 10px 10px 10px 10px"/>
-     </el-col>
-     </el-row>
-     <el-button @click="toTweet">
-      查看全部动态
-     </el-button>
+  <el-card style="margin-top:20px">
+    <template #header>
+      <span style="font-size:18px"><b>动态</b></span>
+    </template>
+    <el-row>
+      <el-col :span="12" v-for="(tweet,index) in tweetList" :key="index" style="width:50%"> 
+        <tweet-brief-info v-bind="tweet" style="margin:10px"/>
+      </el-col>
+    </el-row>
+    <el-row justify="start">
+      <el-button type="text" class="button" @click="toTweet">查看全部动态</el-button>
+    </el-row>
   </el-card>  
-   <el-card>
-     <h1 style="font-size:20px">职位</h1>
-     <el-row>
-     <el-col :span="12" v-for="(recruitment,index) in recruitmentList" :key="index" style="width:50%"> 
-           <recruitment-brief-info v-bind="recruitment" style="margin: 10px 10px 10px 10px"/>
-     </el-col>
-     </el-row>
-     <el-button @click="toRecruitment">
-      查看全部职位
-     </el-button>
+   <el-card style="margin-top:20px">
+    <template #header>
+      <span style="font-size:18px"><b>职位</b></span>
+    </template>
+    <el-row>
+      <el-col :span="12" v-for="(recruitment,index) in recruitmentList" :key="index" style="width:50%"> 
+        <recruitment-brief-info v-bind="recruitment" style="margin:10px"/>
+      </el-col>
+    </el-row>
+    <el-row justify="start">
+      <el-button type="text" class="button" @click="toRecruitment">查看全部职位</el-button>
+    </el-row>
   </el-card>
 </template>
 
@@ -100,19 +106,19 @@ ssss`,
   data(){
     return{
       companyDescription: '',
-      tweetList:[],
-      recruitmentList:[]
+      tweetList: [],
+      recruitmentList: []
     }
   },
   methods:{
     toDescription:function(){
-      this.$router.push({path:'companyDescription'})
+      this.$router.push({ path:'description' })
     },
     toTweet: function(){
-      this.$router.push({path:'companyTweet'})
+      this.$router.push({ path:'tweets' })
     },
     toRecruitment: function(){
-      this.$router.push({path:'companyRecruitment'})
+      this.$router.push({ path:'recruitments' })
     }
   }
 }
@@ -120,14 +126,17 @@ ssss`,
 
 <style>
 #text-area{
-        word-break:normal; 
-        width:auto; 
-        display:block; 
-        white-space:pre-wrap;
-        word-wrap : break-word ;
-        overflow: hidden ;
-        text-overflow: ellipsis;
-        line-break: auto;
-    }
-
+  word-break:normal; 
+  width:auto; 
+  display:block; 
+  white-space:pre-wrap;
+  word-wrap : break-word ;
+  overflow: hidden ;
+  text-overflow: ellipsis;
+  line-break: auto;
+}
+.button {
+  padding-left: 5px;
+  padding-bottom: 0px;
+}
 </style>

@@ -1,28 +1,42 @@
 <template>
-  <el-container direction="vertical" style="padding:5px">
-    <user-icon 
-      :size="100" 
-      :url="userIconUrl" 
-      style="cursor:pointer"
-    />
-    <div id="userName">{{userName}}</div>
-    <div id="briefInfo">{{briefInfo}}</div>
-    <div id="email">邮箱：{{email}}</div>
-    <el-container direction="horizontal" id="buttons">
-        <el-button>关注</el-button>
-        <el-button @click="jump">访问网站</el-button>
-        <el-button @click="modify">修改企业信息</el-button>
-    </el-container>
-  </el-container>
-  
-
+  <el-row>
+    <el-col :span="21">
+      <el-row>
+        <el-col>
+          <user-icon 
+            :size="100" 
+            :url="userIconUrl" 
+            style="cursor:pointer"
+          />
+          </el-col>
+        <el-container direction="vertical" style="margin-left:5px">
+        <div id="userName">{{userName}}</div>
+        <div id="briefInfo">{{briefInfo}}</div>
+        <div style="display:flex">
+          <el-icon :size="16"><connection /></el-icon>
+          <div style="font-size: 13px">
+            官方网站:&nbsp;
+            <a :href="`https://${contactWay}`">{{ contactWay }}</a>
+          </div>
+        </div>
+        </el-container>
+      </el-row>
+    </el-col>
+    <el-col :span="3">
+      <el-button>关注</el-button>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-import UserIcon from './UserIcon.vue'
+import UserIcon from './UserIcon.vue';
+import { Connection } from '@element-plus/icons';
 
 export default {
-  components: { UserIcon },
+  components: { 
+    UserIcon,
+    Connection
+  },
   props: {
     userId: { // 用户统一ID
       type: Number,

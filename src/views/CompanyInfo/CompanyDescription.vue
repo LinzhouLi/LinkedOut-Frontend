@@ -1,6 +1,6 @@
 <template>
-<el-card>
- <div style="margin-top:5px"><span id="text-area"/></div>
+<el-card style="margin-top:20px">
+ <div><span id="text-area"/></div>
 </el-card>
 </template>
 

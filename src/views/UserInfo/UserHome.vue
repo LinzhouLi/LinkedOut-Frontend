@@ -41,7 +41,7 @@
 import TweetBriefInfo from '@/components/TweetBriefInfo';
 import WorkExperience from '@/components/WorkExperience';
 import EducationExperience from '@/components/EducationExperience';
-
+import {getSelfTweet} from '@/apis/tweet.js';
 export default {
   components: {
     TweetBriefInfo,
@@ -103,6 +103,17 @@ ssss`,
       workExperienceList:[],
       educationExperienceList:[]
     }
+  },
+  mounted:async function(){
+    console.log(1);
+    console.log(this.$route,'12312312');
+    const params={
+      visitorId:localStorage.getItem('unifiedId'),
+      intervieweeId:this.$route.params.uid,
+      momentId:0,
+    }
+    const resp=await getSelfTweet(params);
+    console.log(resp,'12321')
   }
 }
 </script>

@@ -218,7 +218,7 @@ export default {
         this.$message.success('发送成功');
       }
       // // this.getComments()
-      // console.log(resp1,'resp111111');
+
 
 
     },
@@ -283,9 +283,8 @@ export default {
     },
     getProperTimeString:getProperTimeString,
     deleteComment:async function(item){
-      console.log(item);
+
       const resp=await deleteComment({unifiedId:this.unifiedId,tweetId:this.tweetId,floor:item.floor})
-      console.log(resp);
       if(resp.status===200){
         this.commentState=false
         this.$message.success('删除成功');

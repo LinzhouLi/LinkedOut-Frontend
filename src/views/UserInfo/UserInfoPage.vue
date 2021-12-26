@@ -101,8 +101,7 @@ export default {
     UserRecommendCard,
     PageFooter
   },
-  created() {
-
+  created:async function(){
     this.user = {
       userId: 102,
       userName: '张三',
@@ -120,8 +119,17 @@ export default {
       sid:this.userId,
     }
     const resp=await getUserInfo(params);
+    console.log(resp.data.data);
+    const datas=resp.data.data;
+    this.user={
+      userId:datas.unifiedId,
+      userName:datas.trueName,
+      briefInfo:datas.briefInfo,
+      livePlace:datas.livePlace,
+      ifFollowing:datas.isSubscribed,
+      userIconUrl:datas.pictureUrl
+    }
     //todo 拿到数据之后进行修改
-    console.log(resp,'1212321')
   },
   data() {
     return{

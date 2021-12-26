@@ -76,7 +76,6 @@ export default {
       this.resultList = [];
       this.searching = true;
       const resp=await userSearch({str:this.searchKey});
-      console.log(resp,'123123123')
       this.resultList=resp.data.data;
       this.searching=false;
       // setTimeout(() => {

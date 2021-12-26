@@ -107,8 +107,8 @@ export default {
 
       const params={unifiedId:localStorage.getItem('unifiedId')};
       const resp=await getRecommendPositions(params);
-      console.log(resp,'123123')
-      // console.log(resp);
+
+
       // TODO
       setTimeout(() => {
         for(let i = 0; i < 15; i++) {

@@ -46,11 +46,10 @@ export default {
     const resp = await getBasicInfo(uid);
     const userData = resp.data.data;
 
-    this.user = {
-      userName: userData.trueName || "匿名用户",
-      userBriefInfo: userData.briefInfo,
-      userType: userData.userType,
-      userIconUrl: userData.pictureUrl
+    try{
+      const resp2=await getRecommentList({unifiedId:uid});
+    }catch(e){
+      console.log(e);
     }
   }
 }

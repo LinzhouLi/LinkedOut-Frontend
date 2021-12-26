@@ -41,7 +41,7 @@
 <script>
 import UserIcon from './UserIcon.vue';
 import { ArrowRight } from '@element-plus/icons';
-import JobIntentionDialog from './JobIntentionDialog.vue';
+import JobIntentionDialog from './JobIntentionDialog';
 
 export default {
   components: { 

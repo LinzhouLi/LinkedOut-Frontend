@@ -9,7 +9,7 @@
     <!-- 动态文字与照片 -->
     <div>
       <div style="padding:5px 15px;"><span :id="`text-area-${tweetId}`"/></div>
-      <el-carousel :autoplay="false">
+      <el-carousel :autoplay="false" v-if="pictureList.length != 0" >
         <el-carousel-item v-for="(picUrl,index) in pictureList" :key="index">
           <el-image :src="picUrl" style="width:100%;" fit="cover" />
         </el-carousel-item>
@@ -155,7 +155,7 @@ export default {
       type: Array,
       default: [],
     },
-    recordTime: { // 图片url数组
+    recordTime: {
       type: String,
       dafault:''
     }
@@ -332,7 +332,7 @@ export default {
   padding: 5px 15px;
   display: flex;
 }
-.comment-delete-button{
+/* .comment-delete-button{
 
-}
+} */
 </style>

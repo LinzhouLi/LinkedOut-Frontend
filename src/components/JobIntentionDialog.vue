@@ -63,11 +63,14 @@ export default {
       return items;
     },
     submit: async function() {
-      // TODO
-      console.log(this.selectedJobs)
-      const params={trueName:'nametest1',unifiedId:localStorage.getItem("unifiedId")};
-      const resp=await updateUserInfo(params);
-      console.log(resp);
+      console.log(this.selectedJobs.join())
+      const params = { 
+        unifiedId: localStorage.getItem("unifiedId"),
+        prePosition: this.selectedJobs.join()
+      };
+      const resp = await updateUserInfo(params);
+      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('保存成功!');
+      else this.$message.error('保存失败!');
       this.$emit('close');
     }
   }

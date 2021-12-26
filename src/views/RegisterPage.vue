@@ -35,8 +35,8 @@
         </el-form-item>
 
         <!-- <el-form-item prop="validateCode"> -->
-          <el-radio v-model="model.userType" label="0">企业</el-radio>
-          <el-radio v-model="model.userType" label="1">个人</el-radio>
+          <el-radio v-model="model.userType" label="user">个人</el-radio>
+          <el-radio v-model="model.userType" label="company">企业</el-radio>
         <!-- </el-form-item> -->
 
         <el-form-item>
@@ -69,7 +69,7 @@ export default {
         password: '',
         email: '',
         validateCode: '',
-        userType:'0',
+        userType: 'user',
       },
       loading: false,
       rules: Rules,
@@ -83,28 +83,25 @@ export default {
       // if (!valid) {
       //   return;
       // }
-      if(this.validateCode!==this.model.validateCode){
-        this.$message.error('验证码错误，请重新输入'); //验证码验证
+      if(this.validateCode !== this.model.validateCode){
+        this.$message.error('验证码错误，请重新输入'); //验证码错误
+        return;
       }
       
       this.loading = true;
-      const params={
-        userName:this.model.username,
-        password:this.model.password,
-        email:this.model.email,
-        userType:this.model.userType
+      const params = {
+        userName: this.model.username,
+        password: this.model.password,
+        email: this.model.email,
+        userType: this.model.userType
       }
       try{
-      
-      const resp=await userRegister(params);
-     
-        this.$message.success('注册成功！');
-        //localStorage.setItem()
-        setTimeout(()=>{this.$router.push('/login')},2000)
-        
-      }catch(e){
+        const resp = await userRegister(params);
+        this.$message.success('注册成功!');
+        this.$router.push('/login');
+      }catch(e) {
         this.$message.error('注册失败');
-      }finally{
+      }finally {
         this.loading=false;
       }
 
@@ -116,9 +113,9 @@ export default {
         const resp = await getEmailCode({mail:this.model.email});
 
         this.validateCode=resp.data.data;
-      } catch (e) {
+      }catch (e) {
         console.log(e);
-      }finally{
+      }finally {
         this.loadingCode=false;
       }
     },

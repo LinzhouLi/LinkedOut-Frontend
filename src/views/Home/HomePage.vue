@@ -2,7 +2,7 @@
   <top-nav/>
   <el-row style="margin-top:20px">
     <el-col :offset="3" :span="4">
-      <user-info-card v-bind="defaultUser"/>
+      <user-info-card v-bind="user"/>
     </el-col>
     <el-col :span="9" style="margin:0px 20px">
       <router-view :key="$route.query" />
@@ -19,42 +19,46 @@
 import TopNav from '@/components/TopNav';
 import UserInfoCard from '@/components/UserInfoCard';
 import UserRecommendCard from '@/components/UserRecommendCard';
-import {getUserInfo} from '@/apis/users.js';
-import {getRecommentList} from '@/apis/tweet.js';
-
+import PageFooter from '@/components/PageFooter';
+import { getBasicInfo } from '@/apis/users.js';
 
 export default {
   components: {
     TopNav,
     UserInfoCard,
-    UserRecommendCard
+    UserRecommendCard,
+    PageFooter
   },
   data() {
     return{
       footerDisp: false,
-      defaultUser: {
-        userName: '李林洲',
-        userBriefInfo: '同济大学学生',
+      user: {
+        userName: '',
+        userBriefInfo: '',
         userIconUrl: '',
-        userType: 'company'
+        userType: 0
       }
     }
   },
   mounted:async function(){
-    const uid=localStorage.getItem("unifiedId");
-    const resp=await getUserInfo({uid,sid:uid})
-    const params=resp.data;
-    this.defaultUser.userName=params.trueName||"匿名用户",
-    this.defaultUser.userIconUrl=params.userIconUrl,
-    this.defaultUser.userBriefInfo=params.userBriefInfo
+    const uid = localStorage.getItem('unifiedId');
+    const userType = localStorage.getItem('userType');
+    const resp = await getBasicInfo(uid);
+    const userData = resp.data;
 
-    try{
-      const resp2=await getRecommentList({unifiedId:uid});
-      console.log(resp2);
-    }catch(e){
-      console.log(e);
+    if (!userData.trueName) { // 用户信息不完善, 跳转页面完善信息
+      this.$message.info('请完善用户信息');
+      if (userType == 'user') this.$router.push({ name: 'modifyUserInfo' });
+      else if (userType == 'company') this/$router.push({ name: 'modifyCompanyInfo' });
     }
-    
+
+    this.user = {
+      userName: userData.trueName || "匿名用户",
+      userBriefInfo: userData.userBriefInfo,
+      userType: userData.userType,
+      briefInfo: userData.briefInfo,
+      userIconUrl: userData.pictureUrl
+    }
   }
 }
 </script>

@@ -1,6 +1,5 @@
-import {UserInstance as user} from './axios'
-
-
+import {UserInstance as user} from './axios';
+import axios from 'axios';
 
 
 export function getEmailCode(params){
@@ -17,6 +16,11 @@ export function userLogin(params){
     return user.post('/user/login', params)
 }
 
+//获取用户基础信息
+export function getBasicInfo(uid){
+    return user.get('/user/get/' + uid)
+}
+
 //获取用户个人信息
 export function getUserInfo(params){
     return user.get('/user/userinfo',{params})
@@ -29,17 +33,19 @@ export function getEnterpriseInfo(params){
 
 //用户个人信息维护
 export function updateUserInfo(params){
-    return user.post('/user/userinfo',params,{params})
+    return user.post('/user/userinfo', params)
 }
 
-export function putEnterpriseInfo(params){
-    return user.put('/enterpriseinfo',params)
+export function updateEnterpriseInfo(params){
+    return user.post('/user/enterpriseinfo', params)
 }
 
 export function upLoadUserImage(params){
-    return user.post('/userinfo/pic',params)
+    
+    return user.post('/user/pic', data, config);
 }
 
+// 查找用户
 export function userSearch(params){
     return user.get('/user/search',{params})
 }

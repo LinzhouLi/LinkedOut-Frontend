@@ -4,70 +4,56 @@
     <el-col :offset="3" :span="12" style="margin-right:20px">
       <!-- 个人信息卡片-->
       <el-card style="margin-bottom:20px">
-         <user-icon 
-             :size="100" 
-             :url="user.userIconUrl" 
-             style="cursor:pointer"
-           />
-         <el-divider/>
-         <el-row>
-           <div id="userName">姓名</div> 
-           <div style="margin-top: 10px; margin-left:140px; margin-right:20px" v-if="!modifyUserName">{{user.userName}}</div>
-           <div style="margin-top: 10px; margin-left:140px" v-if="modifyUserName">
-             <el-input v-model="userNameInput" placeholder="请输入新姓名"/>
-             <el-row style="margin-top: 30px">
-               <el-button @click="saveUserName" type="primary" :disabled="userNameInput==''" size="mini">
-                 保存
-               </el-button>
-               <el-button @click="modifyUserName=false; userNameInput=''" size="mini">
-                 取消
-               </el-button>
-             </el-row>
-           </div>
-           <el-button @click="modifyUserName=true;" v-if="!modifyUserName" size="mini">
-               修改
-           </el-button>
-         </el-row>
-           
-         <el-divider/>
-          <el-row>
-            <div id="briefInfo">简介</div>
-            <div style="margin-top: 10px; margin-left:140px; margin-right:20px" v-if="!modifyBriefInfo">{{user.briefInfo}}</div>
-            <div style="margin-top: 10px; margin-left:140px" v-if="modifyBriefInfo">
-             <el-input v-model="briefInfoInput" placeholder="请输入新简介"/>
-             <el-row style="margin-top: 30px">
-               <el-button @click="saveBriefInfo" type="primary" :disabled="briefInfo==''" size="mini">
-                 保存
-               </el-button>
-               <el-button @click="modifyBriefInfo=false; briefInfoInput=''" size="mini">
-                 取消
-               </el-button>
-             </el-row>
-           </div>
-           <el-button @click="modifyBriefInfo=true" v-if="!modifyBriefInfo" size="mini">
-               修改
-           </el-button>
-          </el-row>
-         <el-divider/>
+        <template #header>
+          <div><b>基本信息</b></div>
+        </template>
 
-          <el-row>
-           <div id="livePlace">所在地</div>
-           <div style="margin-top: 10px; margin-left:118px; margin-right:20px" v-if="!modifyLivePlace">{{user.livePlace}}</div>
-           <div style="margin-top: 10px; margin-left:118px" v-if="modifyLivePlace">
-              <el-input v-model="livePlaceInput" placeholder="请输入新所在地"/>
-             <el-row style="margin-top: 30px">
-               <el-button @click="saveLivePlace" type="primary" :disabled="livePlaceInput==''" size="mini">
-                 保存
-               </el-button>
-               <el-button @click="modifyLivePlace=false; livePlaceInput=''" size="mini">
-                 取消
-               </el-button>
-             </el-row>
-           </div>
-           <el-button @click="modifyLivePlace=true" v-if="!modifyLivePlace" size="mini">
-               修改
-           </el-button>
-          </el-row>
+        <el-upload
+          action=""
+          ref="picUploader"
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-change="uploadAvatar"
+        >
+          <user-icon 
+            :size="100" 
+            :url="userIconUrl" 
+            style="margin-left:30px; cursor:pointer"
+          />
+        </el-upload>
+
+        <el-divider/>
+        <el-form ref="form" :model="userBasicData" label-width="90px" size="small">
+          <el-form-item label="姓名">
+            <el-input style="width:150px" v-model="userBasicData.trueName"></el-input>
+          </el-form-item>
+          <el-form-item label="年龄">
+            <el-input style="width:100px" v-model="userBasicData.age"></el-input>
+          </el-form-item>
+          <el-form-item label="性别">
+            <el-radio-group v-model="userBasicData.gender">
+              <el-radio label="男"></el-radio>
+              <el-radio label="女"></el-radio>
+              <el-radio label="保密"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="身份描述">
+            <el-input style="width:300px" v-model="userBasicData.briefInfo"></el-input>
+          </el-form-item>
+          <el-form-item label="电话号码">
+            <el-input style="width:200px" v-model="userBasicData.phoneNum"></el-input>
+          </el-form-item>
+          <el-form-item label="意向职位">
+            <div>{{ userBasicData.prePosition }}</div>
+            <el-button type="text" @click="setJobIntention">点击选择</el-button>
+          </el-form-item>
+          <el-form-item label="我的位置">
+            <el-input style="width:200px" v-model="userBasicData.livePlace"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitBasicInfo">保存</el-button>
+          </el-form-item>
+        </el-form>
       </el-card>
 
       <el-card>
@@ -181,14 +167,18 @@
       <user-recommend-card/>
     </el-col>
   </el-row>
+
+  <job-intention-dialog :visible="showDialog" @close="showDialog=false" />
 </template>
 
 <script>
-import TopNav from '@/components/TopNav'
-import UserIcon from '@/components/UserIcon'
-import UserRecommendCard from '@/components/UserRecommendCard'
-import WorkExperience from '@/components/WorkExperience'
-import EducationExperience from '@/components/EducationExperience'
+import TopNav from '@/components/TopNav';
+import UserIcon from '@/components/UserIcon';
+import UserRecommendCard from '@/components/UserRecommendCard';
+import WorkExperience from '@/components/WorkExperience';
+import EducationExperience from '@/components/EducationExperience';
+import { getUserInfo, updateUserInfo, upLoadUserImage } from '@/apis/users.js';
+import JobIntentionDialog from '@/components/JobIntentionDialog';
 
 
 export default {
@@ -197,9 +187,25 @@ export default {
     UserIcon,
     UserRecommendCard,
     WorkExperience,
-    EducationExperience
+    EducationExperience,
+    JobIntentionDialog
   },
-  created() {
+  created: async function() {
+    const uid = localStorage.getItem('unifiedId');
+    const resp = await getUserInfo({ uid: uid, sid: uid });
+    const data = resp.data.data;
+    console.log(data)
+    this.userBasicData = {
+      unifiedId: data.unifiedId,
+      age: data.age,
+      gender: data.gender,
+      livePlace: data.livePlace,
+      phoneNum: data.phoneNum,
+      prePosition: data.prePosition,
+      trueName: data.trueName,
+      briefInfo: data.briefInfo
+    }
+
     this.user = {
       userId: 102,
       userName: '张三',
@@ -216,11 +222,11 @@ export default {
       endTime: '2021年7月',
       description: '负责字节跳动商业变现业务相关后台研发，构建对全客户结构、全流程的管理系统；负责高质量的设计和编码，承担重点、难点的技术攻坚；参与产品讨论和开发实现。'
     };
-    for(let i = 0; i < 3; i++) {
-      let w = JSON.parse(JSON.stringify(workExperience));
-      w.workExperienceId = Math.floor(Math.random()*10000);
-      this.workExperienceList.push(w);
-    }
+    // for(let i = 0; i < 3; i++) {
+    //   let w = JSON.parse(JSON.stringify(workExperience));
+    //   w.workExperienceId = Math.floor(Math.random()*10000);
+    //   this.workExperienceList.push(w);
+    // }
     let educationExperience = {
       modifiable: true,
       educationExperienceId: 0,
@@ -230,27 +236,22 @@ export default {
       startTime: '2019年9月',
       endTime: '2023年7月'
     };
-    for(let i = 0; i < 3; i++) {
-      let e = JSON.parse(JSON.stringify(educationExperience));
-      e.educationExperienceId = Math.floor(Math.random()*10000);
-      this.educationExperienceList.push(e);
-    }
+    // for(let i = 0; i < 3; i++) {
+    //   let e = JSON.parse(JSON.stringify(educationExperience));
+    //   e.educationExperienceId = Math.floor(Math.random()*10000);
+    //   this.educationExperienceList.push(e);
+    // }
     
   },
   mounted(){
-    this.axios
-      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-      .then(response => (this.info = response))
+
   },
   data() {
     return{
+      showDialog: false,
+      userBasicData: { },
+      userIconUrl: '',
       user: null,
-      userNameInput:'',
-      briefInfoInput:'',
-      livePlaceInput:'',
-      modifyUserName: false,
-      modifyBriefInfo: false,
-      modifyLivePlace: false,
       workDialogVisible: false,
       educationDialogVisible: false,
       workExperienceList:[],
@@ -343,22 +344,31 @@ export default {
     }
   },
   methods: {
-   saveUserName: function(){//保存用户名字
-     this.user.userName=this.userNameInput
-     this.userNameInput=''
-     this.modifyUserName=false
-   },
-   saveBriefInfo: function(){//保存用户简介
-     this.user.briefInfo=this.briefInfoInput
-     this.briefInfoInput=''
-     this.modifyBriefInfo=false
-   },
-   saveLivePlace: function(){//保存所在地
-     this.user.livePlace=this.livePlaceInput
-     this.livePlaceInput=''
-     this.modifyLivePlace=false
-   },
-   submitWorkForm(formName) {
+    submitBasicInfo: async function() {
+      const resp = updateUserInfo(this.userBasicData);
+      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('保存成功!');
+      else this.$message.error('保存失败!');
+    },
+    setJobIntention: function() {
+      this.showDialog = true;
+    },
+    uploadAvatar: async function(file) {
+      console.log(file);
+      let fileReader = new FileReader();
+      fileReader.readAsDataURL(file.raw);
+      fileReader.onload = (event) => {
+        this.userIconUrl = event.target.result;
+      }
+      let params = new FormData();
+      params.append('unifiedId', this.userBasicData.unifiedId);
+      params.append('file', file.raw, file.name);
+      console.log(params.get('file'))
+      const resp = upLoadUserImage(params);
+      console.log(resp)
+      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('上传成功!');
+      else this.$message.error('上传失败!');
+    },
+    submitWorkForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert('工作经历添加成功!')

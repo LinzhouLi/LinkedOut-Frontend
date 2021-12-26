@@ -67,12 +67,12 @@ const routes = [
     component: PostRecruitmentPage
   },
   {
-    path: '/modifyUserInfo/:uid',
+    path: '/modifyUserInfo',
     name: 'modifyUserInfo',
     component: ModifyUserInfo
   },
   {
-    path: '/modifyCompanyInfo/:cid',
+    path: '/modifyCompanyInfo',
     name: 'modifyCompanyInfo',
     component: ModifyCompanyInfo
   },

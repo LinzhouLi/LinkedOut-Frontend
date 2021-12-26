@@ -36,16 +36,6 @@ import PageFooter from './PageFooter.vue';
 import { ElNotification } from 'element-plus';
 import { getRecommentList,updateFollow,deleteFollow } from '@/apis/tweet.js';
 
-
-// briefInfo: "我太蓝了"
-// password: "xiaolan"
-// pictureUrl: "xiaolan.jpg"
-// subscribeNum: 0
-// trueName: "蓝蓝"
-// unifiedId: 6
-// userName: "小蓝"
-// userType: 1
-
 export default {
   components: { 
     UserBriefDisp,
@@ -61,29 +51,7 @@ export default {
     return {
       ADimgUrl: require('@/assets/ADimg.jpg'),
       logoUrl: require('@/assets/logo.png'),
-      userRecommendList: [
-        {
-          unifiedId: 101,
-          userName: '字节跳动',
-          briefInfo: '互联网企业',
-          userType: 'company',
-          ifFollowing: false
-        },
-        {
-          userId: 102,
-          userName: '张三',
-          userBriefInfo: '同济大学学生',
-          userType: 'user',
-          ifFollowing: false
-        },
-        {
-          userId: 103,
-          userName: '李四',
-          userBriefInfo: '腾讯公司员工',
-          userType: 'user',
-          ifFollowing: false
-        },
-      ]
+      userRecommendList: [ ]
     }
   },
   methods: {
@@ -133,12 +101,23 @@ export default {
       // this.$router.push('/home/recruitments');
     }
   },
-  mounted:async function(){
+  created: async function(){
     const unifiedId=localStorage.getItem("unifiedId");
     try{
-        const resp=await getRecommentList({unifiedId});
-        const recommendList=resp.data.data;
-        this.userRecommendList=recommendList; 
+      this.userRecommendList = [];
+      const resp=await getRecommentList({unifiedId});
+      const recommendList=resp.data.data;
+      console.log(recommendList)
+      for(let item of recommendList) {
+        this.userRecommendList.push({
+          unifiedId: item.unifiedId,
+          userName: item.trueName,
+          userBriefInfo: item.briefInfo,
+          userType: item.userType,
+          userIconUrl: item.pictureUrl,
+          ifFollowing: item.subscribeNum == 0 ? false : true
+        });
+      }
     }catch(e){
       console.log(e)
     }finally{

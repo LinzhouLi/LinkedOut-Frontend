@@ -39,7 +39,7 @@
 
 <script>
 import TopNav from '@/components/TopNav';
-import { userLogin } from '@/apis/users.js';
+import { userLogin, getBasicInfo } from '@/apis/users.js';
 import { LoginRules as Rules } from '@/utils/loginPage';
 
 // import { Search } from '@element/icons-vue'
@@ -63,18 +63,25 @@ export default {
         userName:this.model.username,
         password:this.model.password,
       }
-      try{
-        const resp=await userLogin(params);
+      const resp1=await userLogin(params);
+      console.log(resp1)
+      if (resp1.status == 200 && resp1.data.code == 'success') {
         this.$message.success('登陆成功!');
-        const { unifiedId,userType } = resp.data.data;
-        localStorage.setItem("unifiedId",unifiedId)
-        localStorage.setItem("userType",userType)
+        const { unifiedId, userType } = resp1.data.data;
+        localStorage.setItem("unifiedId",unifiedId);
+        localStorage.setItem("userType",userType);
 
-        this.$router.push('/home');
-      }catch(e){
-        console.log(e)
-        this.$message.error('登陆失败');
-      }finally{
+        const resp2 = await getBasicInfo(unifiedId);
+        if (!resp2.data.data.trueName) { // 用户信息不完善, 跳转页面完善信息
+          this.$message.info('请完善用户信息');
+          if (userType == 'user') this.$router.push({ name: 'modifyUserInfo' });
+          else if (userType == 'company') this.$router.push({ name: 'modifyCompanyInfo' });
+        }
+        else this.$router.push('/home');
+      }
+      else {
+        const reason = resp1.data.message || '登陆失败'; // 登录失败原因
+        this.$message.error(reason + ', 请重新登录');
         this.loading=false;
       }
 

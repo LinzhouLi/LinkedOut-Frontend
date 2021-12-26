@@ -44,19 +44,12 @@ export default {
     const uid = localStorage.getItem('unifiedId');
     const userType = localStorage.getItem('userType');
     const resp = await getBasicInfo(uid);
-    const userData = resp.data;
-
-    if (!userData.trueName) { // 用户信息不完善, 跳转页面完善信息
-      this.$message.info('请完善用户信息');
-      if (userType == 'user') this.$router.push({ name: 'modifyUserInfo' });
-      else if (userType == 'company') this/$router.push({ name: 'modifyCompanyInfo' });
-    }
+    const userData = resp.data.data;
 
     this.user = {
       userName: userData.trueName || "匿名用户",
-      userBriefInfo: userData.userBriefInfo,
+      userBriefInfo: userData.briefInfo,
       userType: userData.userType,
-      briefInfo: userData.briefInfo,
       userIconUrl: userData.pictureUrl
     }
   }

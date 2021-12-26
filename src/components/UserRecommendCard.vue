@@ -107,12 +107,11 @@ export default {
       this.userRecommendList = [];
       const resp=await getRecommentList({unifiedId});
       const recommendList=resp.data.data;
-      console.log(recommendList)
       for(let item of recommendList) {
         this.userRecommendList.push({
           unifiedId: item.unifiedId,
-          userName: item.trueName,
-          userBriefInfo: item.briefInfo,
+          userName: item.trueName || '匿名用户',
+          userBriefInfo: item.briefInfo || '',
           userType: item.userType,
           userIconUrl: item.pictureUrl,
           ifFollowing: item.subscribeNum == 0 ? false : true

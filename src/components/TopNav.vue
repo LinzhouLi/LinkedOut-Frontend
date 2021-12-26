@@ -30,7 +30,7 @@
             :default-active="currentMenu"
             :ellipsis="false"
             mode="horizontal"
-            router
+            @select="gotoPath"
           >
             <el-menu-item index="/home/tweets">
               <el-icon><star /></el-icon>
@@ -40,10 +40,12 @@
               <el-icon><briefcase /></el-icon>
               职位
             </el-menu-item>
-            <el-menu-item index="/myinfo">
-              <el-icon><avatar /></el-icon>
-              个人信息
-            </el-menu-item>
+            <el-sub-menu index="myinfo">
+              <template #title>个人信息</template>
+              <el-menu-item index="myinfo">我的信息</el-menu-item>
+              <el-menu-item index="settings">设置</el-menu-item>
+              <el-menu-item index="logout">注销</el-menu-item>
+            </el-sub-menu>
           </el-menu>
         </el-col>
         <el-col :span="2">
@@ -90,6 +92,24 @@ export default {
         this.searchKey = '';
         this.$refs.searchInput.blur();
       }
+    },
+    gotoPath: function(index) {
+      console.log(index)
+      const uid = localStorage.getItem('unifiedId');
+      const uType = localStorage.getItem('userType');
+      if (index == 'myinfo') { // 我的信息
+        if (uType == 'user') this.$router.push({ name: 'userinfo', params: { uid } });
+        else if (uType == 'company') this.$router.push({ name: 'companyinfo', params: { cid: uid } });
+      }
+      else if (index == 'settings') { // 设置
+        if (uType == 'user') this.$router.push({ name: 'modifyUserInfo' });
+        else if (uType == 'company') this.$router.push({ name: 'modifyCompanyInfo' });
+      }
+      else if (index == 'logout') { // 注销
+        localStorage.clear();
+        this.$router.push('/login');
+      }
+      else this.$router.push(index);
     }
   }
 }

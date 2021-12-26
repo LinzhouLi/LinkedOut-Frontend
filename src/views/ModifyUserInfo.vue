@@ -7,7 +7,7 @@
         <template #header>
           <div><b>基本信息</b></div>
         </template>
-
+        <!-- 上传头像 -->
         <el-upload
           action=""
           ref="picUploader"
@@ -21,7 +21,7 @@
             style="margin-left:30px; cursor:pointer"
           />
         </el-upload>
-
+        <!-- 基本信息 -->
         <el-divider/>
         <el-form ref="form" :model="userBasicData" label-width="90px" size="small">
           <el-form-item label="姓名">
@@ -56,119 +56,187 @@
         </el-form>
       </el-card>
 
-      <el-card>
-        <el-row>
-          <el-col :span="22">
-            <h1 style="font-size:20px" id="work">工作经历</h1>
-          </el-col>
-           <el-button @click="workDialogVisible=true" circle style="font-size:20px">+</el-button>
-        </el-row>
-        <div v-for="(workExperience,index) in workExperienceList" :key="index">
-          <work-experience v-bind="workExperience" @modify="modifyWorkExperience" style="margin: 10px 10px 10px 10px"/> 
-          <el-divider/>
-        </div> 
-        <el-row >
-          <el-col :span="22">
-            <h1 style="font-size:20px" id="education">教育经历</h1>
-          </el-col>
-          <el-button @click="educationDialogVisible=true" circle style="font-size:20px">+</el-button>
-        </el-row>
-         <!--添加工作经历的对话框-->
-          <el-dialog v-model="workDialogVisible" title="添加工作经历">
-            <el-form ref="workForm" :model="workForm" label-width="200px" :rules="workFormRules">
-              <el-form-item label="职位" prop="position" required>
-               <el-input v-model="workForm.position" placeholder="例如:前端开发工程师"></el-input>
-              </el-form-item>
-             
-              <el-form-item label="公司" prop="enterprise" required>
-                <el-input v-model="workForm.enterprise" placeholder="例如:微软"></el-input>
-              </el-form-item>
-              
-              <el-form-item label="开始时间" prop="startTime" required>
-               <el-date-picker
-                v-model="workForm.startTime"
-                type="month"
-                placeholder="请选择开始时间"
-               >
-               </el-date-picker>
-              </el-form-item>
-              
-              <el-form-item label="结束时间" prop="endTime" required>
-               <el-date-picker
-                v-model="workForm.endTime"
-                type="month"
-                placeholder="请选择结束时间"
-               >
-               </el-date-picker>
-              </el-form-item>
-               
-              <el-form-item label="描述" prop="description">
-                <el-input v-model="workForm.description" type="textarea"></el-input>
-              </el-form-item>
-
-              <el-form-item>
-                <el-button type="primary" @click="submitWorkForm('workForm')">确认</el-button>
-                <el-button @click="resetForm('workForm')">重置</el-button>
-              </el-form-item>
-            </el-form>
-          </el-dialog>
-        <!--添加教育经历的对话框-->
-          <el-dialog v-model="educationDialogVisible" title="添加教育经历">
-            <el-form ref="educationForm" :model="educationForm" label-width="200px" :rules="educationFormRules">
-              <el-form-item label="学校" prop="college" required>
-               <el-input v-model="educationForm.college" placeholder="例如:清华大学"></el-input>
-              </el-form-item>
-             
-              <el-form-item label="专业" prop="major" required>
-                <el-input v-model="educationForm.major" placeholder="例如:软件工程"></el-input>
-              </el-form-item>
-
-              <el-form-item label="学位" prop="degree" required>
-               <el-select v-model="educationForm.degree" placeholder="请选择学位">
-                <el-option label="专科" value="专科"></el-option>
-                <el-option label="本科" value="本科"></el-option>
-                <el-option label="硕士" value="硕士"></el-option>
-                <el-option label="博士" value="博士"></el-option>
-               </el-select>
-              </el-form-item>
-              
-              <el-form-item label="开始时间" prop="startTime" required>
-               <el-date-picker
-                v-model="educationForm.startTime"
-                type="month"
-                placeholder="请选择开始时间"
-               >
-               </el-date-picker>
-              </el-form-item>
-              
-              <el-form-item label="结束时间" prop="endTime" required>
-               <el-date-picker
-                v-model="educationForm.endTime"
-                type="month"
-                placeholder="请选择结束时间"
-               >
-               </el-date-picker>
-              </el-form-item>
-
-              <el-form-item>
-                <el-button type="primary" @click="submitEducationForm('educationForm')">提交</el-button>
-                <el-button @click="resetForm('educationForm')">重置</el-button>
-              </el-form-item>
-            </el-form>
-          </el-dialog>
-        <div v-for="(educationExperience,index) in educationExperienceList" :key="index">
-          <education-experience v-bind="educationExperience" @modify="modifyEducationExperience" style="margin: 10px 10px 10px 10px"/> 
-          <el-divider/>
+      <!-- 上传简历 -->
+      <el-card style="margin-bottom:20px">
+        <template #header>
+          <div><b>上传简历</b></div>
+        </template>
+        <div v-for="(item, index) in resumeList" :key="index">
+          <el-row>
+            <el-col :offset="1" :span="1">
+              <el-icon><document-add /></el-icon>
+            </el-col>
+            <el-col :span="17">
+              <div style="font-size:14px">{{ item.resumeName }}</div>
+            </el-col>
+            <el-col :span="2">
+              <el-button type="text" @click="openUrl(item.documentUrl)" >查看</el-button>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="text" @click="deleteResume(item.resumeId)">删除</el-button>
+            </el-col>
+          </el-row>
         </div>
+        <el-upload
+          action=""
+          ref="picUploader"
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-change="uploadResume"
+        >
+          <el-button style="margin-top:15px" type="primary" size="mini">点击上传</el-button>
+        </el-upload>
       </el-card>
+
+      <!-- 教育经历展示 -->
+      <el-card style="margin-bottom:20px">
+        <template #header>
+          <div><b>教育经历</b></div>
+        </template>
+        <div v-for="(item,index) in educationExperienceList" :key="index">
+          <el-row>
+            <el-col :span="22">
+              <education-experience v-bind="item" style="margin:10px"/> 
+            </el-col>
+            <el-col :span="2">
+              <el-button type="text" @click="deleteEduExp(item.numId)">删除</el-button>
+            </el-col>
+          </el-row>
+          <el-divider v-if="index!=educationExperienceList.length-1"/>
+        </div>
+        <el-button
+          style="margin-top:15px"
+          type="primary"
+          size="mini"
+          @click="educationDialogVisible=true"
+        >
+        点击添加
+        </el-button>
+      </el-card>
+
+      <!-- 工作经历展示 -->
+      <el-card>
+        <template #header>
+          <div><b>工作经历</b></div>
+        </template>
+        <div v-for="(item,index) in workExperienceList" :key="index">
+          <el-row>
+            <el-col :span="22">
+              <work-experience v-bind="item" style="margin:10px"/>
+            </el-col>
+            <el-col :span="2">
+              <el-button type="text" @click="deleteWorkExp(item.numId)">删除</el-button>
+            </el-col>
+          </el-row> 
+          <el-divider v-if="index!=workExperienceList.length-1"/>
+        </div> 
+        <el-button
+          style="margin-top:15px"
+          type="primary"
+          size="mini"
+          @click="workDialogVisible=true"
+        >
+        点击添加
+        </el-button>
+      </el-card>
+
     </el-col>
 
     <el-col :span="5">
-      <user-recommend-card/>
+      <user-recommend-card :ifFooter="false"/>
     </el-col>
   </el-row>
 
-  <job-intention-dialog :visible="showDialog" @close="showDialog=false" />
+  <page-footer/>
+
+  <!-- 选择意向职位对话框 -->
+  <job-intention-dialog :visible="showJobIntentionDialog" @close="closeJobDialog" />
+
+  <!--添加工作经历的对话框-->
+  <el-dialog v-model="workDialogVisible" title="添加工作经历">
+    <el-form ref="workForm" :model="workForm" label-width="100px" :rules="workFormRules">
+      <el-form-item label="职位" prop="position" required>
+        <el-input v-model="workForm.position" placeholder="前端开发工程师"></el-input>
+      </el-form-item>
+      
+      <el-form-item label="公司" prop="enterprise" required>
+        <el-input v-model="workForm.enterprise" placeholder="微软"></el-input>
+      </el-form-item>
+      
+      <el-form-item label="开始时间" prop="startTime" required>
+        <el-date-picker
+        v-model="workForm.startTime"
+        type="month"
+        placeholder="请选择开始时间"
+        >
+        </el-date-picker>
+      </el-form-item>
+      
+      <el-form-item label="结束时间" prop="endTime" required>
+        <el-date-picker
+        v-model="workForm.endTime"
+        type="month"
+        placeholder="请选择结束时间"
+        >
+        </el-date-picker>
+      </el-form-item>
+        
+      <el-form-item label="描述" prop="description">
+        <el-input v-model="workForm.description" type="textarea"></el-input>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" @click="submitWorkForm('workForm')">确认</el-button>
+        <el-button @click="resetForm('workForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+
+  <!--添加教育经历的对话框-->
+  <el-dialog v-model="educationDialogVisible" title="添加教育经历">
+    <el-form ref="educationForm" :model="educationForm" label-width="100px" :rules="educationFormRules">
+      <el-form-item label="学校" prop="college" required>
+        <el-input v-model="educationForm.college" placeholder="同济大学"></el-input>
+      </el-form-item>
+      
+      <el-form-item label="专业" prop="major" required>
+        <el-input v-model="educationForm.major" placeholder="软件工程"></el-input>
+      </el-form-item>
+
+      <el-form-item label="学位" prop="degree" required>
+        <el-select v-model="educationForm.degree" placeholder="请选择学位">
+        <el-option label="专科" value="专科"></el-option>
+        <el-option label="本科" value="本科"></el-option>
+        <el-option label="硕士" value="硕士"></el-option>
+        <el-option label="博士" value="博士"></el-option>
+        </el-select>
+      </el-form-item>
+      
+      <el-form-item label="开始时间" prop="startTime" required>
+        <el-date-picker
+          v-model="educationForm.startTime"
+          type="month"
+          placeholder="请选择开始时间"
+        >
+        </el-date-picker>
+      </el-form-item>
+      
+      <el-form-item label="结束时间" prop="endTime" required>
+        <el-date-picker
+          v-model="educationForm.endTime"
+          type="month"
+          placeholder="请选择结束时间"
+        >
+        </el-date-picker>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" @click="submitEducationForm('educationForm')">提交</el-button>
+        <el-button @click="resetForm('educationForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
+
 </template>
 
 <script>
@@ -177,8 +245,15 @@ import UserIcon from '@/components/UserIcon';
 import UserRecommendCard from '@/components/UserRecommendCard';
 import WorkExperience from '@/components/WorkExperience';
 import EducationExperience from '@/components/EducationExperience';
-import { getUserInfo, updateUserInfo, upLoadUserImage } from '@/apis/users.js';
+import { 
+  getUserInfo, updateUserInfo, upLoadUserImage,
+  postResume, deleteResume, getResume,
+  postEduBackground, deleteUserEduBackground, getUserEduBackground,
+  postUserJobBackground, deleteUserJobBackground, getUserJobBackground
+} from '@/apis/users.js';
 import JobIntentionDialog from '@/components/JobIntentionDialog';
+import { DocumentAdd } from '@element-plus/icons';
+import PageFooter from '@/components/PageFooter';
 
 
 export default {
@@ -188,13 +263,16 @@ export default {
     UserRecommendCard,
     WorkExperience,
     EducationExperience,
-    JobIntentionDialog
+    JobIntentionDialog,
+    DocumentAdd,
+    PageFooter
   },
   created: async function() {
     const uid = localStorage.getItem('unifiedId');
-    const resp = await getUserInfo({ uid: uid, sid: uid });
-    const data = resp.data.data;
-    console.log(data)
+
+    // 用户基本信息
+    const resp1 = await getUserInfo({ uid: uid, sid: uid });
+    const data = resp1.data.data;
     this.userBasicData = {
       unifiedId: data.unifiedId,
       age: data.age,
@@ -205,6 +283,17 @@ export default {
       trueName: data.trueName,
       briefInfo: data.briefInfo
     }
+    this.userIconUrl = data.pictureUrl;
+
+    // 简历
+    const resp2 = await getResume({ unifiedId: uid });
+    this.resumeList = resp2.data.data || [];
+
+    // 教育经历
+    this.updateEduExp();
+
+    // 工作经历
+    this.updateWorkExp();
 
     this.user = {
       userId: 102,
@@ -222,11 +311,6 @@ export default {
       endTime: '2021年7月',
       description: '负责字节跳动商业变现业务相关后台研发，构建对全客户结构、全流程的管理系统；负责高质量的设计和编码，承担重点、难点的技术攻坚；参与产品讨论和开发实现。'
     };
-    // for(let i = 0; i < 3; i++) {
-    //   let w = JSON.parse(JSON.stringify(workExperience));
-    //   w.workExperienceId = Math.floor(Math.random()*10000);
-    //   this.workExperienceList.push(w);
-    // }
     let educationExperience = {
       modifiable: true,
       educationExperienceId: 0,
@@ -236,26 +320,21 @@ export default {
       startTime: '2019年9月',
       endTime: '2023年7月'
     };
-    // for(let i = 0; i < 3; i++) {
-    //   let e = JSON.parse(JSON.stringify(educationExperience));
-    //   e.educationExperienceId = Math.floor(Math.random()*10000);
-    //   this.educationExperienceList.push(e);
-    // }
-    
-  },
-  mounted(){
-
+    this.workExperienceList.push(workExperience);
+    this.educationExperienceList.push(educationExperience);
   },
   data() {
     return{
-      showDialog: false,
-      userBasicData: { },
-      userIconUrl: '',
-      user: null,
+      showJobIntentionDialog: false, // 是否展示选择求职意向dialog
+      userBasicData: { }, // 用户基础信息form
+      userIconUrl: '', // 用户头像
+      resumeList: [], // 简历列表
+
       workDialogVisible: false,
       educationDialogVisible: false,
       workExperienceList:[],
       educationExperienceList:[],
+
       workForm: {
         position: '',
         enterprise: '',
@@ -270,149 +349,222 @@ export default {
         startTime: '',
         endTime: ''
       },
+
       workFormRules: {
-        position: [
-          {
-            required: true,
-            message: '请输入职位',
-            trigger: 'change',
-          },
-        ],
-        enterprise: [
-          {
-            required: true,
-            message: '请输入公司名',
-            trigger: 'change',
-          },
-        ],
-        startTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择开始时间',
-            trigger: 'change',
-          },
-        ],
-        endTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择结束时间',
-            trigger: 'change',
-          },
-        ]
+        position: {
+          required: true,
+          message: '请输入职位',
+        },
+        enterprise: {
+          required: true,
+          message: '请输入公司名',
+        },
+        startTime: {
+          type: 'date',
+          required: true,
+          message: '请选择开始时间',
+        },
+        endTime: {
+          type: 'date',
+          required: true,
+          message: '请选择结束时间',
+        },
       },
       educationFormRules: {
-        college: [
-          {
-            required: true,
-            message: '请输入学校',
-            trigger: 'change',
-          },
-        ],
-        major: [
-          {
-            required: true,
-            message: '请输入专业',
-            trigger: 'change',
-          },
-        ],
-        degree: [
-          {
-            required: true,
-            message: '请选择学位',
-            trigger: 'change',
-          },
-        ],
-        startTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择开始时间',
-            trigger: 'change',
-          },
-        ],
-        endTime: [
-          {
-            type: 'date',
-            required: true,
-            message: '请选择结束时间',
-            trigger: 'change',
-          },
-        ],
+        college: {
+          required: true,
+          message: '请输入学校',
+        },
+        major: {
+          required: true,
+          message: '请输入专业',
+        },
+        degree: {
+          required: true,
+          message: '请选择学位',
+        },
+        startTime: {
+          type: 'date',
+          required: true,
+          message: '请选择开始时间',
+        },
+        endTime: {
+          type: 'date',
+          required: true,
+          message: '请选择结束时间',
+        },
       },
     }
   },
   methods: {
-    submitBasicInfo: async function() {
-      const resp = updateUserInfo(this.userBasicData);
+    openUrl: function(url) {
+      window.open(url);
+    },
+
+    uploadAvatar: async function(file) { // 上传头像
+      let params = new FormData();
+      params.append('unifiedId', this.userBasicData.unifiedId);
+      params.append('file', file.raw, file.name);
+      
+      const resp1 = await upLoadUserImage(params);
+      if (resp1.status == 200 && resp1.data.code == 'success') {
+        this.$message.success('上传成功!');
+        const uid = localStorage.getItem('unifiedId');
+        const resp2 = await getUserInfo({ uid: uid, sid: uid }); // 得到新头像url
+        this.userIconUrl = resp2.data.data.pictureUrl;
+      }
+      else this.$message.error('上传失败!');
+    },
+    submitBasicInfo: async function() { // 提交基本信息
+      const resp = await updateUserInfo(this.userBasicData);
       if (resp.status == 200 && resp.data.code == 'success') this.$message.success('保存成功!');
       else this.$message.error('保存失败!');
     },
-    setJobIntention: function() {
-      this.showDialog = true;
+
+    setJobIntention: function() { // 打开职位选择dialog
+      this.showJobIntentionDialog = true;
     },
-    uploadAvatar: async function(file) {
-      console.log(file);
-      let fileReader = new FileReader();
-      fileReader.readAsDataURL(file.raw);
-      fileReader.onload = (event) => {
-        this.userIconUrl = event.target.result;
+    closeJobDialog: async function() { // 关闭职位选择dialog
+      this.showJobIntentionDialog = false;
+      const uid = localStorage.getItem('unifiedId');
+      const resp = await getUserInfo({ uid: uid, sid: uid }); // 得到新JobIntention
+      this.userBasicData.prePosition = resp.data.data.prePosition;
+    },
+
+    uploadResume: async function(file) { // 上传简历文件
+      if (this.resumeList.length >= 3) { // 限制简历数量
+        this.$message.warning('最多上传3份简历!');
+        return;
       }
       let params = new FormData();
       params.append('unifiedId', this.userBasicData.unifiedId);
       params.append('file', file.raw, file.name);
-      console.log(params.get('file'))
-      const resp = upLoadUserImage(params);
-      console.log(resp)
-      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('上传成功!');
+
+      const resp1 = await postResume(params);
+      if (resp1.status == 200 && resp1.data.code == 'success') {
+        this.$message.success('上传成功!');
+        const uid = localStorage.getItem('unifiedId');
+        const resp2 = await getResume({ unifiedId: uid }); // 更新简历列表
+        this.resumeList = resp2.data.data || [];
+      }
       else this.$message.error('上传失败!');
     },
-    submitWorkForm(formName) {
-      this.$refs[formName].validate((valid) => {
+    deleteResume: async function(rId) {
+      const uid = localStorage.getItem('unifiedId');
+      const resp1 = await deleteResume({ unifiedId: uid, resumeId: rId});
+      if (resp1.status == 200 && resp1.data.code == 'success') {
+        this.$message.success('删除成功!');
+        const uid = localStorage.getItem('unifiedId');
+        const resp2 = await getResume({ unifiedId: uid }); // 更新简历列表
+        this.resumeList = resp2.data.data || [];
+      }
+      else this.$message.error('删除失败!');
+    },
+
+    updateEduExp: async function() { // 更新教育经历
+      const uid = localStorage.getItem('unifiedId');
+      const resp = await getUserEduBackground({ unifiedId: uid });
+      const eduExplist = resp.data.data;
+      this.educationExperienceList = [];
+      for (let item of eduExplist) {
+        this.educationExperienceList.push({
+          numId : item.numId,
+          college: item.collegeName,
+          major: item.major,
+          degree: item.degree,
+          startTime: item.startTime,
+          endTime: item.endTime
+        });
+      }
+    },
+    deleteEduExp: async function(nid) { // 删除教育经历
+      const uid = localStorage.getItem('unifiedId');
+      const resp1 = await deleteUserEduBackground({ unifiedId: uid, numId: nid });
+      if (resp1.status == 200 && resp1.data.code == 'success') {
+        this.$message.success('删除成功!');
+        this.updateEduExp();
+      }
+      else this.$message.error('删除失败!');
+    },
+    submitEducationForm: async function(formName) {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          alert('工作经历添加成功!')
-          this.workExperienceList.push(this.workForm)
-          this.workDialogVisible=false
+          this.educationDialogVisible = false;
+          const params = {
+            unifiedId: localStorage.getItem('unifiedId'),
+            startTime: this.educationForm.startTime,
+            endTime: this.educationForm.endTime,
+            collegeName: this.educationForm.college,
+            degree: this.educationForm.degree,
+            major: this.educationForm.major
+          };
+          const resp = await postEduBackground(params);
+          if (resp.status == 200 && resp.data.code == 'success') {
+            this.$message.success('添加成功!');
+            this.updateEduExp();
+          }
+          else this.$message.error('添加失败!');
+          this.$refs[formName].resetFields();
         } else {
           return false
         }
       })
     },
-    submitEducationForm(formName) {
-      this.$refs[formName].validate((valid) => {
+
+    updateWorkExp: async function() { // 更新工作经历
+      const uid = localStorage.getItem('unifiedId');
+      const resp = await getUserJobBackground({ unifiedId: uid });
+      const workExplist = resp.data.data;
+      this.workExperienceList = [];
+      for (let item of workExplist) {
+        this.workExperienceList.push({
+          numId : item.numId,
+          position: item.positionType,
+          enterprise: item.enterpriseName,
+          description: item.description,
+          startTime: item.startTime,
+          endTime: item.endTime
+        });
+      }
+    },
+    deleteWorkExp: async function(nid) { // 删除工作经历
+      const uid = localStorage.getItem('unifiedId');
+      const resp = await deleteUserJobBackground({ unifiedId: uid, numId: nid });
+      if (resp.status == 200 && resp.data.code == 'success') {
+        this.$message.success('删除成功!');
+        this.updateWorkExp();
+      }
+      else this.$message.error('删除失败!');
+    },
+    submitWorkForm: async function(formName) {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          alert('教育经历添加成功!')
-          this.educationExperienceList.push(this.educationForm)
-          this.educationDialogVisible=false
+          this.workDialogVisible = false;
+          const params = {
+            unifiedId: localStorage.getItem('unifiedId'),
+            startTime: this.workForm.startTime,
+            endTime: this.workForm.endTime,
+            enterpriseName: this.workForm.enterprise,
+            positionType: this.workForm.position,
+            description: this.workForm.description
+          };
+          const resp = await postUserJobBackground(params);
+          if (resp.status == 200 && resp.data.code == 'success') {
+            this.$message.success('添加成功!');
+            this.updateWorkExp();
+          }
+          else this.$message.error('添加失败!');
+          this.$refs[formName].resetFields();
         } else {
           return false
         }
       })
     },
+
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    },
-    modifyWorkExperience(form){
-      for(let j=0;j<this.workExperienceList.length;j++){
-        if(this.workExperienceList[j].workExperienceId==form.workExperienceId){
-          this.workExperienceList[j]=form
-          this.workExperienceList[j].modifiable=true
-          break
-          //this.axios.post.......(写在这里还是写在子组件里？)
-        }
-      }
-    },
-    modifyEducationExperience(form){
-      for(let j=0;j<this.educationExperienceList.length;j++){
-        if(this.educationExperienceList[j].educationExperienceId==form.educationExperienceId){
-          this.educationExperienceList[j]=form
-          this.educationExperienceList[j].modifiable=true
-          break
-        }
-      }
-    },
-   
+    }
+  
   }
 }
 </script>

@@ -40,9 +40,16 @@ export function updateEnterpriseInfo(params){
     return user.post('/user/enterpriseinfo', params)
 }
 
+//上传头像
 export function upLoadUserImage(params){
-    
-    return user.post('/user/pic', data, config);
+    return axios({
+        method: 'post',
+        url: '/user/pic',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data: params,
+    });
 }
 
 // 查找用户
@@ -73,21 +80,21 @@ export function getUserEduBackground(params){
 //工作经历 增删改查
 
 export function postUserJobBackground(params){
-    return user.post('/user/edu',params)
+    return user.post('/user/job',params)
 }
 
 
 //查询工作经历
 export function getUserJobBackground(params){
-    return user.get('/user/edu',{params})
+    return user.get('/user/job',{params})
 }
 
 export function deleteUserJobBackground(params){
-    return user.delete('/user/edu',{params})
+    return user.delete('/user/job',{params})
 }
 
 export function updateUserJobBackground(params){
-    return user.put('/user/edu',params)
+    return user.put('/user/job',params)
 }
 
 
@@ -101,6 +108,13 @@ export function deleteResume(params){
 } 
 
 export function postResume(params){
-    return user.post('/user/resume',params)
+    return axios({
+        method: 'post',
+        url: '/user/resume',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data: params,
+    });
 } 
 

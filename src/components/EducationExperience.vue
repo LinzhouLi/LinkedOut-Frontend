@@ -9,7 +9,7 @@
         <h1 style="font-size:16px; margin:0px 0px 5px 0px">{{college}}</h1>
       </el-col>
       <el-col :span="4">
-        <el-button @click="dialogVisible=true" type="mini" v-if="modifiable">修改</el-button>
+        <!-- <el-button @click="dialogVisible=true" type="mini" v-if="modifiable">修改</el-button> -->
       </el-col>
       </el-row>
       <p style="font-size:15px; margin:0px 0px 5px 0px">{{major}}·{{degree}}</p>

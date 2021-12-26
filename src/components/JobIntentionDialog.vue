@@ -63,7 +63,6 @@ export default {
       return items;
     },
     submit: async function() {
-      console.log(this.selectedJobs.join())
       const params = { 
         unifiedId: localStorage.getItem("unifiedId"),
         prePosition: this.selectedJobs.join()

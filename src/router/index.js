@@ -4,15 +4,11 @@ import HomePage from '../views/Home/HomePage'
 import Tweet from '../views/Home/Tweet'
 import Recruitment from '../views/Home/Recruitment'
 import RecruitmentDetailPage from '../views/RecruitmentDetailPage'
-<<<<<<< HEAD
-import UserInfoPage from '../views/UserInfo/UserInfoPage'
 import UserTweet from '../views/UserInfo/UserTweet'
 import UserHome from '../views/UserInfo/UserHome'
-=======
-import UserInfoPage from '../views/UserInfoPage'
+import UserInfoPage from '../views/UserInfo/UserInfoPage'
 import ModifyUserInfo from '../views/ModifyUserInfo'
 import ModifyCompanyInfo from '../views/ModifyCompanyInfo'
->>>>>>> 8d2be21c50730b113cd4ae4c98481c105e1af65e
 import CompanyInfoPage from '../views/CompanyInfo/CompanyInfoPage'
 import CompanyHome from '../views/CompanyInfo/CompanyHome'
 import CompanyDescription from '../views/CompanyInfo/CompanyDescription'
@@ -66,12 +62,11 @@ const routes = [
     ]
   },
   {
-<<<<<<< HEAD
     path: '/postRecruitment',
     name: 'postRecruitment',
     component: PostRecruitmentPage
-  }
-=======
+  },
+  {
     path: '/modifyUserInfo/:uid',
     name: 'modifyUserInfo',
     component: ModifyUserInfo
@@ -91,7 +86,6 @@ const routes = [
     { path: 'companyRecruitment', component: CompanyRecruitment }
   ]
 },
->>>>>>> 8d2be21c50730b113cd4ae4c98481c105e1af65e
 ]
 
 const router = createRouter({

@@ -92,6 +92,7 @@ import UserIcon from '@/components/UserIcon';
 import UserRecommendCard from '@/components/UserRecommendCard';
 import PageFooter from '../../components/PageFooter.vue';
 import { ElNotification } from 'element-plus';
+import {getUserInfo} from '@/apis/users.js'
 
 export default {
   components: {
@@ -101,6 +102,7 @@ export default {
     PageFooter
   },
   created() {
+
     this.user = {
       userId: 102,
       userName: '张三',
@@ -111,6 +113,15 @@ export default {
     };
     this.currentMenu = this.$route.path;
     this.userId = this.$route.params['uid']; // 获取页面参数
+  },
+  mounted:async function(){
+    const params={
+      uid:localStorage.getItem('unifiedId'),
+      sid:this.userId,
+    }
+    const resp=await getUserInfo(params);
+    //todo 拿到数据之后进行修改
+    console.log(resp,'1212321')
   },
   data() {
     return{
@@ -157,7 +168,7 @@ export default {
         this.user.ifFollowing = true;
       }
     },
-  }
+  },
 }
 </script>
 

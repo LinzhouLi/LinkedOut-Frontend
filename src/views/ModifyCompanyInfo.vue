@@ -1,175 +1,132 @@
 <template>
   <top-nav/>
-  <el-row style="margin-top:20px">
-    <el-col :offset="3" :span="12" style="margin-right:20px">
-      <!-- 公司信息卡片-->
-      <el-card style="margin-bottom:20px">
-         <user-icon 
-             :size="100" 
-             :url="user.userIconUrl" 
-             style="cursor:pointer"
-           />
-         <el-divider/>
-         <el-row>
-           <div id="userName">公司名</div> 
-           <div style="margin-top: 10px; margin-left:140px; margin-right:20px" v-if="!modifyUserName">{{user.userName}}</div>
-           <div style="margin-top: 10px; margin-left:140px" v-if="modifyUserName">
-             <el-input v-model="userNameInput" placeholder="请输入新公司名"/>
-             <el-row style="margin-top: 30px">
-               <el-button @click="saveUserName" type="primary" :disabled="userNameInput==''" size="mini">
-                 保存
-               </el-button>
-               <el-button @click="modifyUserName=false; userNameInput=''" size="mini">
-                 取消
-               </el-button>
-             </el-row>
-           </div>
-           <el-button @click="modifyUserName=true;" v-if="!modifyUserName" size="mini">
-               修改
-           </el-button>
-         </el-row>
-           
-         <el-divider/>
-          <el-row>
-            <div id="briefInfo">简介</div>
-            <div style="margin-top: 10px; margin-left:160px; margin-right:20px" v-if="!modifyBriefInfo">{{user.briefInfo}}</div>
-            <div style="margin-top: 10px; margin-left:160px" v-if="modifyBriefInfo">
-             <el-input v-model="briefInfoInput" placeholder="请输入新简介"/>
-             <el-row style="margin-top: 30px">
-               <el-button @click="saveBriefInfo" type="primary" :disabled="briefInfoInput==''" size="mini">
-                 保存
-               </el-button>
-               <el-button @click="modifyBriefInfo=false; briefInfoInput=''" size="mini">
-                 取消
-               </el-button>
-             </el-row>
-           </div>
-           <el-button @click="modifyBriefInfo=true" v-if="!modifyBriefInfo" size="mini">
-               修改
-           </el-button>
-          </el-row>
-         <el-divider/>
-
-          <el-row>
-           <div id="contactWay">联系方式</div>
-           <div style="margin-top: 10px; margin-left:120px; margin-right:20px" v-if="!modifyContactWay">{{user.contactWay}}</div>
-           <div style="margin-top: 10px; margin-left:120px" v-if="modifyContactWay">
-              <el-input v-model="contactWayInput" placeholder="请输入新联系方式(网址)"/>
-             <el-row style="margin-top: 30px">
-               <el-button @click="saveContactWay" type="primary" :disabled="contactWayInput==''" size="mini">
-                 保存
-               </el-button>
-               <el-button @click="modifyContactWay=false; contactWayInput=''" size="mini">
-                 取消
-               </el-button>
-             </el-row>
-           </div>
-           <el-button @click="modifyContactWay=true" v-if="!modifyContactWay" size="mini">
-               修改
-           </el-button>
-          </el-row>
+  <el-row justify="center" style="margin-top:20px">
+    <el-col :span="13">
+      <el-form ref="form" :model="userBasicData" label-width="90px" size="small">
+        <!-- 公司信息卡片-->
+        <el-card style="margin-bottom:20px">
+          <template #header>
+            <div><b>基本信息</b></div>
+          </template>
+          <!-- 上传头像 -->
+          <el-upload
+            action=""
+            ref="picUploader"
+            :auto-upload="false"
+            :show-file-list="false"
+            :on-change="uploadAvatar"
+          >
+            <user-icon 
+              :size="100" 
+              :url="userIconUrl" 
+              style="margin-left:30px; cursor:pointer"
+            />
+          </el-upload>
+          <!-- 基本信息 -->
           <el-divider/>
+            <el-form-item label="公司名称">
+              <el-input style="width:150px" v-model="userBasicData.trueName"></el-input>
+            </el-form-item>
+            <el-form-item label="所属行业">
+              <el-input style="width:300px" v-model="userBasicData.briefInfo"></el-input>
+            </el-form-item>
+            <el-form-item label="官方网站">
+              <el-input style="width:200px" v-model="userBasicData.contactWay"></el-input>
+            </el-form-item>
+        </el-card>
 
-          <el-row>
-           <div id="email">邮箱</div>
-           <div style="margin-top: 10px; margin-left:160px; margin-right:20px" v-if="!modifyEmail">{{user.email}}</div>
-           <div style="margin-top: 10px; margin-left:160px" v-if="modifyEmail">
-              <el-input v-model="emailInput" placeholder="请输入新邮箱"/>
-             <el-row style="margin-top: 30px">
-               <el-button @click="saveEmail" type="primary" :disabled="emailInput==''" size="mini">
-                 保存
-               </el-button>
-               <el-button @click="modifyEmail=false; emailInput=''" size="mini">
-                 取消
-               </el-button>
-             </el-row>
-           </div>
-           <el-button @click="modifyEmail=true" v-if="!modifyEmail" size="mini">
-               修改
-           </el-button>
+        <!-- 公司介绍 -->
+        <el-card style="margin-top: 20px">
+          <template #header>
+            <span><b>职位详情</b></span>
+            <span style="margin-left:10px; font-size:10px; color: rgb(122 122 122);">
+              (支持markdown语法编辑)
+            </span>
+          </template>
+            <div id="vditor"/>
+          <el-row justify="center" style="margin-top:20px">
+            <el-button type="primary" @click="submitBasicInfo">保存</el-button>
           </el-row>
-      </el-card>
-    </el-col>
-
-    <el-col :span="5">
-      <user-recommend-card/>
+        </el-card>
+      </el-form>
     </el-col>
   </el-row>
+
+  <page-footer/>
+
 </template>
 
 <script>
-import TopNav from '@/components/TopNav'
-import UserIcon from '@/components/UserIcon'
-import UserRecommendCard from '@/components/UserRecommendCard'
-
+import TopNav from '@/components/TopNav';
+import UserIcon from '@/components/UserIcon';
+import PageFooter from '@/components/PageFooter';
+import Vditor from 'vditor';
+import '@/assets/vditor.css';
+import { 
+  upLoadUserImage, 
+  getEnterpriseInfo, updateEnterpriseInfo 
+} from '@/apis/users.js';
 
 export default {
   components: {
     TopNav,
     UserIcon,
-    UserRecommendCard
+    PageFooter
   },
-  created() {
-    this.user = {
-      userId: 101,
-      userName: '字节跳动',
-      userIconUrl: '',
-      briefInfo: '互联网企业',
-      contactWay: 'www.bytedance.com',
-      email: 'zijietiaodong@email.com'
-    };
+  mounted: async function() {
+    const uid = localStorage.getItem('unifiedId');
+
+    // 用户基本信息
+    const resp1 = await getEnterpriseInfo({ uid: uid, sid: uid });
+    const data = resp1.data.data;
+    this.userBasicData = {
+      unifiedId: data.unifiedId,
+      contactWay: data.contactWay,
+      trueName: data.trueName,
+      briefInfo: data.briefInfo,
+      description: data.description
+    }
+    this.userIconUrl = data.pictureUrl;
     
+    // 编辑器
+    this.vditor = new Vditor('vditor', {
+      mode: 'wysiwyg',
+      placeholder: '请输入公司简介...',
+      value: this.userBasicData.description,
+      input: value => this.userBasicData.description = value,
+      cache: { enable: false },
+    });
   },
   data() {
     return{
-      user: null,
-      userNameInput:'',
-      briefInfoInput:'',
-      contactWayInput:'',
-      emailInput:'',
-      modifyUserName: false,
-      modifyBriefInfo: false,
-      modifyContactWay: false,
-      modifyEmail: false
+      userBasicData: { }, // 用户基础信息form
+      userIconUrl: '', // 用户头像
     }
   },
   methods: {
-   saveUserName: function(){//保存公司名
-     this.user.userName=this.userNameInput
-     this.userNameInput=''
-     this.modifyUserName=false
-   },
-   saveBriefInfo: function(){//保存公司简介
-     this.user.briefInfo=this.briefInfoInput
-     this.briefInfoInput=''
-     this.modifyBriefInfo=false
-   },
-   saveContactWay: function(){//保存联系方式
-     this.user.contactWay=this.contactWayInput
-     this.contactWayInput=''
-     this.modifyContactWay=false
-   },
-   saveEmail: function(){//保存邮箱
-     this.user.email=this.emailInput
-     this.emailInput=''
-     this.modifyEmail=false
-   },
-   
+    uploadAvatar: async function(file) { // 上传头像
+      let params = new FormData();
+      params.append('unifiedId', this.userBasicData.unifiedId);
+      params.append('file', file.raw, file.name);
+      
+      const resp1 = await upLoadUserImage(params);
+      if (resp1.status == 200 && resp1.data.code == 'success') {
+        this.$message.success('上传成功!');
+        const uid = localStorage.getItem('unifiedId');
+        const resp2 = await getEnterpriseInfo({ uid: uid, sid: uid }); // 得到新头像url
+        this.userIconUrl = resp2.data.data.pictureUrl;
+      }
+      else this.$message.error('上传失败!');
+    },
+    submitBasicInfo: async function() { // 提交基本信息
+      const resp = await updateEnterpriseInfo(this.userBasicData);
+      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('保存成功!');
+      else this.$message.error('保存失败!');
+    },
   }
 }
 </script>
 
 <style scoped>
-#userName,#briefInfo,#contactWay,#email{
-  font-size: 20px;
-  font-weight: 650;
-  margin: 5px 0px 10px;
-}
-
-
-#buttons{
-  margin: 15px 0px 0px 0px;
-}
-
 
 </style>

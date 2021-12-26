@@ -28,7 +28,7 @@ export function getUserInfo(params){
 
 //获取企业用户信息
 export function getEnterpriseInfo(params){
-    return user.get('/enterpriseinfo',{params})
+    return user.get('/user/enterpriseinfo',{params})
 }
 
 //用户个人信息维护
@@ -36,6 +36,7 @@ export function updateUserInfo(params){
     return user.post('/user/userinfo', params)
 }
 
+//企业个人信息维护
 export function updateEnterpriseInfo(params){
     return user.post('/user/enterpriseinfo', params)
 }

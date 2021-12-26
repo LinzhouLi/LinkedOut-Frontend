@@ -1,7 +1,7 @@
 <template>
   <top-nav/>
-  <el-row style="margin-top:20px">
-    <el-col :offset="3" :span="12" style="margin-right:20px">
+  <el-row justify="center" style="margin-top:20px">
+    <el-col :span="13">
       <!-- 个人信息卡片-->
       <el-card style="margin-bottom:20px">
         <template #header>
@@ -141,10 +141,6 @@
       </el-card>
 
     </el-col>
-
-    <el-col :span="5">
-      <user-recommend-card :ifFooter="false"/>
-    </el-col>
   </el-row>
 
   <page-footer/>
@@ -242,7 +238,6 @@
 <script>
 import TopNav from '@/components/TopNav';
 import UserIcon from '@/components/UserIcon';
-import UserRecommendCard from '@/components/UserRecommendCard';
 import WorkExperience from '@/components/WorkExperience';
 import EducationExperience from '@/components/EducationExperience';
 import { 
@@ -260,7 +255,6 @@ export default {
   components: {
     TopNav,
     UserIcon,
-    UserRecommendCard,
     WorkExperience,
     EducationExperience,
     JobIntentionDialog,
@@ -295,33 +289,6 @@ export default {
     // 工作经历
     this.updateWorkExp();
 
-    this.user = {
-      userId: 102,
-      userName: '张三',
-      userIconUrl: '',
-      briefInfo: '同济大学学生',
-      livePlace: '上海'
-    };
-    let workExperience = {
-      modifiable: true,
-      workExperienceId: 0,
-      position: 'Java开发工程师',
-      enterprise: '字节跳动',
-      startTime: '2019年7月',
-      endTime: '2021年7月',
-      description: '负责字节跳动商业变现业务相关后台研发，构建对全客户结构、全流程的管理系统；负责高质量的设计和编码，承担重点、难点的技术攻坚；参与产品讨论和开发实现。'
-    };
-    let educationExperience = {
-      modifiable: true,
-      educationExperienceId: 0,
-      college: '同济大学',
-      major: '软件工程',
-      degree: '本科',
-      startTime: '2019年9月',
-      endTime: '2023年7月'
-    };
-    this.workExperienceList.push(workExperience);
-    this.educationExperienceList.push(educationExperience);
   },
   data() {
     return{
@@ -570,16 +537,5 @@ export default {
 </script>
 
 <style scoped>
-#userName,#briefInfo,#livePlace{
-  font-size: 20px;
-  font-weight: 650;
-  margin: 5px 0px 10px;
-}
-
-
-#buttons{
-  margin: 15px 0px 0px 0px;
-}
-
 
 </style>

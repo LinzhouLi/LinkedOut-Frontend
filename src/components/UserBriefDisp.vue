@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     checkUser: function() {
-      console.log(this.unifiedId)
+      //userType存疑
       if (this.userType == 'user') {
         this.$router.push({ name: 'userinfo', params: { uid: this.unifiedId }});
       }

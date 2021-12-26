@@ -42,7 +42,10 @@ import TweetBriefInfo from '@/components/TweetBriefInfo';
 import WorkExperience from '@/components/WorkExperience';
 import EducationExperience from '@/components/EducationExperience';
 import {getSelfTweet} from '@/apis/tweet.js';
+<<<<<<< HEAD
 import {getUserJobBackground,getUserEduBackground} from '@/apis/users.js';
+=======
+>>>>>>> 641105b (修改个人页面)
 export default {
   components: {
     TweetBriefInfo,

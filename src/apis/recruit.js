@@ -1,15 +1,15 @@
 import {RecruitInstance as recruit} from './axios'
 
 export function addPosition(params){
-    return recruit.put('/recruit/enterprise/position',params)
+    return recruit.post('/recruit/enterprise/position',params)
 }
 
 export function deletePosition(params){
     return recruit.delete('/recruit/enterprise/position',{params})
 }
 
-export function postPosition(params){
-    return recruit.post('/recruit/enterprise/position',params)
+export function modifyPosition(params){
+    return recruit.put('/recruit/enterprise/position',params)
 }
 
 export function getCompanyAllPosition(params){

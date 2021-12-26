@@ -62,13 +62,12 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 import PageFooter from '@/components/PageFooter';
 import Vditor from 'vditor';
 import '@/assets/vditor.css';
-import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
+import { addPosition } from '@/apis/recruit.js';
 
 export default {
   components: {
     TopNav,
-    PageFooter,
-    ElNotification
+    PageFooter
   },
   created() {
     AMapLoader.load({ // 地图加载器
@@ -81,7 +80,6 @@ export default {
   },
   mounted() {
     this.vditor = new Vditor('vditor', {
-      height: 600,
       mode: 'wysiwyg',
       placeholder: '请输入职位详情...',
       input: value => this.details = value,
@@ -156,36 +154,25 @@ export default {
         }
       });
     },
-    submit: function() {
-      this.$refs['form'].validate((valid) => {
+    submit: async function() {
+      this.$refs['form'].validate(async (valid) => {
         if (valid) {
-          ElMessageBox.confirm(
-            '确认职位信息准确无误, 发布后不可撤销!',
-            '发布此职位?',
-            {
-              confirmButtonText: '确认',
-              cancelButtonText: '取消',
-              type: 'warning',
-            }
-          )
-          .then(() => {
-            // TODO
-            ElNotification({
-              title: 'Success',
-              message: '发布成功!',
-              type: 'success',
-            })
+          const params = {
+            unifiedId: localStorage.getItem('unifiedId'),
+            jobName: this.form.title,
+            positionType: this.form.classification,
+            reward: this.form.salary,
+            workPlace: this.form.location,
+            description: this.form.details
+          };
+          const resp = await addPosition(params);
+          if (resp.status == 200 && resp.data.code == 'success') {
+            this.$message.success('发布成功!');
             this.$router.push('/home');
-          })
-          .catch(() => {
-            return false
-          })          
+          }
+          else this.$message.error('发布失败!');
         } else {
-          ElNotification({
-            title: 'Error',
-            message: '请完整填写职位信息!',
-            type: 'error',
-          })
+          this.$message.warning('请完整填写职位信息!');
           return false
         }
       })

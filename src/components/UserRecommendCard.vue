@@ -95,6 +95,7 @@ export default {
       this.userRecommendList = [];
       const resp = await getRecommentList(unifiedId);
       const recommendList = resp.data.data;
+      
       for(let item of recommendList) {
         this.userRecommendList.push({
           unifiedId: item.unifiedId,

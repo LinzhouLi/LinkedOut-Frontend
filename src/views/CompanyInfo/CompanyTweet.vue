@@ -61,6 +61,7 @@
 import TweetDisp from '@/components/TweetDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';
+import {getSelfTweet} from '@/apis/tweet.js'
 
 let url = require('@/assets/ADimg.jpg');
 let tweet = {
@@ -118,19 +119,22 @@ export default {
     }
   },
   methods: {
-    reloadInitialTweets: function() { // 加载初始动态
+    reloadInitialTweets:async function() { // 加载初始动态
       this.tweetList = []; // 清空动态列表
       this.loadAll = false;
       this.loadingInitialTweets = true; // 开始加载
-      // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 12; i++) {
-          let t = JSON.parse(JSON.stringify(tweet));
-          t.tweetId = Math.floor(Math.random()*10000);
-          this.tweetList.push(t);
-        }
-        this.loadingInitialTweets = false; // 加载结束
-      }, 2000)
+
+      
+    const resp2=await getSelfTweet({
+      visitorId:localStorage.getItem('unifiedId'),
+      intervieweeId:this.cid,
+      momentId:0,
+    })
+
+    const datas2=resp2.data.data;
+    this.tweetList=datas2;
+    this.loadingInitialTweets=false;
+
     },
     loadMoreTweets: function() { // 加载更多动态
       this.loadingMoreTweets = true; // 开始加载

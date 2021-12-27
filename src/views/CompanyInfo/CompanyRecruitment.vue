@@ -58,6 +58,7 @@
 <script>
 import RecruitmentDisp from '@/components/RecruitmentDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
+import {getCompanyAllPosition} from '@/apis/recruit.js'
 
 let recruitment = {
   recruitmentId: 0,
@@ -101,19 +102,19 @@ export default {
     }
   },
   methods: {
-    reloadInitialRecruitments: function() { // 加载初始招聘信息
+    reloadInitialRecruitments: async function() { // 加载初始招聘信息
       this.recruitmentList = []; // 清空招聘列表
       this.loadAll = false;
       this.loadingInitialRecruitments = true; // 开始加载
-      // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 15; i++) {
-          let t = JSON.parse(JSON.stringify(recruitment));
-          t.recruitmentId = Math.floor(Math.random()*10000);
-          this.recruitmentList.push(t);
-        }
-        this.loadingInitialRecruitments = false; // 加载结束
-      }, 2000)
+
+      this.cid=this.$route.params.cid;
+      
+      const resp3=await getCompanyAllPosition({unifiedId:this.cid});
+      const data3=resp3.data.data;
+      this.recruitmentList=data3;
+      
+      
+
     },
     loadMoreRecruitments: function() { // 加载更多招聘信息
       this.loadingMoreRecruitments = true; // 开始加载

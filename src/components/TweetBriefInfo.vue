@@ -28,7 +28,7 @@ data(){
 },
 props: {
     tweetId: { 
-      type: Number,
+      type: String,
       required: true
     },
     contents: { 
@@ -54,8 +54,8 @@ props: {
     }
   },
 mounted() {
-    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.contents);
- 
+    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), 
+    this.contents===''?` 没有内容`:this.contents);
   },
   
 }

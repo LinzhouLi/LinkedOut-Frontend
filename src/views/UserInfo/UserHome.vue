@@ -42,6 +42,7 @@ import TweetBriefInfo from '@/components/TweetBriefInfo';
 import WorkExperience from '@/components/WorkExperience';
 import EducationExperience from '@/components/EducationExperience';
 import {getSelfTweet} from '@/apis/tweet.js';
+import {getUserJobBackground,getUserEduBackground} from '@/apis/users.js';
 export default {
   components: {
     TweetBriefInfo,
@@ -98,22 +99,33 @@ ssss`,
   },
   data() {
     return {
-      userId: 0,
+      uid: 0,
       tweetList:[],
       workExperienceList:[],
       educationExperienceList:[]
     }
   },
   mounted:async function(){
-    console.log(1);
-    console.log(this.$route,'12312312');
+
+    this.uid=this.$route.params.uid;
+    this.tweetList=[];
     const params={
       visitorId:localStorage.getItem('unifiedId'),
       intervieweeId:this.$route.params.uid,
       momentId:0,
     }
     const resp=await getSelfTweet(params);
-    console.log(resp,'12321')
+    this.tweetList=resp.data.data.slice(0,6);
+
+
+    const resp2=await getUserJobBackground({unifiedId:this.uid});
+    const resp3=await getUserEduBackground({unifiedId:this.uid});
+
+    this.workExperienceList=resp2.data.data;
+
+    this.educationExperienceList=resp3.data.data;
+
+    console.log(resp2,resp3,'asdiouasgdioasgoasgodi')
   }
 }
 </script>

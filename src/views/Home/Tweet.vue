@@ -129,8 +129,10 @@ export default {
       const params={unifiedId,momentId:0} //Todo
       const resp=await getOtherTweet(params);
 
+
       this.tweetList=resp.data.data;
       this.tweetsSum=resp.data.data.length;
+
 
       this.loadingInitialTweets = false;
     },

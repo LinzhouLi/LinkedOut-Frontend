@@ -12,6 +12,7 @@ export function modifyPosition(params){
     return recruit.put('/recruit/enterprise/position',params)
 }
 
+//企业获取用户信息
 export function getCompanyAllPosition(params){
     return recruit.get('/recruit/position/all',{params})
 }

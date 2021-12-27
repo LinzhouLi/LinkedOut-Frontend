@@ -26,7 +26,7 @@ export function getUserInfo(params){
     return user.get('/user/userinfo',{params})
 }
 
-//获取企业用户信息
+//获取企业用户个人信息
 export function getEnterpriseInfo(params){
     return user.get('/user/enterpriseinfo',{params})
 }
@@ -78,7 +78,6 @@ export function getUserEduBackground(params){
 
 
 //工作经历 增删改查
-
 export function postUserJobBackground(params){
     return user.post('/user/job',params)
 }

@@ -64,7 +64,7 @@ export default {
         password:this.model.password,
       }
       const resp1=await userLogin(params);
-      console.log(resp1)
+      // console.log(resp1)
       if (resp1.status == 200 && resp1.data.code == 'success') {
         this.$message.success('登陆成功!');
         const { unifiedId, userType } = resp1.data.data;

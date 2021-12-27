@@ -112,8 +112,8 @@ export default {
       type: Number,
       required: true,
     },
-    userId: { // 用户统一ID
-      type: Number,
+    unifiedId: { // 用户统一ID
+      type: String,
       required: true,
     },
     userName: { // 动态发布者真实姓名
@@ -167,18 +167,22 @@ export default {
     this.Eleme = Eleme;
   },
   mounted() {
+    // console.log(this.u)
+    console.log(this.unifiedId,this.userName,'casdiasodhbaisodh');
+    console.log(this.$props)
     VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.contents);
     this.likeDom = document.getElementById(`like-icon-${this.tweetId}`);
     this.commentDom = document.getElementById(`comment-icon-${this.tweetId}`);
   },
   computed: {
     user() {
+      // console.log(this.unifiedId)
       return {
-        userId: this.unifiedId,
-        userName: this.simpleUserInfo.true_name,
-        userType: this.simpleUserInfo.user_type,
-        userIconUrl: this.userIconUrl,
-        userBriefInfo: this.userBriefInfo
+        unifiedId: this.$props.unifiedId,
+        userName: this.$props.simpleUserInfo.true_name,
+        userType: this.$props.simpleUserInfo.user_type,
+        userIconUrl: this.$props.userIconUrl,
+        userBriefInfo: this.$props.userBriefInfo
       }
     }
   },
@@ -202,8 +206,7 @@ export default {
       this.myCommentInputDom.focus();
     },
     uploadMyComment:async function() { // 发表评论
-      // TODO
-      const date=new Date()
+
       const params={
         unifiedId:localStorage.getItem('unifiedId'),
         tweetId:this.tweetId,

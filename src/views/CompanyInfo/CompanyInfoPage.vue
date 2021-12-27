@@ -80,6 +80,7 @@ import UserIcon from '@/components/UserIcon.vue';
 import { Connection } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter.vue';
 import { ElNotification } from 'element-plus';
+import {getEnterpriseInfo} from '@/apis/users.js'
 
 export default {
   components: {
@@ -109,6 +110,7 @@ export default {
       companyDescription:'',
       user: null,
       userId: 0,
+      cid:'',
     }
   },
   watch: {
@@ -140,6 +142,28 @@ export default {
         this.user.ifFollowing = true;
       }
     },
+  },
+  mounted:async function(){
+    // console.log(this.$route.params.cid,'123123');
+    this.cid=this.$route.params.cid;
+    const params={
+      uid:localStorage.getItem('unifiedId'),
+      sid:this.cid,
+    }
+
+
+    const resp=await getEnterpriseInfo(params);
+
+    const datas=resp.data.data;
+    this.user={
+      userId:datas.unifiedId,
+      userName:datas.trueName,
+      userIconUrl:datas.pictureUrl,
+      briefInfo:datas.briefInfo,
+      contactWay:datas.contactWay,
+      ifFollowing:datas.isSubscribed,
+    }
+
   }
 }
 </script>

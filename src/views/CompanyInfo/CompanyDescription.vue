@@ -7,6 +7,8 @@
 <script>
 import VditorPreview from 'vditor/dist/method.min';
 import '@/assets/vditor.css';
+import {getEnterpriseInfo} from '@/apis/users.js'
+
 export default {
   created(){
     this.companyDescription = `
@@ -30,7 +32,17 @@ China,China
 2012
 `
   },
-  mounted() {
+  mounted:async function(){
+    this.cid=this.$route.params.cid;
+    const params={
+      uid:localStorage.getItem('unifiedId'),
+      sid:this.cid,
+    }
+    const resp=await getEnterpriseInfo(params);
+    const datas=resp.data.data;
+
+    this.companyDescription=datas.description;
+
     VditorPreview.preview(document.getElementById('text-area'), this.companyDescription);
   },
   data(){

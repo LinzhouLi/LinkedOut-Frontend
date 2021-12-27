@@ -47,18 +47,6 @@ const routes = [
       { path: 'tweets', component: UserTweet },
     ]
   },
-  { 
-    path: '/companyinfo/:cid',
-    name: 'companyinfo',
-    component: CompanyInfoPage,
-    redirect: { name: '/companyinfo/:cid/home' },
-    children: [
-      { path: 'home', name:'/companyinfo/:cid/home', component: CompanyHome },
-      { path: 'description', component: CompanyDescription },
-      { path: 'tweets', component: CompanyTweet },
-      { path: 'recruitments', component: CompanyRecruitment }
-    ]
-  },
   {
     path: '/postRecruitment',
     name: 'postRecruitment',
@@ -74,14 +62,15 @@ const routes = [
     name: 'modifyCompanyInfo',
     component: ModifyCompanyInfo
   },
-  { path: '/companyInfo/:cid',
+  { path: '/companyinfo/:cid',
   name: 'companyinfo',
   component: CompanyInfoPage,
+  redirect:{name:"companyPathHome"},
   children: [
-    { path: 'companyHome', component: CompanyHome},
-    { path: 'companyDescription', component: CompanyDescription },
-    { path: 'companyTweet', component: CompanyTweet },
-    { path: 'companyRecruitment', component: CompanyRecruitment }
+    { path: 'home', name:"companyPathHome",component: CompanyHome},
+    { path: 'description', component: CompanyDescription },
+    { path: 'tweets', component: CompanyTweet },
+    { path: 'recruitments', component: CompanyRecruitment }
   ]
 },
 ]

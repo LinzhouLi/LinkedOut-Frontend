@@ -41,6 +41,9 @@ import VditorPreview from 'vditor/dist/method.min';
 import '@/assets/vditor.css';
 import TweetBriefInfo from '@/components/TweetBriefInfo'
 import RecruitmentBriefInfo from '@/components/RecruitmentBriefInfo'
+import {getEnterpriseInfo} from '@/apis/users.js'
+import {getSelfTweet} from '@/apis/tweet.js'
+import {getCompanyAllPosition} from '@/apis/recruit.js'
 
 
 export default {
@@ -48,7 +51,7 @@ export default {
     TweetBriefInfo,
     RecruitmentBriefInfo
   },
-  created(){
+  created:async function(){
     this.companyDescription = `
 ## 概览
 Inspire creativity, enrich life.
@@ -69,7 +72,7 @@ China,China
 ## 创立时间
 2012
 `
-let url = require('@/assets/ADimg.jpg');
+    let url = require('@/assets/ADimg.jpg');
     let tweet = {
       tweetId: 0,   
       tweetText: `# 一级标题一级标题一级标题一级标题
@@ -100,7 +103,31 @@ ssss`,
       this.recruitmentList.push(r);
     }
   },
-  mounted() {
+  mounted:async function() {
+    this.cid=this.$route.params.cid;
+    const params={
+      uid:localStorage.getItem('unifiedId'),
+      sid:this.cid,
+    }
+    const resp=await getEnterpriseInfo(params);
+    const datas=resp.data.data;
+
+    const resp2=await getSelfTweet({
+      visitorId:localStorage.getItem('unifiedId'),
+      intervieweeId:this.cid,
+      momentId:0,
+    })
+
+    const datas2=resp2.data.data;
+
+    const resp3=await getCompanyAllPosition({unifiedId:this.cid});
+    const data3=resp3.data.data;
+
+    console.log(resp3,'resp3resp3resp3resp3resp3')
+    this.companyDescription=datas.description;
+    this.tweetList=datas2;
+    this.recruitmentList=data3;
+
     VditorPreview.preview(document.getElementById('text-area'), this.companyDescription);
   },
   data(){

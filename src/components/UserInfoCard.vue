@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     checkUserInfo: function() {
-      this.$router.push({ path: '/myinfo' });
+      this.$router.push({ name: 'userinfo', params: { uid: localStorage.getItem('unifiedId') }});
     },
     setJobIntention: function() {
       this.showDialog = true;

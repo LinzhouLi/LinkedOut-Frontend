@@ -105,19 +105,23 @@ export default {
       this.loadAll = false;
       this.loadingInitialRecruitments = true; // 开始加载
 
-      const params={unifiedId:localStorage.getItem('unifiedId')};
-      const resp=await getRecommendPositions(params);
-
-
-      // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 15; i++) {
-          let t = JSON.parse(JSON.stringify(recruitment));
-          t.recruitmentId = Math.floor(Math.random()*10000);
-          this.recruitmentList.push(t);
-        }
-        this.loadingInitialRecruitments = false; // 加载结束
-      }, 2000)
+      const params = { unifiedId: localStorage.getItem('unifiedId') };
+      const resp = await getRecommendPositions(params);
+      const recruitmentsData  = resp.data.data;
+      for (let item of recruitmentsData) {
+        this.recruitmentList.push({
+          recruitmentId: item.jobId,
+          userId: item.unifiedId,
+          userName: item.trueName,
+          userType: item.userType,
+          userIconUrl: item.pictureUrl,
+          userBriefInfo: item.briefInfo,
+          recruitmentTitle: item.jobName,
+          recruitmentType: item.positionType,
+          salary: item.reward,
+        });
+      }
+      this.loadingInitialRecruitments = false; // 加载结束
     },
     loadMoreRecruitments: function() { // 加载更多招聘信息
       this.loadingMoreRecruitments = true; // 开始加载

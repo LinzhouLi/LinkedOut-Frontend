@@ -95,7 +95,7 @@
         </template>
         <div v-for="(item,index) in educationExperienceList" :key="index">
           <el-row>
-            <el-col :span="22" style="margin:10px">
+            <el-col :span="22">
               <education-experience :modifiable="false" v-bind="item"/> 
             </el-col>
             <el-col :span="2">
@@ -121,7 +121,7 @@
         </template>
         <div v-for="(item,index) in workExperienceList" :key="index">
           <el-row>
-            <el-col style="margin:10px" :span="22">
+            <el-col :span="22">
               <work-experience :modifiable="false" v-bind="item"/>
             </el-col>
             <el-col :span="2">

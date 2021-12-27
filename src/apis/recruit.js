@@ -23,7 +23,6 @@ export function getRecommendPositions(params){
 }
 
 export function getPositionDetails(params){
-    console.log(params);
     return recruit.get('/recruit/position/specified', {params})
 }
 

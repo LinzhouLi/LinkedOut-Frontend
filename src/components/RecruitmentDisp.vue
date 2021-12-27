@@ -77,8 +77,7 @@ export default {
   },
   methods: {
     checkRecruitment: function() {
-      //this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
-      this.$router.push({ name: 'recruitment', params: { rid: 2 }});
+      this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
     }
   }
 }

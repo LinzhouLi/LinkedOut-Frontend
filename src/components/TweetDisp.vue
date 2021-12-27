@@ -28,7 +28,7 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="tweet-icon" :id="`comment-icon-${tweetId}`" @click="getComments">
+        <div class="tweet-icon" :id="`comment-icon-${tweetId}`" @click="foldCommentList">
           <el-icon :size="20"><chat-line-square /></el-icon>
           <span class="icon-text">{{ _commentNum }}</span>
         </div>
@@ -47,17 +47,18 @@
         <div style="margin:10px 0px">
           <div class="comment-area">
             <user-brief-disp v-bind="item.user"/>
-            <div class="comment-time">发表于{{ getProperTimeString(item.recordTime) }}</div>
             <el-button size="mini" type="text" 
             v-show="item.unifiedId==this.unifiedId" 
             class="comment-delete-button"
             @click="deleteComment(item)">删除</el-button>
           </div>
-        <div style="padding-left:66px">{{ item.contents }}</div>
-        
-      </div>
+        <div style="padding-left:30px">{{ item.contents }}</div>
+        <div class="comment-time-container">
+        <div class="comment-time">发表于{{ getProperTimeString(item.recordTime) }}</div>
+        </div>
+        </div>
       
-        <el-divider v-if="index!=commentList.length-1" style="margin: 0px 10px 0px 66px;" />
+        <el-divider v-if="index!=commentList.length-1" style="margin: 0px 10px 0px 0px;" />
       </div>
       <el-divider style="margin: 0px;" />
       <!-- 用户评论输入区 -->
@@ -167,9 +168,6 @@ export default {
     this.Eleme = Eleme;
   },
   mounted() {
-    // console.log(this.u)
-    console.log(this.unifiedId,this.userName,'casdiasodhbaisodh');
-    console.log(this.$props)
     VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.contents);
     this.likeDom = document.getElementById(`like-icon-${this.tweetId}`);
     this.commentDom = document.getElementById(`comment-icon-${this.tweetId}`);
@@ -216,13 +214,11 @@ export default {
 
       const resp1=await addComment(params);
       if(resp1.data.code==='success'){
-        this.myCommentText='',
-        this.commentState=false
+        this.myCommentText='';
+        this._commentNum++;
+        this.getCommentList();
         this.$message.success('发送成功');
       }
-      // // this.getComments()
-
-
 
     },
     likeTweet: async function() { // 点赞动态
@@ -245,26 +241,23 @@ export default {
         this._likeNum=resp.data.data;
       }
     },
-    getComments: async function() { // 用户点击评论图标, 展示所有评论
+    getCommentList:async function(){
+       this.commentList=[];
        this.unifiedId=localStorage.getItem('unifiedId');
-      if(this.commentState == false) {
-        // TODO 打开评论
-        // s\是
 
-        const resp=await getAllComments({tweetId:this.tweetId});
-
-
+      const resp=await getAllComments({tweetId:this.tweetId});
         this.commentList=resp.data.data;
-
-       console.log(this.commentList,'123213123213')
-        //不确定数据类型的格式  todo 需要加更多的参数
-        this.commentList.forEach(e=>{
+      this.commentList.forEach(e=>{
           e.user={
             userName:e.simpleUserInfo.true_name,
             userType:e.simpleUserInfo.user_type,
           }
         })
+    },
+    foldCommentList: async function() { 
+      if(this.commentState === false) {
         this.commentState = true;
+        this.getCommentList();
         this.commentDom.style.color = '#409eff';
         this.$nextTick(() => { // 确保document刷新后再获取表情选择器
           this.myCommentInputDom = document.getElementById(`my-comment-input-${this.tweetId}`)
@@ -278,7 +271,6 @@ export default {
         })
       }
       else {
-        // TODO 收起评论
         this.commentDom.style.color = '';
         this.commentState = false
         this.commentList = []
@@ -289,7 +281,8 @@ export default {
 
       const resp=await deleteComment({unifiedId:this.unifiedId,tweetId:this.tweetId,floor:item.floor})
       if(resp.status===200){
-        this.commentState=false
+        this._commentNum--;
+        this.getCommentList();
         this.$message.success('删除成功');
         //todo 评论数量更新问题
       }
@@ -329,6 +322,14 @@ export default {
   /* padding-top: 23px; */
   font-size: 12px;
   color: rgba(0,0,0,0.4);
+  margin-bottom: -8px;
+  margin-right:10px;
+}
+
+.comment-time-container {
+  /* padding-top: 23px; */
+  display: flex;
+  flex-direction: row-reverse;
 }
 .comment-area {
   padding: 5px 15px;

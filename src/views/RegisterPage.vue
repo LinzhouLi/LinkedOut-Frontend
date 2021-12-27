@@ -113,6 +113,7 @@ export default {
         const resp = await getEmailCode({mail:this.model.email});
 
         this.validateCode=resp.data.data;
+        this.$message.success('成功发送验证码！');
       }catch (e) {
         console.log(e);
       }finally {

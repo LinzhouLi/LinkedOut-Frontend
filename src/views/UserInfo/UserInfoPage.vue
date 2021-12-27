@@ -23,6 +23,7 @@
           </el-col>
           <el-col :span="3">
             <el-button 
+               v-show="!isSelf"
               :type="buttonType(user.ifFollowing)"
               @click="follow(index)"
               style="width:76px; padding:0px"
@@ -118,6 +119,7 @@ export default {
       uid:localStorage.getItem('unifiedId'),
       sid:this.userId,
     }
+    this.isSelf=localStorage.getItem('unifiedId')===this.userId;
     const resp=await getUserInfo(params);
     console.log(resp.data.data);
     const datas=resp.data.data;
@@ -138,7 +140,8 @@ export default {
       userId: 0,
       tweetList:[],
       workExperienceList:[],
-      educationExperienceList:[]
+      educationExperienceList:[],
+      isSelf:false,
     }
   },
   watch: {

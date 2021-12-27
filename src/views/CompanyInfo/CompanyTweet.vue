@@ -116,14 +116,16 @@ export default {
       tweetInputDom: null,
       showEmojiSelector: false,
       tweetText: '',
+      cid:'',
     }
   },
   methods: {
     reloadInitialTweets:async function() { // 加载初始动态
       this.tweetList = []; // 清空动态列表
-      this.loadAll = false;
+      // this.loadAll = false;
       this.loadingInitialTweets = true; // 开始加载
 
+    this.cid=this.$route.params.cid;
       
     const resp2=await getSelfTweet({
       visitorId:localStorage.getItem('unifiedId'),
@@ -134,22 +136,18 @@ export default {
     const datas2=resp2.data.data;
     this.tweetList=datas2;
     this.loadingInitialTweets=false;
-
+    console.log(this.tweetList,'12321321321')
+    
+// commentNum: 9
+// contents: "测试"
+// like_state: 0
+// praiseNum: 2
+// recordTime: "2019-09-09T03:20:20.000+0000"
+// state: 1
+// tweetId: 4
+// unifiedId: 1
     },
-    loadMoreTweets: function() { // 加载更多动态
-      this.loadingMoreTweets = true; // 开始加载
-      // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 6; i++) {
-          let t = JSON.parse(JSON.stringify(tweet));
-          t.tweetId = Math.floor(Math.random()*10000);
-          this.tweetList.push(t);
-        }
-        this.loadingMoreTweets = false; // 加载结束
-        this.loadAll = true; // 去掉
-      }, 2000)
-      
-    }
+
   }
 }
 </script>

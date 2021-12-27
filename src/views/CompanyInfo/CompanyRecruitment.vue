@@ -112,21 +112,12 @@ export default {
       const resp3=await getCompanyAllPosition({unifiedId:this.cid});
       const data3=resp3.data.data;
       this.recruitmentList=data3;
-      
-      
+      this.loadingInitialRecruitments = false; // 开始加载
 
     },
-    loadMoreRecruitments: function() { // 加载更多招聘信息
+    loadMoreRecruitments:async function() { // 加载更多招聘信息
       this.loadingMoreRecruitments = true; // 开始加载
-      setTimeout(() => {
-        for(let i = 0; i < 8; i++) {
-          let t = JSON.parse(JSON.stringify(recruitment));
-          t.recruitmentId = Math.floor(Math.random()*10000);
-          this.recruitmentList.push(t);
-        }
-        this.loadingMoreRecruitments = false;
-        this.loadAll = true; // 去掉
-      }, 2000)
+      
     }
   }
 }

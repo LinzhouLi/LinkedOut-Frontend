@@ -108,10 +108,10 @@ export default {
       const params={unifiedId,momentId:0} //Todo
       const resp=await getOtherTweet(params);
 
-
       this.tweetList=resp.data.data;
       this.tweetsSum=resp.data.data.length;
 
+      console.log(this.tweetList,'12321631298312608932604')
 
       this.loadingInitialTweets = false;
     },

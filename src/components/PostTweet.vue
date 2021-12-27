@@ -53,7 +53,7 @@
 import 'emoji-picker-element';
 import { Eleme, PictureFilled, Plus, CloseBold } from '@element-plus/icons';
 import { ElMessage } from 'element-plus';
-import {addTweet} from '@/apis/tweet.js';
+import { addTweet } from '@/apis/tweet.js';
 
 export default {
   components: {
@@ -87,12 +87,13 @@ export default {
   },
   data() {
     return {
-      imgPopoverVisible: true,
       imgReader: null,
-      picList: [],
+      imgPopoverVisible: true,
       tweetInputDom: null,
       showEmojiSelector: false,
       tweetText: '',
+      picList: [], // 用于展示图片
+      fileList: [], // 用于上传文件
     }
   },
   methods: {
@@ -104,6 +105,7 @@ export default {
         this.imgPopoverVisible = false;
         this.imgReader.readAsDataURL(file.raw);
         URL.revokeObjectURL(file.url);
+        this.fileList.push(file.raw);
       }
       else {
         ElMessage.error('最多上传3张图片!');
@@ -112,19 +114,24 @@ export default {
     },
     removePicture: function(index) { // 删除预览图片
       this.picList.splice(index, 1);
+      this.fileList.splice(index, 1);
     },
     uploadTweet:async function() { // 上传动态
       // TODO 发布动态文件传输的问题
-      let date=new Date();
-      const trueDate=date.toJSON().split('T')[0]+' '+date.toJSON().split('T')[1].split('Z')[0]
-      const params={
-        unifiedId:localStorage.getItem("unifiedId"),
-        content:this.tweetText,
-        recordTime:trueDate,
-        //files:this.picList,
-        // files:this. //todo 图片如何传
+      let date = new Date();
+      const trueDate = date.toJSON().split('T')[0]+' '+date.toJSON().split('T')[1].split('Z')[0];
+
+      let params = new FormData();
+      params.append('unifiedId', localStorage.getItem("unifiedId"));
+      params.append('content', this.tweetText);
+      params.append('recordTime', trueDate);
+      for (let file in this.fileList) {
+        params.append('files', file);
       }
-      const resp=await addTweet(params);
+
+      const resq = await addTweet(params);
+      if (resq.status == 200 && resq.data.code == 'success') this.$message.success('发布成功!');
+      else this.$message.error('发布失败!');
     },
   }
 }

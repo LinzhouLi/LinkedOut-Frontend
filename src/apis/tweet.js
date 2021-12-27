@@ -1,4 +1,5 @@
-import {TweetInstance as tweet} from './axios'
+import {TweetInstance as tweet} from './axios';
+import axios from 'axios';
 
 //关注用户
 export function updateFollow(params){
@@ -60,7 +61,14 @@ export function deleteComment(params){
 
 //发布动态
 export function addTweet(params){
-    return tweet.put('/tweet',params,{params})//存疑
+    return axios({
+        method: 'put',
+        url: '/tweet',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data: params,
+    });
 }
 
 export function deleteTweet(params){

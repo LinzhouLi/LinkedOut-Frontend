@@ -14,13 +14,13 @@ export function getFollow(params){
     return tweet.get('/tweet/subscription',{params})
 }
 
-export function getAllFollow(params){
-    return tweet.get('/tweet/subscriptionList',{params})
+export function getAllFollow(uid){
+    return tweet.get('/tweet/subscriptionList/' + uid)
 }
 
 //推荐关注列表
-export function getRecommentList(params){
-    return tweet.get('/tweet/recommend/'+params.unifiedId)
+export function getRecommentList(uid){
+    return tweet.get('/tweet/recommend/'+ uid)
 }
 
 //点赞api

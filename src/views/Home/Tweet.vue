@@ -64,27 +64,6 @@ import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';
 import {getOtherTweet} from '@/apis/tweet.js'
 
-let url = require('@/assets/ADimg.jpg');
-let tweet = {
-  tweetId: 0,
-  userId: 123,
-  userName: '张三',
-  userType: 'user',
-  userIconUrl: '',
-  userBriefInfo: '腾讯员工',
-  tweetText: `# s
-🥶sdas
-123123
-**asdva**
-### s`,
-  tweetPics: [
-    url, url, url
-  ],
-  likeNum: 10,
-  isLiked: false,
-  commentNum: 20,
-};
-
 export default {
   components: {
     TweetDisp,

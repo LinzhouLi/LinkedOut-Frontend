@@ -33,7 +33,6 @@
 <script>
 import UserBriefDisp from '@/components/UserBriefDisp.vue';
 import PageFooter from './PageFooter.vue';
-import { ElNotification } from 'element-plus';
 import { getRecommentList,updateFollow,deleteFollow } from '@/apis/tweet.js';
 
 export default {
@@ -64,37 +63,26 @@ export default {
     follow: async function(index) {
       // TODO
       const user = this.userRecommendList[index];
-      const myUnifiedId=localStorage.getItem("unifiedId");
-      if(user.ifFollowing) { 
-        const params={unifiedId:myUnifiedId,subscribeId:user.unifiedId}
-        try{
-          const resp=await deleteFollow(params);
-        if(resp.status===200){
-          ElNotification({
-            title: '取关成功',
-            type: 'success',
-          });
-          this.userRecommendList[index].ifFollowing =false;
+      const myUnifiedId = localStorage.getItem("unifiedId");
+      if(user.ifFollowing) { // 已关注
+        const params = { unifiedId: myUnifiedId, subscribeId: user.unifiedId }
+        const resp = await deleteFollow(params);
+        console.log(resp)
+        if(resp.status === 200 && resp.data.code == 'success'){
+          this.$message.success('取关成功!');
+          this.userRecommendList[index].ifFollowing = false;
         }
-        }catch(e){
-          console.log(e);
-        }
+        else this.$message.error('取关失败!');
       }
       else { // 未关注
-        const params={unifiedId:myUnifiedId,subscribeId:user.unifiedId}
-        try{
-          const resp=await updateFollow(params);
-        if(resp.status===200){
-          ElNotification({
-            title: '关注成功',
-            type: 'success',
-          });
+        const params = { unifiedId: myUnifiedId, subscribeId: user.unifiedId }
+        const resp = await updateFollow(params);
+        console.log(resp)
+        if(resp.status === 200 && resp.data.code == 'success'){
+          this.$message.success('关注成功!');
           this.userRecommendList[index].ifFollowing = true;
         }
-        }catch(e){
-          console.log(e);
-        }
-  
+        else this.$message.error('关注失败!');
       }
     },
     toRecruitmentPage: function() {
@@ -105,8 +93,9 @@ export default {
     const unifiedId=localStorage.getItem("unifiedId");
     try{
       this.userRecommendList = [];
-      const resp=await getRecommentList({unifiedId});
+      const resp=await getRecommentList(unifiedId);
       const recommendList=resp.data.data;
+      console.log(recommendList)
       for(let item of recommendList) {
         this.userRecommendList.push({
           unifiedId: item.unifiedId,

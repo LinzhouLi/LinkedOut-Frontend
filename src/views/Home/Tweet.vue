@@ -117,14 +117,14 @@ export default {
           userIconUrl: item.simpleUserInfo.pictureUrl,
           userBriefInfo: item.simpleUserInfo.briefInfo,
           praiseNum: item.praiseNum,
-          likeState: item.likeState,
+          likeState: item.likeState == 0 ? false : true,
           commentNum: item.commentNum,
           contents: item.contents,
           pictureList: item.pictureList,
           recordTime: item.recordTime
         });
       }
-      
+
       this.loadingInitialTweets = false;
     },
     loadMoreTweets:async function() { // 加载更多动态

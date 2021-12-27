@@ -34,7 +34,7 @@
         </div>
       </el-col>
       <el-col :span="8">
-        <div class="tweet-icon">
+        <div class="tweet-icon" @click="shareTweet">
           <el-icon :size="20"><share /></el-icon>
           <span class="icon-text">分享</span>
         </div>
@@ -96,9 +96,8 @@ import 'emoji-picker-element';
 import UserBriefDisp from './UserBriefDisp';
 import VditorPreview from 'vditor/dist/method.min';
 import { Share, ChatLineSquare, Star, Eleme } from '@element-plus/icons';
-import {addLikes,deleteLikes,getAllComments,addComment,deleteComment} from '@/apis/tweet.js';
-import { localeContextKey } from 'element-plus';
-import {getProperTimeString} from '@/utils/utils.js'
+import { addLikes, deleteLikes, getAllComments, addComment, deleteComment } from '@/apis/tweet.js';
+import { getProperTimeString } from '@/utils/utils.js'
 
 export default {
   components: { 
@@ -161,12 +160,13 @@ export default {
   created() {
     this._likeNum = this.praiseNum;
     this._commentNum = this.commentNum;
-    this.likeState = this.like_state;
+    this._likeState = this.likeState;
     this.Eleme = Eleme;
   },
   mounted() {
     VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.contents);
     this.likeDom = document.getElementById(`like-icon-${this.tweetId}`);
+    if (this.likeState == true) this.likeDom.style.color = '#409eff'; // 已经点赞
     this.commentDom = document.getElementById(`comment-icon-${this.tweetId}`);
   },
   computed: {
@@ -183,7 +183,7 @@ export default {
   data() {
     return {
       likeDom: null,
-      likeState: false,
+      _likeState: false,
       _likeNum: 0,
       _commentNum: 0,
       commentDom: null,
@@ -192,64 +192,57 @@ export default {
       myCommentText: '',
       myCommentInputDom: null,
       Eleme: null,
-      unifiedId:'',
     }
   },
   methods: {
     selectCommentEmoji: function() { // 选中评论输入区emoji
       this.myCommentInputDom.focus();
     },
-    uploadMyComment:async function() { // 发表评论
-
-      const params={
-        unifiedId:localStorage.getItem('unifiedId'),
-        tweetId:this.tweetId,
-        contents:this.myCommentText,
+    uploadMyComment: async function() { // 发表评论
+      const params = {
+        unifiedId: localStorage.getItem('unifiedId'),
+        tweetId: this.tweetId,
+        contents: this.myCommentText,
       }
 
-
-      const resp1=await addComment(params);
-      if(resp1.data.code==='success'){
-        this.myCommentText='';
+      const resp1 = await addComment(params);
+      if(resp1.status == 200 && resp1.data.code == 'success') {
+        this.myCommentText = '';
         this._commentNum++;
         this.getCommentList();
-        this.$message.success('发送成功');
+        this.$message.success('发表成功!');
       }
-
     },
     likeTweet: async function() { // 点赞动态
-    const params={unifiedId:localStorage.getItem('unifiedId'),tweetId:this.tweetId};
-      if(this.likeState == false) {
-        // TODO 点赞
+      const params = { 
+        unifiedId: localStorage.getItem('unifiedId'),
+        tweetId: this.tweetId
+      };
+      if(this._likeState == false) { // 点赞
         this.likeDom.style.color = '#409eff';
-        this.likeState = true;
-        const resp=await addLikes(params);
-
-        this._likeNum=resp.data.data;
-        // this._likeNum++;
+        this._likeState = true;
+        const resp = await addLikes(params);
+        this._likeNum = resp.data.data;
       }
-      else {
-        // TODO 取赞
+      else { // 取赞
         this.likeDom.style.color = '';
-        this.likeState = false;
-        const resp=await deleteLikes(params);
-        this._likeNum=resp.data.data;
+        this._likeState = false;
+        const resp = await deleteLikes(params);
+        this._likeNum = resp.data.data;
       }
     },
-    getCommentList:async function(){
+    getCommentList: async function(){
       this.commentList=[];
-      this.unifiedId=localStorage.getItem('unifiedId');
-
-      const resp=await getAllComments({tweetId:this.tweetId});
-      this.commentList=resp.data.data;
-      this.commentList.forEach(e=>{
-        e.user={
+      const resp = await getAllComments({tweetId:this.tweetId});
+      this.commentList = resp.data.data;
+      this.commentList.forEach(e => {
+        e.user = {
           unifiedId: e.simpleUserInfo.unifiedId,
           userName: e.simpleUserInfo.trueName,
           userType: e.simpleUserInfo.userType,
           userBriefInfo: e.simpleUserInfo.briefInfo,
           userIconUrl: e.simpleUserInfo.pictureUrl,
-        }
+        };
       });
     },
     foldCommentList: async function() { 
@@ -270,20 +263,25 @@ export default {
       }
       else {
         this.commentDom.style.color = '';
-        this.commentState = false
-        this.commentList = []
+        this.commentState = false;
+        this.commentList = [];
       }
     },
-    getProperTimeString:getProperTimeString,
-    deleteComment:async function(item){
-
-      const resp=await deleteComment({unifiedId:this.unifiedId,tweetId:this.tweetId,floor:item.floor})
-      if(resp.status===200){
+    getProperTimeString: getProperTimeString,
+    deleteComment: async function(item) {
+      const resp=await deleteComment({
+        unifiedId: localStorage.getItem('unifiedId'),
+        tweetId: this.tweetId,
+        floor: item.floor
+      });
+      if(resp.status == 200 && resp.data.code == 'success'){
         this._commentNum--;
         this.getCommentList();
         this.$message.success('删除成功');
-        //todo 评论数量更新问题
       }
+    },
+    shareTweet: async function() {
+      // TODO 分享动态
     }
   }
 }

@@ -104,6 +104,7 @@ ssss`,
     }
   },
   mounted:async function() {
+    this.tweetList=[];
     this.cid=this.$route.params.cid;
     const params={
       uid:localStorage.getItem('unifiedId'),
@@ -123,9 +124,8 @@ ssss`,
     const resp3=await getCompanyAllPosition({unifiedId:this.cid});
     const data3=resp3.data.data;
 
-    console.log(resp3,'resp3resp3resp3resp3resp3')
     this.companyDescription=datas.description;
-    this.tweetList=datas2;
+    this.tweetList=datas2.slice(0,6);
     this.recruitmentList=data3;
 
     VditorPreview.preview(document.getElementById('text-area'), this.companyDescription);

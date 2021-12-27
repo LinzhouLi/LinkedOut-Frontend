@@ -114,7 +114,7 @@ export default {
           userBriefInfo: item.briefInfo || '',
           userType: item.userType,
           userIconUrl: item.pictureUrl,
-          ifFollowing: item.subscribeNum == 0 ? false : true
+          ifFollowing: false
         });
       }
     }catch(e){

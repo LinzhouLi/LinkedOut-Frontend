@@ -95,8 +95,8 @@
         </template>
         <div v-for="(item,index) in educationExperienceList" :key="index">
           <el-row>
-            <el-col :span="22">
-              <education-experience v-bind="item" style="margin:10px"/> 
+            <el-col :span="22" style="margin:10px">
+              <education-experience :modifiable="false" v-bind="item"/> 
             </el-col>
             <el-col :span="2">
               <el-button type="text" @click="deleteEduExp(item.numId)">删除</el-button>
@@ -121,8 +121,8 @@
         </template>
         <div v-for="(item,index) in workExperienceList" :key="index">
           <el-row>
-            <el-col :span="22">
-              <work-experience v-bind="item" style="margin:10px"/>
+            <el-col style="margin:10px" :span="22">
+              <work-experience :modifiable="false" v-bind="item"/>
             </el-col>
             <el-col :span="2">
               <el-button type="text" @click="deleteWorkExp(item.numId)">删除</el-button>
@@ -432,15 +432,16 @@ export default {
       const uid = localStorage.getItem('unifiedId');
       const resp = await getUserEduBackground({ unifiedId: uid });
       const eduExplist = resp.data.data;
+      console.log(eduExplist)
       this.educationExperienceList = [];
       for (let item of eduExplist) {
         this.educationExperienceList.push({
-          numId : item.numId,
           college: item.collegeName,
           major: item.major,
           degree: item.degree,
           startTime: item.startTime,
-          endTime: item.endTime
+          endTime: item.endTime,
+          educationExperienceId: item.numId
         });
       }
     },
@@ -482,15 +483,16 @@ export default {
       const uid = localStorage.getItem('unifiedId');
       const resp = await getUserJobBackground({ unifiedId: uid });
       const workExplist = resp.data.data;
+      console.log(workExplist)
       this.workExperienceList = [];
       for (let item of workExplist) {
         this.workExperienceList.push({
-          numId : item.numId,
           position: item.positionType,
           enterprise: item.enterpriseName,
           description: item.description,
           startTime: item.startTime,
-          endTime: item.endTime
+          endTime: item.endTime,
+          workExperienceId: item.numId
         });
       }
     },

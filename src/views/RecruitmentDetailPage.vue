@@ -100,25 +100,23 @@ export default {
     LocationInformation,
     PageFooter
   },
-  created: async function () {
+  mounted: function () {
     const rid = this.$route.params['rid']; // 获取页面参数
     const uid = localStorage.getItem('unifiedId');
 
-    const resp = await getPositionDetails({ unifideId: uid, jobId: rid });
-    console.log(resp);
     this.ifSelf = true;
     this.recruitmentTitle = '资深前端研发-到综商家';
     this.salary = '20-40K·15薪';
     this.limit = '上海 · 1-3年 · 本科';
     this.user = {
-      userId: 123,
+      unifiedId: 123,
       userName: '美团',
       userType: 'company',
       userIconUrl: '',
       userBriefInfo: '互联网公司',
     }
     let candidate = {
-      userId: 123,
+      unifiedId: 123,
       userName: '张三',
       userType: 'user',
       userIconUrl: '',
@@ -146,8 +144,6 @@ export default {
 # 公司介绍
 美团的使命是“帮大家吃得更好，生活更好”。作为一家生活服务电子商务平台，公司聚焦“Food +Platform”战略，以“吃”为核心，通过科技创新，和广大商户与各类合作伙伴一起，努力为消费者提供品质生活，推动生活服务业需求侧和供给侧数字化升级。
 2018年9月20日，美团正式在港交所挂牌上市。美团将始终坚持以客户为中心，不断加大在科技研发方面的投入，更好承担社会责任，更多创造社会价值，与广大合作伙伴一起发展共赢。`
-  },
-  mounted() {
     // markdown 渲染器
     VditorPreview.preview(document.getElementById('text-area'), this.detailedInfo);
     // 高德地图
@@ -173,6 +169,12 @@ export default {
           this.map.add(marker);
         }
       })
+    });
+    console.log(111)
+    getPositionDetails({ unifideId: uid, jobId: rid }).then((resp) => {
+      console.log(resp);
+    }).catch((e)=>{
+      console.log(e)
     })
   },
   beforeDestroy() {

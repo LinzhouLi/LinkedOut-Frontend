@@ -40,7 +40,7 @@ TweetInstance.interceptors.response.use(function (response) {
 const RecruitInstance=axios.create()
 
 RecruitInstance.interceptors.request.use(config=>{
-
+    console.log(config)
     return config
 } ,error=>{
     return Promise.reject(error)

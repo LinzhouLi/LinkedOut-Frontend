@@ -94,7 +94,6 @@ export default {
       }
     },
     gotoPath: function(index) {
-      console.log(index)
       const uid = localStorage.getItem('unifiedId');
       const uType = localStorage.getItem('userType');
       if (index == 'myinfo') { // 我的信息

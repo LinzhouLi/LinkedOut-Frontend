@@ -67,7 +67,7 @@ export default {
   computed: {
     user() {
       return {
-        userId: this.userId,
+        unifiedId: this.userId,
         userName: this.userName,
         userType: this.userType,
         userIconUrl: this.userIconUrl,
@@ -77,7 +77,8 @@ export default {
   },
   methods: {
     checkRecruitment: function() {
-      this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
+      //this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
+      this.$router.push({ name: 'recruitment', params: { rid: 2 }});
     }
   }
 }

@@ -90,6 +90,7 @@ import '@/assets/vditor.css';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { LocationInformation } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter';
+import { getPositionDetails } from '@/apis/recruit.js';
 
 export default {
   components: {
@@ -99,7 +100,12 @@ export default {
     LocationInformation,
     PageFooter
   },
-  created() {
+  created: async function () {
+    const rid = this.$route.params['rid']; // 获取页面参数
+    const uid = localStorage.getItem('unifiedId');
+
+    const resp = await getPositionDetails({ unifideId: uid, jobId: rid });
+    console.log(resp);
     this.ifSelf = true;
     this.recruitmentTitle = '资深前端研发-到综商家';
     this.salary = '20-40K·15薪';

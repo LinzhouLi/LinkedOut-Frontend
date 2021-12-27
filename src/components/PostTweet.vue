@@ -117,7 +117,6 @@ export default {
       this.fileList.splice(index, 1);
     },
     uploadTweet:async function() { // 上传动态
-      // TODO 发布动态文件传输的问题
       let date = new Date();
       const trueDate = date.toJSON().split('T')[0]+' '+date.toJSON().split('T')[1].split('Z')[0];
 
@@ -125,12 +124,18 @@ export default {
       params.append('unifiedId', localStorage.getItem("unifiedId"));
       params.append('content', this.tweetText);
       params.append('recordTime', trueDate);
-      for (let file in this.fileList) {
+      for (let file of this.fileList) {
         params.append('files', file);
       }
-
+      
       const resq = await addTweet(params);
-      if (resq.status == 200 && resq.data.code == 'success') this.$message.success('发布成功!');
+      if (resq.status == 200 && resq.data.code == 'success') {
+        this.$message.success('发布成功!');
+        // 清空
+        this.picList = [];
+        this.fileList = [];
+        this.tweetText = '';
+      }
       else this.$message.error('发布失败!');
     },
   }

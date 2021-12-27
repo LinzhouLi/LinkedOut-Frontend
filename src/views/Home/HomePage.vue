@@ -36,29 +36,20 @@ export default {
         userName: '',
         userBriefInfo: '',
         userIconUrl: '',
-        userType: 0
+        userType: 'user'
       }
     }
   },
-  mounted:async function(){
+  mounted: async function(){
     const uid = localStorage.getItem('unifiedId');
-    const userType = localStorage.getItem('userType');
     const resp = await getBasicInfo(uid);
     const userData = resp.data.data;
 
-
-    this.user={
-      userName:userData.trueName,
-      userBriefInfo:userData.briefInfo,
-      userIconUrl:userData.pictureUrl,
-      userType:userData.userType,
-      unifiedId:userData.unifiedId,
-    }
-
-    try{
-      const resp2=await getRecommentList({unifiedId:uid});
-    }catch(e){
-      console.log(e);
+    this.user = {
+      userName: userData.trueName,
+      userBriefInfo: userData.briefInfo,
+      userIconUrl: userData.pictureUrl,
+      userType: userData.userType
     }
   }
 }

@@ -10,8 +10,8 @@
     <div>
       <div style="padding:5px 15px;"><span :id="`text-area-${tweetId}`"/></div>
       <el-carousel :autoplay="false" v-if="pictureList.length != 0" >
-        <el-carousel-item v-for="(picUrl,index) in pictureList" :key="index">
-          <el-image :src="picUrl" style="width:100%;" fit="cover" />
+        <el-carousel-item v-for="(item,index) in pictureList" :key="index">
+          <el-image :src="item.pictureUrl" style="width:100%;" fit="cover" />
         </el-carousel-item>
       </el-carousel>
     </div>
@@ -114,7 +114,7 @@ export default {
       required: true,
     },
     unifiedId: { // 用户统一ID
-      type: String,
+      type: Number,
       required: true,
     },
     userName: { // 动态发布者真实姓名
@@ -133,14 +133,11 @@ export default {
       type: String,
       default: '',
     },
-    simpleUserInfo:{
-      type:Object,
-    },
     praiseNum: { // 点赞数量
       type: Number,
       required: true,
     },
-    like_state: { // 用户是否点赞此条动态
+    likeState: { // 用户是否点赞此条动态
       type: Boolean,
       required: true
     },
@@ -174,11 +171,10 @@ export default {
   },
   computed: {
     user() {
-      // console.log(this.unifiedId)
       return {
         unifiedId: this.$props.unifiedId,
-        userName: this.$props.simpleUserInfo.true_name,
-        userType: this.$props.simpleUserInfo.user_type,
+        userName: this.$props.userName,
+        userType: this.$props.userType,
         userIconUrl: this.$props.userIconUrl,
         userBriefInfo: this.$props.userBriefInfo
       }
@@ -237,22 +233,24 @@ export default {
         this.likeDom.style.color = '';
         this.likeState = false;
         const resp=await deleteLikes(params);
-        console.log(resp);
         this._likeNum=resp.data.data;
       }
     },
     getCommentList:async function(){
-       this.commentList=[];
-       this.unifiedId=localStorage.getItem('unifiedId');
+      this.commentList=[];
+      this.unifiedId=localStorage.getItem('unifiedId');
 
       const resp=await getAllComments({tweetId:this.tweetId});
-        this.commentList=resp.data.data;
+      this.commentList=resp.data.data;
       this.commentList.forEach(e=>{
-          e.user={
-            userName:e.simpleUserInfo.true_name,
-            userType:e.simpleUserInfo.user_type,
-          }
-        })
+        e.user={
+          unifiedId: e.simpleUserInfo.unifiedId,
+          userName: e.simpleUserInfo.trueName,
+          userType: e.simpleUserInfo.userType,
+          userBriefInfo: e.simpleUserInfo.briefInfo,
+          userIconUrl: e.simpleUserInfo.pictureUrl,
+        }
+      });
     },
     foldCommentList: async function() { 
       if(this.commentState === false) {

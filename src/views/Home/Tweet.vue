@@ -104,29 +104,64 @@ export default {
       this.loadAll = false;
       this.loadingInitialTweets = true; // 开始加载
 
-      const params= { unifiedId: localStorage.getItem("unifiedId")} //Todo
+      const params= { unifiedId: localStorage.getItem("unifiedId")}
       const resp = await getOtherTweet(params);
 
       const tweetData = resp.data.data;
-      for (let item in tweetData) {
+      for (let item of tweetData) {
         this.tweetList.push({
-          
+          tweetId: item.tweetId,
+          unifiedId: item.simpleUserInfo.unifiedId,
+          userName: item.simpleUserInfo.trueName,
+          userType: item.simpleUserInfo.userType,
+          userIconUrl: item.simpleUserInfo.pictureUrl,
+          userBriefInfo: item.simpleUserInfo.briefInfo,
+          praiseNum: item.praiseNum,
+          likeState: item.likeState,
+          commentNum: item.commentNum,
+          contents: item.contents,
+          pictureList: item.pictureList,
+          recordTime: item.recordTime
         });
       }
-
-      console.log(this.tweetList,'12321631298312608932604')
-
+      
       this.loadingInitialTweets = false;
     },
     loadMoreTweets:async function() { // 加载更多动态
       this.loadingMoreTweets = true; // 开始加载
-      // TODO
-      const unifiedId=localStorage.getItem("unifiedId");
-      const params={unifiedId,momentId:0} //Todo
-      const resp=await getOtherTweet(params);
-      this.tweetList=[...this.tweetList,...resp.data.data];
+
+      const params= { 
+        unifiedId: localStorage.getItem("unifiedId"),
+        momentId: this.tweetList[this.tweetList.length-1].tweetId
+      }
+      const resp = await getOtherTweet(params);
+
+      const tweetData = resp.data.data;
+
+      if (tweetData.length === 0) { // 没有动态则加载完毕
+        this.loadAll = true;
+        this.loadingMoreTweets = false;
+        return;
+      }
+
+      for (let item of tweetData) {
+        this.tweetList.push({
+          tweetId: item.tweetId,
+          unifiedId: item.simpleUserInfo.unifiedId,
+          userName: item.simpleUserInfo.trueName,
+          userType: item.simpleUserInfo.userType,
+          userIconUrl: item.simpleUserInfo.pictureUrl,
+          userBriefInfo: item.simpleUserInfo.briefInfo,
+          praiseNum: item.praiseNum,
+          likeState: item.likeState == 0 ? false : true,
+          commentNum: item.commentNum,
+          contents: item.contents,
+          pictureList: item.pictureList,
+          recordTime: item.recordTime
+        });
+      }
       
-      this.loadingInitialTweets = false;
+      this.loadingMoreTweets = false;
     }
   }
 }

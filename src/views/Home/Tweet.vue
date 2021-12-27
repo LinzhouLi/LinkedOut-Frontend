@@ -96,7 +96,6 @@ export default {
       tweetInputDom: null,
       showEmojiSelector: false,
       tweetText: '',
-      tweetsSum:0,
     }
   },
   methods: {
@@ -104,12 +103,16 @@ export default {
       this.tweetList = []; // 清空动态列表
       this.loadAll = false;
       this.loadingInitialTweets = true; // 开始加载
-      const unifiedId=localStorage.getItem("unifiedId");
-      const params={unifiedId,momentId:0} //Todo
-      const resp=await getOtherTweet(params);
 
-      this.tweetList=resp.data.data;
-      this.tweetsSum=resp.data.data.length;
+      const params= { unifiedId: localStorage.getItem("unifiedId")} //Todo
+      const resp = await getOtherTweet(params);
+
+      const tweetData = resp.data.data;
+      for (let item in tweetData) {
+        this.tweetList.push({
+          
+        });
+      }
 
       console.log(this.tweetList,'12321631298312608932604')
 
@@ -119,7 +122,7 @@ export default {
       this.loadingMoreTweets = true; // 开始加载
       // TODO
       const unifiedId=localStorage.getItem("unifiedId");
-      const params={unifiedId,momentId:this.tweetsSum} //Todo
+      const params={unifiedId,momentId:0} //Todo
       const resp=await getOtherTweet(params);
       this.tweetList=[...this.tweetList,...resp.data.data];
       

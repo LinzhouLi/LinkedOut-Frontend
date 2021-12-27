@@ -15,8 +15,8 @@
               <el-cascader 
                 v-model="form.classification" 
                 :options="jobOptions" 
-                :show-all-levels="false" 
-                :props="{disabled:'null'}" 
+                :show-all-levels="false"
+                :props="{ disabled: 'null', emitPath: false,}" 
               />
             </el-form-item>
             <el-form-item label="职位薪资描述" prop="salary">

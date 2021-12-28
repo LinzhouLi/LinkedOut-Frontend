@@ -96,7 +96,7 @@ import 'emoji-picker-element';
 import UserBriefDisp from './UserBriefDisp';
 import VditorPreview from 'vditor/dist/method.min';
 import { Share, ChatLineSquare, Star, Eleme } from '@element-plus/icons';
-import { addLikes, deleteLikes, getAllComments, addComment, deleteComment } from '@/apis/tweet.js';
+import { addLikes, deleteLikes, getAllComments, addComment, deleteComment, addTweet } from '@/apis/tweet.js';
 import { getProperTimeString } from '@/utils/utils.js'
 
 export default {
@@ -281,7 +281,17 @@ export default {
       }
     },
     shareTweet: async function() {
-      // TODO 分享动态
+      let date = new Date();
+      const trueDate = date.toJSON().split('T')[0]+' '+date.toJSON().split('T')[1].split('Z')[0];
+
+      let params = new FormData();
+      params.append('unifiedId', localStorage.getItem("unifiedId"));
+      params.append('content', `> 转载于: ${this.userName}\n${this.contents}`);
+      params.append('recordTime', trueDate);
+
+      const resq = await addTweet(params);
+      if (resq.status == 200 && resq.data.code == 'success') this.$message.success('分享成功!');
+      else this.$message.error('分享失败!');
     }
   }
 }

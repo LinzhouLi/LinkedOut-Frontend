@@ -185,7 +185,7 @@ export default {
     VditorPreview.preview(document.getElementById('text-area'), this.detailedInfo);
 
     // 高德地图
-    const Amap = await AMapLoader.load({ // 地图加载器
+    const AMap = await AMapLoader.load({ // 地图加载器
       key: '7b0368f9798bd0bfe3d901a47f90f8f6',
       plugins: ['AMap.PlaceSearch']
     });
@@ -256,9 +256,11 @@ export default {
           resumeId: resumeId
         };
         const resp = await postPositionApplication(params);
-        console.log(resp)
-        if (resp.status == 200 && resp.data.code == 'success') this.$message.success('投递成功!');
-        else this.$message.error('投递成功!');
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('投递成功!');
+          this.ifApplied = true;
+        }
+        else this.$message.error('投递失败!');
       });
     },
     showFullMap: function() {

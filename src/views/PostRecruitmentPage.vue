@@ -82,7 +82,7 @@ export default {
     this.vditor = new Vditor('vditor', {
       mode: 'wysiwyg',
       placeholder: '请输入职位详情...',
-      input: value => this.details = value,
+      input: value => this.form.details = value,
       cache: { enable: false },
     });
   },

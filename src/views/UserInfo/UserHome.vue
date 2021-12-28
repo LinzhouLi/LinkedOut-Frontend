@@ -112,11 +112,9 @@ ssss`,
     const params={
       visitorId:localStorage.getItem('unifiedId'),
       intervieweeId:this.$route.params.uid,
-      momentId:0,
     }
     const resp=await getSelfTweet(params);
     this.tweetList=resp.data.data.slice(0,6);
-
 
     const resp2=await getUserJobBackground({unifiedId:this.uid});
     const resp3=await getUserEduBackground({unifiedId:this.uid});
@@ -124,8 +122,7 @@ ssss`,
     this.workExperienceList=resp2.data.data;
 
     this.educationExperienceList=resp3.data.data;
-
-    console.log(resp2,resp3,'asdiouasgdioasgoasgodi')
+    console.log(resp,'13213902103?')
   }
 }
 </script>

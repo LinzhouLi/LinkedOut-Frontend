@@ -66,7 +66,6 @@ export default {
     const resp2=await getSelfTweet({
       visitorId:localStorage.getItem('unifiedId'),
       intervieweeId:this.cid,
-      momentId:0,
     })
 
     const datas2=resp2.data.data;
@@ -76,7 +75,34 @@ export default {
 
     this.companyDescription=datas.description;
     this.tweetList=datas2.slice(0,6);
-    this.recruitmentList=data3;
+    // this.recruitmentList=data3;
+    this.recruitmentList=[];
+    let newList=[];
+    console.log(data3,'12321312')
+    data3.forEach((item)=>{
+      // newList.push({
+      //     recruitmentId: item.jobId,
+      //     userId: item.unifiedId,
+      //     userIconUrl: item.pictureUrl,
+      //     recruitmentTitle: item.jobName,
+      //     limited:20,
+      //   })
+      item.recruitmentId=item.jobId;
+      item.userId=item.unifiedId;
+      item.userIconUrl=item.pictureUrl;
+      item.recruitmentTitle=item.jobName;
+      item.limit=item.positionType;
+    })
+
+    this.recruitmentList=data3.slice(0,6);
+
+    // this.recruitmentList=newList;
+
+      //     const recruitmentsData  = resp.data.data;
+      // for (let item of recruitmentsData) {
+
+      // }
+    console.log(this.recruitmentList,this.tweetList,'21312312312321')
 
     VditorPreview.preview(document.getElementById('text-area'), this.companyDescription);
   },

@@ -107,7 +107,6 @@ export default {
         intervieweeId: this.userId
       }
       const resp = await getSelfTweet(params);
-
       const tweetData = resp.data.data;
       for (let item of tweetData) {
         this.tweetList.push({
@@ -138,7 +137,7 @@ export default {
         momentId: this.tweetList[this.tweetList.length-1].tweetId
       }
       const resp = await getSelfTweet(params);
-      const tweetData = resp.data.data;
+      console.log(tweetData,'12312312321312loadmore')
 
       if (tweetData.length === 0) { // 没有动态则加载完毕
         this.loadAll = true;

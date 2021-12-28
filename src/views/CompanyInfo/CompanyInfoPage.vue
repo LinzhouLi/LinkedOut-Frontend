@@ -81,6 +81,8 @@ import { Connection } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter.vue';
 import { ElNotification } from 'element-plus';
 import {getEnterpriseInfo} from '@/apis/users.js'
+import {updateFollow,deleteFollow} from '@/apis/tweet.js';
+
 
 export default {
   components: {
@@ -125,9 +127,14 @@ export default {
     buttonText: (flag) => {
       return flag ? '已关注' : '关注';
     },
-    follow: function() {
+    follow: async function() {
       // TODO
+      const params={
+        unifiedId:localStorage.getItem('unifiedId'),
+        subscribeId:this.userId,
+      }
       if(this.user.ifFollowing) { // 已关注
+        const resp=await deleteFollow(params);
         ElNotification({
           title: '取关成功',
           type: 'success',
@@ -135,6 +142,7 @@ export default {
         this.user.ifFollowing = false;
       }
       else { // 未关注
+        const resp=await updateFollow(params);
         ElNotification({
           title: '关注成功',
           type: 'success',

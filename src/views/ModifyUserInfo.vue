@@ -432,7 +432,6 @@ export default {
       const uid = localStorage.getItem('unifiedId');
       const resp = await getUserEduBackground({ unifiedId: uid });
       const eduExplist = resp.data.data;
-      console.log(eduExplist)
       this.educationExperienceList = [];
       for (let item of eduExplist) {
         this.educationExperienceList.push({
@@ -483,7 +482,6 @@ export default {
       const uid = localStorage.getItem('unifiedId');
       const resp = await getUserJobBackground({ unifiedId: uid });
       const workExplist = resp.data.data;
-      console.log(workExplist)
       this.workExperienceList = [];
       for (let item of workExplist) {
         this.workExperienceList.push({

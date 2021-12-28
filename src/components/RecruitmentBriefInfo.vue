@@ -1,7 +1,10 @@
 <template>
   <el-container direction="horizontal" style="height:50px; cursor:pointer;" @click="checkRecruitment">
       <!--用户头像-->
-    <user-icon v-bind="userIconUrl"/>
+    <div v-if="havePicture">
+      <el-image :src="userIconUrl" style="width:50px; height:50px; border-radius:50% " fit="cover"/>
+    </div>
+    <!-- <user-icon v-bind="userIconUrl"/> -->
     <el-container direction="vertical" style="margin:0px 0px 0px 5px" >
     <h1 class="recruitmentTitle">{{recruitmentTitle}}</h1>
     <a class="small-text">{{limit}}</a>
@@ -18,14 +21,19 @@ import UserIcon from '@/components/UserIcon'
 
 
 export default {
+  data(){
+  return{
+    havePicture: false  //是否有图片
+  }
+},
   components: { UserIcon },
-props: {
+  props: {
     recruitmentId: { 
-      type: Number,
+      type: String,
       required: true
     },
     userId: { 
-      type: Number,
+      type: String,
       required: true
     },
     userIconUrl: { 
@@ -45,6 +53,14 @@ props: {
      checkRecruitment: function(){
          this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
      }
+ },
+created(){
+    if(this.userIconUrl!==" "){//检查是否有图片
+      this.havePicture = true;
+    }
+  },
+ mounted:function(){
+   console.log(this.userId,'123123123')
  }
   
 }
@@ -53,13 +69,14 @@ props: {
 
 <style>
     .recruitmentTitle{
+      font-size:13px;
       margin:0px 0px 9px 0px;
       word-break:normal; 
+
         width:auto; 
         display:block; 
         white-space:pre-wrap;
         word-wrap : break-word ;
-        overflow: hidden ;
         line-break: auto;
     }
     .small-text{

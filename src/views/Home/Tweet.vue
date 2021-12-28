@@ -121,6 +121,8 @@ export default {
         });
       }
 
+
+
       this.loadingInitialTweets = false;
     },
     loadMoreTweets:async function() { // 加载更多动态
@@ -155,6 +157,7 @@ export default {
           recordTime: item.recordTime
         });
       }
+
       
       this.loadingMoreTweets = false;
     }

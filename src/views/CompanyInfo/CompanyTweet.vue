@@ -63,6 +63,7 @@ import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';
 import { getSelfTweet } from '@/apis/tweet.js';
 
+
 export default {
   components: {
     TweetDisp,
@@ -128,6 +129,7 @@ export default {
 
       this.loadingInitialTweets = false;
 
+
     },
     loadMoreTweets: async function() { // 加载更多动态
       this.loadingMoreTweets = true; // 开始加载
@@ -162,6 +164,7 @@ export default {
           recordTime: item.recordTime
         });
       }
+
       
       this.loadingMoreTweets = false;
     }

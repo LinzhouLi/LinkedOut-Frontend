@@ -55,7 +55,7 @@ props: {
   },
 mounted() {
     VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), 
-    this.contents===''?` 没有内容`:this.contents);
+    this.contents===''?` 暂无内容`:this.contents);
   },
   
 }

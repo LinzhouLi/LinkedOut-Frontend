@@ -1,7 +1,7 @@
 <template>
   <el-container direction="horizontal">
     <el-col :span="2">
-      <user-icon :src="picUrl" :size="50" />
+      <user-icon :url="picUrl" :size="50" />
     </el-col>
     <el-container direction="vertical" style="margin:0px 0px 0px 20px">
       <el-row>

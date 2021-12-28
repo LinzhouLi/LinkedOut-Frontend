@@ -1,62 +1,63 @@
 <template>
-   <el-container direction="horizontal">
-       <el-col :span="2">
-    <user-icon/>
+  <el-container direction="horizontal">
+    <el-col :span="2">
+      <user-icon :src="picUrl" :size="50" />
     </el-col>
     <el-container direction="vertical" style="margin:0px 0px 0px 20px">
       <el-row>
-      <el-col :span="20">
-        <h1 style="font-size:16px; margin:0px 0px 5px 0px">{{position}}</h1>
-      </el-col>
-      <el-col :span="4">
-        <!-- <el-button @click="dialogVisible=true" type="mini" v-if="modifiable">修改</el-button> -->
-      </el-col>
+        <el-col :span="20">
+          <h1 style="font-size:16px; margin:0px 0px 5px 0px">{{ enterprise }}</h1>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="dialogVisible=true" type="mini" v-if="modifiable">修改</el-button>
+        </el-col>
       </el-row>
-    
-    <p style="font-size:15px; margin:0px 0px 5px 0px">{{enterprise}}</p>
-    <p style="font-size:12px; color:rgb(122,122,122); margin:0px 0px 5px 0px">{{startTime}}-{{endTime}}</p>
-   
-    <div style="15px">{{description}}</div>
+  
+      <p style="font-size:15px; margin:0px 0px 5px 0px">{{ position }}</p>
+      <p style="font-size:12px; color:rgb(122,122,122); margin:0px 0px 5px 0px">{{startTime}}-{{endTime}}</p>
+  
+      <div style="font-size:13px">{{ description }}</div>
     
     </el-container>
   </el-container>
-   <el-dialog v-model="dialogVisible" title="修改工作经历">
-      <el-form ref="form" :model="form" label-width="200px" :rules="rules">
-        <el-form-item label="职位" prop="position" required>
-          <el-input v-model="form.position" placeholder="例如:前端开发工程师"></el-input>
-        </el-form-item>
-             
-        <el-form-item label="公司" prop="enterprise" required>
-          <el-input v-model="form.enterprise" placeholder="例如:微软"></el-input>
-        </el-form-item>
-              
-        <el-form-item label="开始时间" prop="startTime" required>
-          <el-date-picker
-          v-model="form.startTime"
-          type="month"
-          placeholder="请选择开始时间"
-          >
-          </el-date-picker>
-        </el-form-item>
-              
-        <el-form-item label="结束时间" prop="endTime" required>
-          <el-date-picker
-          v-model="form.endTime"
-          type="month"
-          placeholder="请选择结束时间"
-          >
-          </el-date-picker>
-        </el-form-item>       
-        <el-form-item label="描述" prop="description">
-           <el-input v-model="form.description" type="textarea"></el-input>
-           </el-form-item>
 
-        <el-form-item>
-              <el-button type="primary" @click="submitForm('form')">确认</el-button>
-              <el-button @click="resetForm('form')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+  <el-dialog v-model="dialogVisible" title="修改工作经历">
+    <el-form ref="form" :model="form" label-width="200px" :rules="rules">
+      <el-form-item label="职位" prop="position" required>
+        <el-input v-model="form.position" placeholder="例如:前端开发工程师"></el-input>
+      </el-form-item>
+            
+      <el-form-item label="公司" prop="enterprise" required>
+        <el-input v-model="form.enterprise" placeholder="例如:微软"></el-input>
+      </el-form-item>
+            
+      <el-form-item label="开始时间" prop="startTime" required>
+        <el-date-picker
+        v-model="form.startTime"
+        type="month"
+        placeholder="请选择开始时间"
+        >
+        </el-date-picker>
+      </el-form-item>
+            
+      <el-form-item label="结束时间" prop="endTime" required>
+        <el-date-picker
+        v-model="form.endTime"
+        type="month"
+        placeholder="请选择结束时间"
+        >
+        </el-date-picker>
+      </el-form-item>       
+      <el-form-item label="描述" prop="description">
+          <el-input v-model="form.description" type="textarea"></el-input>
+          </el-form-item>
+
+      <el-form-item>
+            <el-button type="primary" @click="submitForm('form')">确认</el-button>
+            <el-button @click="resetForm('form')">重置</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
 </template>
 
 <script>
@@ -122,7 +123,7 @@ export default {
    props: {
     modifiable: {
       type: Boolean,
-      required: true
+      default: false
     },
     workExperienceId: { 
       type: Number,
@@ -145,6 +146,10 @@ export default {
       required: true
     },
     description: {
+      type: String,
+      default: ''
+    },
+    picUrl: {
       type: String,
       default: ''
     }

@@ -23,7 +23,7 @@
           </el-col>
           <el-col :span="3">
             <el-button 
-               v-show="!isSelf"
+              v-show="!isSelf"
               :type="buttonType(user.ifFollowing)"
               @click="follow(index)"
               style="width:76px; padding:0px"
@@ -49,33 +49,6 @@
           </el-menu-item>
         </el-menu>
       </el-card>
-      <!-- <el-card style="margin-bottom:20px">
-       <el-container direction="horizontal"  style="padding:5px">
-         <el-col :span="18">
-           <user-icon 
-             :size="100" 
-             :url="user.userIconUrl" 
-             style="cursor:pointer"
-           />
-           <div id="userName">{{user.userName}}</div>
-           <div id="briefInfo">{{user.briefInfo}}</div>
-           <div id="livePlace">所在地：{{user.livePlace}}</div>
-           <el-container direction="horizontal" id="buttons">
-             <el-button>关注</el-button>
-           </el-container>
-         </el-col>
-         <el-col style="margin-top:100px">
-           <el-container direction="horizontal" style="cursor:pointer" @click="toEducation">
-             <user-icon :size="50"/>
-             <h2 style="font-size:18px; margin-left:10px">{{workExperienceList[0].enterprise}}</h2>
-           </el-container>
-           <el-container direction="horizontal" style="margin-top: 10px; cursor:pointer" @click="toWork">
-             <user-icon :size="50"/>
-             <h2 style="font-size:18px; margin-left:10px">{{educationExperienceList[0].college}}</h2>
-           </el-container>
-         </el-col>
-       </el-container>
-      </el-card> -->
       
       <router-view />
     </el-col>
@@ -92,7 +65,6 @@ import TopNav from '@/components/TopNav';
 import UserIcon from '@/components/UserIcon';
 import UserRecommendCard from '@/components/UserRecommendCard';
 import PageFooter from '../../components/PageFooter.vue';
-import { ElNotification } from 'element-plus';
 import {getUserInfo} from '@/apis/users.js';
 import {updateFollow,deleteFollow} from '@/apis/tweet.js';
 
@@ -103,45 +75,34 @@ export default {
     UserRecommendCard,
     PageFooter
   },
-  created:async function(){
-    this.user = {
-      userId: 102,
-      userName: '张三',
-      userIconUrl: '',
-      briefInfo: '同济大学学生',
-      livePlace: '上海',
-      ifFollowing: false
-    };
+  created: async function() {
     this.currentMenu = this.$route.path;
     this.userId = this.$route.params['uid']; // 获取页面参数
+    this.isSelf = localStorage.getItem('unifiedId') === this.userId;
   },
-  mounted:async function(){
-    const params={
-      uid:localStorage.getItem('unifiedId'),
-      sid:this.userId,
+  mounted: async function() {
+    const params = {
+      uid: localStorage.getItem('unifiedId'),
+      sid: this.userId,
     }
-    this.isSelf=localStorage.getItem('unifiedId')===this.userId;
-    const resp=await getUserInfo(params);
-    const datas=resp.data.data;
-    this.user={
-      userId:datas.unifiedId,
-      userName:datas.trueName,
-      briefInfo:datas.briefInfo,
-      livePlace:datas.livePlace,
-      ifFollowing:datas.isSubscribed,
-      userIconUrl:datas.pictureUrl
+    
+    const resp = await getUserInfo(params);
+    const datas = resp.data.data;
+    this.user = {
+      unifiedId: datas.unifiedId,
+      userName: datas.trueName,
+      briefInfo: datas.briefInfo,
+      livePlace: datas.livePlace,
+      ifFollowing: datas.isSubscribed,
+      userIconUrl: datas.pictureUrl
     }
-    //todo 拿到数据之后进行修改
   },
   data() {
     return{
       currentMenu: '',
-      user: null,
+      user: { },
       userId: 0,
-      tweetList:[],
-      workExperienceList:[],
-      educationExperienceList:[],
-      isSelf:false,
+      isSelf: false,
     }
   },
   watch: {
@@ -150,12 +111,6 @@ export default {
     }
   },
   methods: {
-    toWork: function(){
-      document.getElementById("work").scrollIntoView()
-    },
-    toEducation: function(){
-      document.getElementById("education").scrollIntoView()
-    },
     buttonType: (flag) => {
       return flag ? 'primary' : '';
     },
@@ -163,26 +118,25 @@ export default {
       return flag ? '已关注' : '关注';
     },
     follow: async function() {
-      // TODO
-      const params={
-        unifiedId:localStorage.getItem('unifiedId'),
-        subscribeId:this.userId,
+      const params = {
+        unifiedId: localStorage.getItem('unifiedId'),
+        subscribeId: this.userId,
       }
       if(this.user.ifFollowing) { // 已关注
-        const resp=await deleteFollow(params);
-        ElNotification({
-          title: '取关成功',
-          type: 'success',
-        });
-        this.user.ifFollowing = false;
+        const resp = await deleteFollow(params);
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('取关成功!');
+          this.user.ifFollowing = false;
+        }
+        else this.$message.error('取关失败!');
       }
       else { // 未关注
-        const resp=await updateFollow(params);
-        ElNotification({
-          title: '关注成功',
-          type: 'success',
-        });
-        this.user.ifFollowing = true;
+        const resp = await updateFollow(params);
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('关注成功!');
+          this.user.ifFollowing = true;
+        }
+        else this.$message.error('关注失败!');
       }
     },
   },

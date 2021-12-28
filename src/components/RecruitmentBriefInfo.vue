@@ -7,7 +7,7 @@
     <!-- <user-icon v-bind="userIconUrl"/> -->
     <el-container direction="vertical" style="margin:0px 0px 0px 5px" >
     <h1 class="recruitmentTitle">{{recruitmentTitle}}</h1>
-    <a class="small-text">{{limit}}</a>
+    <a class="small-text">{{recruitmentType}}</a>
     
     
     </el-container>
@@ -29,7 +29,7 @@ export default {
   components: { UserIcon },
   props: {
     recruitmentId: { 
-      type: String,
+      type: Number,
       required: true
     },
     userId: { 
@@ -44,7 +44,7 @@ export default {
       type: String,
       required: true
     },
-    limit: {
+    recruitmentType: {
       type: String,
       required: true
     }
@@ -58,11 +58,7 @@ created(){
     if(this.userIconUrl!==" "){//检查是否有图片
       this.havePicture = true;
     }
-  },
- mounted:function(){
-   console.log(this.userId,'123123123')
- }
-  
+  }
 }
 
 </script>

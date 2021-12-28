@@ -5,20 +5,18 @@
       <el-image :src="tweetPics[0]" style="width:50px; height:50px;" fit="cover"/>
     </div>
     <el-container direction="vertical" style="margin:0px 0px 0px 5px">
-    <span :id="`text-area-${tweetId}`" style="overflow:hidden" class="tweetText"/>
-    <div class="small-text">
-       点赞（{{praiseNum}})·评论（{{commentNum}}）
-    </div>
-  
+      <span class="tweetText">{{ contents }}</span>
+      <div class="small-text">
+        点赞 ({{ praiseNum }}) · 评论 ({{ commentNum }})
+      </div>
     </el-container>
   </el-container>
-
-
+  <div style="margin: 10px 25px 10px 0px">
+  <el-divider style="margin: 0px"/>
+  </div>
 </template>
 
 <script>
-import VditorPreview from 'vditor/dist/method.min';
-import '@/assets/vditor.css';
 
 export default {
 data(){
@@ -28,7 +26,7 @@ data(){
 },
 props: {
     tweetId: { 
-      type: String,
+      type: Number,
       required: true
     },
     contents: { 
@@ -49,32 +47,28 @@ props: {
     }
   },
   created(){
-    if(this.tweetPics.length>0){//检查是否有图片
+    if (this.tweetPics.length > 0){ // 检查是否有图片
       this.havePicture = true;
     }
-  },
-mounted() {
-    VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), 
-    this.contents===''?` 暂无内容`:this.contents);
-  },
-  
+  }
 }
 
 </script>
 
 <style>
-    .tweetText{
-      word-break:normal; 
-        width:auto; 
-        display:block; 
-        white-space:pre-wrap;
-        word-wrap : break-word ;
-        overflow: hidden ;
-        line-break: auto;
-    }
-    .small-text{
-      font-size: 13px;
-      color: rgb(122 122 122);
-    }
+.tweetText{
+  word-break:normal; 
+  width:auto; 
+  display:block; 
+  white-space:pre-wrap;
+  word-wrap : break-word ;
+  overflow: hidden ;
+  line-break: auto;
+  font-size: 13px;
+}
+.small-text{
+  font-size: 13px;
+  color: rgb(122 122 122);
+}
 
 </style>

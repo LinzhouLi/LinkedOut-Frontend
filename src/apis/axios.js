@@ -6,7 +6,6 @@ const UserInstance = axios.create(
 )
 
 UserInstance.interceptors.request.use(config=>{
-    console.log(config)
     return config
 } ,error=>{
     return Promise.reject(error)
@@ -23,7 +22,6 @@ UserInstance.interceptors.response.use(function (response) {
 const TweetInstance=axios.create()
   
 TweetInstance.interceptors.request.use(config=>{
-    console.log(config)
     return config
 } ,error=>{
     return Promise.reject(error)
@@ -40,7 +38,6 @@ TweetInstance.interceptors.response.use(function (response) {
 const RecruitInstance=axios.create()
 
 RecruitInstance.interceptors.request.use(config=>{
-    console.log(config)
     return config
 } ,error=>{
     return Promise.reject(error)

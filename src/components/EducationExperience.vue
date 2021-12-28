@@ -1,24 +1,23 @@
 <template>
-   <el-container direction="horizontal" style="margin-bottom:0px">
-       <el-col :span="2">
-    <user-icon/>
+  <el-container direction="horizontal" style="margin-bottom:0px">
+    <el-col :span="2">
+      <user-icon :src="picUrl" :size="50"/>
     </el-col>
     <el-container direction="vertical" style="margin:0px 0px 0px 20px">
       <el-row>
-      <el-col :span="20">
-        <h1 style="font-size:16px; margin:0px 0px 5px 0px">{{college}}</h1>
-      </el-col>
-      <el-col :span="4">
-        <!-- <el-button @click="dialogVisible=true" type="mini" v-if="modifiable">修改</el-button> -->
-      </el-col>
+        <el-col :span="20">
+          <h1 style="font-size:16px; margin:0px 0px 5px 0px">{{college}}</h1>
+        </el-col>
+        <el-col :span="4">
+          <el-button @click="dialogVisible=true" type="mini" v-if="modifiable">修改</el-button>
+        </el-col>
       </el-row>
       <p style="font-size:15px; margin:0px 0px 5px 0px">{{major}}·{{degree}}</p>
       <p style="font-size:12px; color:rgb(122,122,122); margin:0px 0px 5px 0px">{{startTime}}-{{endTime}}</p>
-    
-    
-  
     </el-container>
   </el-container>
+
+  
   <el-dialog v-model="dialogVisible" title="修改教育经历">
     <el-form ref="form" :model="form" label-width="200px" :rules="rules">
       <el-form-item label="学校" prop="college" required>
@@ -134,7 +133,7 @@ export default {
    props: {
     modifiable: {
       type: Boolean,
-      required: true
+      default: false
     },
     educationExperienceId: { 
       type: Number,
@@ -159,6 +158,10 @@ export default {
     endTime: {
       type: String,
       required: true
+    },
+    picUrl: {
+      type: String,
+      default: ''
     }
   },
   methods:{

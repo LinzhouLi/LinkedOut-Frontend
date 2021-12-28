@@ -28,7 +28,8 @@
             </el-row>
           </el-col>
           <el-col :span="3">
-            <el-button 
+            <el-button
+              v-show="!isSelf"
               :type="buttonType(user.ifFollowing)"
               @click="follow(index)"
               style="width:76px; padding:0px"
@@ -79,9 +80,8 @@ import CompanyInfoCard from '@/components/CompanyInfoCard';
 import UserIcon from '@/components/UserIcon.vue';
 import { Connection } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter.vue';
-import { ElNotification } from 'element-plus';
-import {getEnterpriseInfo} from '@/apis/users.js'
-import {updateFollow,deleteFollow} from '@/apis/tweet.js';
+import { getEnterpriseInfo } from '@/apis/users.js'
+import { updateFollow, deleteFollow } from '@/apis/tweet.js';
 
 
 export default {
@@ -94,25 +94,16 @@ export default {
     PageFooter
   },
   created() {
-    this.user = {
-      userId: 101,
-      userName: '字节跳动',
-      userIconUrl: '',
-      briefInfo: '互联网企业',
-      contactWay: 'www.bytedance.com',
-      email: 'zijietiaodong@email.com',
-      ifFollowing: false
-    },
     this.currentMenu = this.$route.path;
     this.userId = this.$route.params['cid']; // 获取页面参数
+    this.isSelf = localStorage.getItem('unifiedId') === this.userId;
   },
   data() {
     return{
       currentMenu: '',
-      companyDescription:'',
-      user: null,
-      userId: 0,
-      cid:'',
+      user: { },
+      userId: '',
+      isSelf: false
     }
   },
   watch: {
@@ -128,50 +119,44 @@ export default {
       return flag ? '已关注' : '关注';
     },
     follow: async function() {
-      // TODO
-      const params={
-        unifiedId:localStorage.getItem('unifiedId'),
-        subscribeId:this.userId,
+      const params = {
+        unifiedId: localStorage.getItem('unifiedId'),
+        subscribeId: this.userId,
       }
       if(this.user.ifFollowing) { // 已关注
-        const resp=await deleteFollow(params);
-        ElNotification({
-          title: '取关成功',
-          type: 'success',
-        });
-        this.user.ifFollowing = false;
+        const resp = await deleteFollow(params);
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('取关成功!');
+          this.user.ifFollowing = false;
+        }
+        else this.$message.error('取关失败!');
       }
       else { // 未关注
-        const resp=await updateFollow(params);
-        ElNotification({
-          title: '关注成功',
-          type: 'success',
-        });
-        this.user.ifFollowing = true;
+        const resp = await updateFollow(params);
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('关注成功!');
+          this.user.ifFollowing = true;
+        }
+        else this.$message.error('关注失败!');
       }
     },
   },
-  mounted:async function(){
-    // console.log(this.$route.params.cid,'123123');
-    this.cid=this.$route.params.cid;
-    const params={
-      uid:localStorage.getItem('unifiedId'),
-      sid:this.cid,
+  mounted: async function(){
+    const params = {
+      uid: localStorage.getItem('unifiedId'),
+      sid: this.userId,
     }
+    const resp = await getEnterpriseInfo(params);
 
-
-    const resp=await getEnterpriseInfo(params);
-
-    const datas=resp.data.data;
-    this.user={
-      userId:datas.unifiedId,
-      userName:datas.trueName,
-      userIconUrl:datas.pictureUrl,
-      briefInfo:datas.briefInfo,
-      contactWay:datas.contactWay,
-      ifFollowing:datas.isSubscribed,
+    const datas = resp.data.data;
+    this.user = {
+      unifiedId: datas.unifiedId,
+      userName: datas.trueName,
+      userIconUrl: datas.pictureUrl,
+      briefInfo: datas.briefInfo,
+      contactWay: datas.contactWay,
+      ifFollowing: datas.isSubscribed,
     }
-
   }
 }
 </script>

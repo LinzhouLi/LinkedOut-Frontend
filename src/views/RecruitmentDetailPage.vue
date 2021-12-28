@@ -162,13 +162,13 @@ export default {
       this.ifSelf = true;
       // 调用查看申请者接口
       const params = {
-        enterpriseId: recruitment.unifiedId,
+        unifiedId: recruitment.unifiedId,
         jobId: this.rid
       }
       const resp4 = await getAllApplicants(params);
       const candidatesData = resp4.data.data;
       // 设置申请人信息
-      for (item of candidatesData) {
+      for (let item of candidatesData) {
         this.candidates.push({
           unifiedId: item.unifiedId,
           userName: item.trueName,

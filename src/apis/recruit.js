@@ -39,5 +39,5 @@ export function getAllApplicationPosition(params){
 }
 
 export function getAllApplicants(params){
-    return recruit.get('/position/apply',{params})
+    return recruit.get('/recruit/applicants',{params})
 }

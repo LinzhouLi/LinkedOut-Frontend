@@ -58,19 +58,7 @@
 <script>
 import RecruitmentDisp from '@/components/RecruitmentDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
-import {getCompanyAllPosition} from '@/apis/recruit.js'
-
-let recruitment = {
-  recruitmentId: 0,
-  userId: 123,
-  userName: 'Ailibaba',
-  userType: 'company',
-  userIconUrl: '',
-  userBriefInfo: '互联网公司',
-  recruitmentTitle: 'xxx前端开发工程师',
-  recruitmentType: '前端开发',
-  salary: '18-20K',
-};
+import { getCompanyAllPosition } from '@/apis/recruit.js';
 
 export default {
   components: {
@@ -79,6 +67,7 @@ export default {
     RefreshRight
   },
   created() {
+    this.userId = this.$route.params['cid'];
     this.reloadInitialRecruitments();
   },
   mounted() {
@@ -98,7 +87,8 @@ export default {
       loadingInitialRecruitments: true, // 是否正在加载初始招聘信息
       loadingMoreRecruitments: false, // 是否正在加载更多招聘信息
       recruitmentList: [], // 是否加载结束
-      loadAll: false
+      loadAll: false,
+      userId: 0
     }
   },
   methods: {
@@ -107,17 +97,56 @@ export default {
       this.loadAll = false;
       this.loadingInitialRecruitments = true; // 开始加载
 
-      this.cid=this.$route.params.cid;
+      const params = { unifiedId: this.userId };
+      const resp = await getCompanyAllPosition(params);
       
-      const resp3=await getCompanyAllPosition({unifiedId:this.cid});
-      const data3=resp3.data.data;
-      this.recruitmentList=data3;
-      this.loadingInitialRecruitments = false; // 开始加载
-
+      const recruitmentsData  = resp.data.data;
+      for (let item of recruitmentsData) {
+        this.recruitmentList.push({
+          recruitmentId: item.jobId,
+          unifiedId: item.unifiedId,
+          userName: item.trueName,
+          userType: item.userType,
+          userIconUrl: item.pictureUrl,
+          userBriefInfo: item.briefInfo,
+          recruitmentTitle: item.jobName,
+          recruitmentType: item.positionType,
+          salary: item.reward,
+        });
+      }
+      this.loadingInitialRecruitments = false; // 加载结束
     },
-    loadMoreRecruitments:async function() { // 加载更多招聘信息
+    loadMoreRecruitments: async function() { // 加载更多招聘信息
       this.loadingMoreRecruitments = true; // 开始加载
       
+      const params = { 
+        unifiedId: this.userId,
+        momentId: this.recruitmentList[this.recruitmentList.length-1].recruitmentId
+      }
+      const resp = await getCompanyAllPosition(params);
+      const recruitmentData = resp.data.data;
+
+      if (recruitmentData.length === 0) { // 没有更多职位则加载完毕
+        this.loadAll = true;
+        this.loadingMoreRecruitments = false;
+        return;
+      }
+
+      for (let item of recruitmentData) {
+        this.recruitmentList.push({
+          recruitmentId: item.jobId,
+          unifiedId: item.unifiedId,
+          userName: item.trueName,
+          userType: item.userType,
+          userIconUrl: item.pictureUrl,
+          userBriefInfo: item.briefInfo,
+          recruitmentTitle: item.jobName,
+          recruitmentType: item.positionType,
+          salary: item.reward,
+        })
+      }
+
+      this.loadingMoreRecruitments = false;
     }
   }
 }

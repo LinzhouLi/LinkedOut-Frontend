@@ -58,18 +58,6 @@ import RecruitmentDisp from '@/components/RecruitmentDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
 import {getRecommendPositions} from '@/apis/recruit.js';
 
-let recruitment = {
-  recruitmentId: 0,
-  userId: 123,
-  userName: 'Ailibaba',
-  userType: 'company',
-  userIconUrl: '',
-  userBriefInfo: '互联网公司',
-  recruitmentTitle: 'xxx前端开发工程师',
-  recruitmentType: '前端开发',
-  salary: '18-20K',
-};
-
 export default {
   components: {
     RecruitmentDisp,
@@ -107,11 +95,12 @@ export default {
 
       const params = { unifiedId: localStorage.getItem('unifiedId') };
       const resp = await getRecommendPositions(params);
+      
       const recruitmentsData  = resp.data.data;
       for (let item of recruitmentsData) {
         this.recruitmentList.push({
           recruitmentId: item.jobId,
-          userId: item.unifiedId,
+          unifiedId: item.unifiedId,
           userName: item.trueName,
           userType: item.userType,
           userIconUrl: item.pictureUrl,
@@ -123,17 +112,37 @@ export default {
       }
       this.loadingInitialRecruitments = false; // 加载结束
     },
-    loadMoreRecruitments: function() { // 加载更多招聘信息
+    loadMoreRecruitments: async function() { // 加载更多招聘信息
       this.loadingMoreRecruitments = true; // 开始加载
-      setTimeout(() => {
-        for(let i = 0; i < 8; i++) {
-          let t = JSON.parse(JSON.stringify(recruitment));
-          t.recruitmentId = Math.floor(Math.random()*10000);
-          this.recruitmentList.push(t);
-        }
+      
+      const params = {
+        unifiedId: localStorage.getItem("unifiedId"),
+        momentId: this.recruitmentList[this.recruitmentList.length-1].recruitmentId
+      }
+      const resp = await getRecommendPositions(params);
+      const recruitmentData = resp.data.data;
+
+      if (recruitmentData.length === 0) { // 没有更多职位则加载完毕
+        this.loadAll = true;
         this.loadingMoreRecruitments = false;
-        this.loadAll = true; // 去掉
-      }, 2000)
+        return;
+      }
+
+      for (let item of recruitmentData) {
+        this.recruitmentList.push({
+          recruitmentId: item.jobId,
+          unifiedId: item.unifiedId,
+          userName: item.trueName,
+          userType: item.userType,
+          userIconUrl: item.pictureUrl,
+          userBriefInfo: item.briefInfo,
+          recruitmentTitle: item.jobName,
+          recruitmentType: item.positionType,
+          salary: item.reward,
+        })
+      }
+
+      this.loadingMoreRecruitments = false;
     }
   }
 }

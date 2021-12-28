@@ -38,7 +38,7 @@ const routes = [
     component: RecruitmentDetailPage
   },
   { 
-    path: '/userhomepage/:uid',
+    path: '/userinfo/:uid',
     name: 'userinfo',
     component: UserInfoPage,
     redirect: { name: '/userinfo/:uid/home' },

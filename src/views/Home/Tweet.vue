@@ -92,10 +92,6 @@ export default {
       loadingMoreTweets: false, // 是否正在加载更多动态
       loadAll: false, // 是否加载结束
       tweetList: [],
-      picList: [],
-      tweetInputDom: null,
-      showEmojiSelector: false,
-      tweetText: '',
     }
   },
   methods: {
@@ -130,12 +126,11 @@ export default {
     loadMoreTweets:async function() { // 加载更多动态
       this.loadingMoreTweets = true; // 开始加载
 
-      const params= { 
+      const params = { 
         unifiedId: localStorage.getItem("unifiedId"),
         momentId: this.tweetList[this.tweetList.length-1].tweetId
       }
       const resp = await getOtherTweet(params);
-
       const tweetData = resp.data.data;
 
       if (tweetData.length === 0) { // 没有动态则加载完毕

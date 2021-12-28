@@ -31,7 +31,7 @@ export default {
       type: Number,
       required: true,
     },
-    userId: { // 用户统一ID
+    unifiedId: { // 用户统一ID
       type: Number,
       required: true,
     },
@@ -67,7 +67,7 @@ export default {
   computed: {
     user() {
       return {
-        unifiedId: this.userId,
+        unifiedId: this.unifiedId,
         userName: this.userName,
         userType: this.userType,
         userIconUrl: this.userIconUrl,

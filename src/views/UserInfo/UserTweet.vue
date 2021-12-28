@@ -61,27 +61,7 @@
 import TweetDisp from '@/components/TweetDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';
-
-let url = require('@/assets/ADimg.jpg');
-let tweet = {
-  tweetId: 0,
-  userId: 123,
-  userName: '张三',
-  userType: 'user',
-  userIconUrl: '',
-  userBriefInfo: '腾讯员工',
-  tweetText: `# s
-🥶sdas
-123123
-**asdva**
-### s`,
-  tweetPics: [
-    url, url, url
-  ],
-  likeNum: 10,
-  isLiked: false,
-  commentNum: 20,
-};
+import { getSelfTweet } from '@/apis/tweet.js';
 
 export default {
   components: {
@@ -91,6 +71,7 @@ export default {
     RefreshRight
   },
   created() {
+    this.userId = this.$route.params['uid'];
     this.reloadInitialTweets();
   },
   mounted() {
@@ -112,39 +93,77 @@ export default {
       loadAll: false, // 是否加载结束
       tweetList: [],
       picList: [],
-      tweetInputDom: null,
-      showEmojiSelector: false,
-      tweetText: '',
+      userId: 0
     }
   },
   methods: {
-    reloadInitialTweets: function() { // 加载初始动态
+    reloadInitialTweets: async function() { // 加载初始动态
       this.tweetList = []; // 清空动态列表
       this.loadAll = false;
       this.loadingInitialTweets = true; // 开始加载
-      // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 12; i++) {
-          let t = JSON.parse(JSON.stringify(tweet));
-          t.tweetId = Math.floor(Math.random()*10000);
-          this.tweetList.push(t);
-        }
-        this.loadingInitialTweets = false; // 加载结束
-      }, 2000)
-    },
-    loadMoreTweets: function() { // 加载更多动态
-      this.loadingMoreTweets = true; // 开始加载
-      // TODO
-      setTimeout(() => {
-        for(let i = 0; i < 6; i++) {
-          let t = JSON.parse(JSON.stringify(tweet));
-          t.tweetId = Math.floor(Math.random()*10000);
-          this.tweetList.push(t);
-        }
-        this.loadingMoreTweets = false; // 加载结束
-        this.loadAll = true; // 去掉
-      }, 2000)
       
+      const params = { 
+        visitorId: localStorage.getItem("unifiedId"),
+        intervieweeId: this.userId
+      }
+      const resp = await getSelfTweet(params);
+
+      const tweetData = resp.data.data;
+      for (let item of tweetData) {
+        this.tweetList.push({
+          tweetId: item.tweetId,
+          unifiedId: item.simpleUserInfo.unifiedId,
+          userName: item.simpleUserInfo.trueName,
+          userType: item.simpleUserInfo.userType,
+          userIconUrl: item.simpleUserInfo.pictureUrl,
+          userBriefInfo: item.simpleUserInfo.briefInfo,
+          praiseNum: item.praiseNum,
+          likeState: item.likeState == 0 ? false : true,
+          commentNum: item.commentNum,
+          contents: item.contents,
+          pictureList: item.pictureList,
+          recordTime: item.recordTime
+        });
+      }
+
+      this.loadingInitialTweets = false;
+
+    },
+    loadMoreTweets: async function() { // 加载更多动态
+      this.loadingMoreTweets = true; // 开始加载
+
+      const params = { 
+        visitorId: localStorage.getItem("unifiedId"),
+        intervieweeId: this.userId,
+        momentId: this.tweetList[this.tweetList.length-1].tweetId
+      }
+      const resp = await getSelfTweet(params);
+      const tweetData = resp.data.data;
+
+      if (tweetData.length === 0) { // 没有动态则加载完毕
+        this.loadAll = true;
+        this.loadingMoreTweets = false;
+        return;
+      }
+
+      for (let item of tweetData) {
+        this.tweetList.push({
+          tweetId: item.tweetId,
+          unifiedId: item.simpleUserInfo.unifiedId,
+          userName: item.simpleUserInfo.trueName,
+          userType: item.simpleUserInfo.userType,
+          userIconUrl: item.simpleUserInfo.pictureUrl,
+          userBriefInfo: item.simpleUserInfo.briefInfo,
+          praiseNum: item.praiseNum,
+          likeState: item.likeState == 0 ? false : true,
+          commentNum: item.commentNum,
+          contents: item.contents,
+          pictureList: item.pictureList,
+          recordTime: item.recordTime
+        });
+      }
+      
+      this.loadingMoreTweets = false;
     }
   }
 }

@@ -7,6 +7,18 @@
         <template #header>
           <div><b>基本信息</b></div>
         </template>
+        <!-- 上传背景图 -->
+        <el-upload
+          style="margin-left:30px"
+          action=""
+          ref="backgroundUploader"
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-change="uploadBackground"
+        >
+          <el-button size="small" type="primary">点击上传名片背景图</el-button>
+        </el-upload>
+        <el-divider/>
         <!-- 上传头像 -->
         <el-upload
           action=""
@@ -152,11 +164,16 @@
   <el-dialog v-model="workDialogVisible" title="添加工作经历">
     <el-form ref="workForm" :model="workForm" label-width="100px" :rules="workFormRules">
       <el-form-item label="职位" prop="position" required>
-        <el-input v-model="workForm.position" placeholder="前端开发工程师"></el-input>
+        <el-input v-model="workForm.position" placeholder="例如: 前端开发工程师"></el-input>
       </el-form-item>
       
       <el-form-item label="公司" prop="enterprise" required>
-        <el-input v-model="workForm.enterprise" placeholder="微软"></el-input>
+        <el-autocomplete
+          v-model="workForm.enterprise"
+          :fetch-suggestions="searchCompany"
+          placeholder="例如: 微软"
+          @select="item => { educationForm.college = item.value }"
+        />
       </el-form-item>
       
       <el-form-item label="开始时间" prop="startTime" required>
@@ -192,11 +209,16 @@
   <el-dialog v-model="educationDialogVisible" title="添加教育经历">
     <el-form ref="educationForm" :model="educationForm" label-width="100px" :rules="educationFormRules">
       <el-form-item label="学校" prop="college" required>
-        <el-input v-model="educationForm.college" placeholder="同济大学"></el-input>
+        <el-autocomplete
+          v-model="educationForm.college"
+          :fetch-suggestions="searchCompany"
+          placeholder="例如: 同济大学"
+          @select="item => { educationForm.college = item.value }"
+        />
       </el-form-item>
       
       <el-form-item label="专业" prop="major" required>
-        <el-input v-model="educationForm.major" placeholder="软件工程"></el-input>
+        <el-input v-model="educationForm.major" placeholder="例如: 软件工程"></el-input>
       </el-form-item>
 
       <el-form-item label="学位" prop="degree" required>
@@ -241,10 +263,11 @@ import UserIcon from '@/components/UserIcon';
 import WorkExperience from '@/components/WorkExperience';
 import EducationExperience from '@/components/EducationExperience';
 import { 
-  getUserInfo, updateUserInfo, upLoadUserImage,
+  getUserInfo, updateUserInfo, upLoadUserImage, upLoadUserBackground,
   postResume, deleteResume, getResume,
   postEduBackground, deleteUserEduBackground, getUserEduBackground,
-  postUserJobBackground, deleteUserJobBackground, getUserJobBackground
+  postUserJobBackground, deleteUserJobBackground, getUserJobBackground,
+  userSearch
 } from '@/apis/users.js';
 import JobIntentionDialog from '@/components/JobIntentionDialog';
 import { DocumentAdd } from '@element-plus/icons';
@@ -382,6 +405,15 @@ export default {
       }
       else this.$message.error('上传失败!');
     },
+    uploadBackground: async function(file) { // 上传背景图
+      let params = new FormData();
+      params.append('unifiedId', this.userBasicData.unifiedId);
+      params.append('file', file.raw, file.name);
+      
+      const resp = await upLoadUserBackground(params);
+      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('上传成功!');
+      else this.$message.error('上传失败!');
+    },
     submitBasicInfo: async function() { // 提交基本信息
       const resp = await updateUserInfo(this.userBasicData);
       if (resp.status == 200 && resp.data.code == 'success') this.$message.success('保存成功!');
@@ -440,7 +472,8 @@ export default {
           degree: item.degree,
           startTime: item.startTime,
           endTime: item.endTime,
-          educationExperienceId: item.numId
+          educationExperienceId: item.numId,
+          picUrl: item.pictureUrl
         });
       }
     },
@@ -490,7 +523,8 @@ export default {
           description: item.description,
           startTime: item.startTime,
           endTime: item.endTime,
-          workExperienceId: item.numId
+          workExperienceId: item.numId,
+          picUrl: item.pictureUrl
         });
       }
     },
@@ -530,6 +564,18 @@ export default {
 
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    },
+
+    searchCompany: async function(queryString, cb) {
+      const resp = await userSearch({ str: queryString });
+      const dataList = resp.data.data;
+      let result = [];
+      for (let item of dataList) {
+        if (item.userType == 'company') {
+          result.push({ value: item.trueName });
+        }
+      }
+      cb(result);
     }
   
   }

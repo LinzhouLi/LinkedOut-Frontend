@@ -8,10 +8,22 @@
           <template #header>
             <div><b>基本信息</b></div>
           </template>
+          <!-- 上传背景图 -->
+          <el-upload
+            style="margin-left:30px"
+            action=""
+            ref="backgroundUploader"
+            :auto-upload="false"
+            :show-file-list="false"
+            :on-change="uploadBackground"
+          >
+            <el-button size="small" type="primary">点击上传名片背景图</el-button>
+          </el-upload>
+          <el-divider/>
           <!-- 上传头像 -->
           <el-upload
             action=""
-            ref="picUploader"
+            ref="avatarUploader"
             :auto-upload="false"
             :show-file-list="false"
             :on-change="uploadAvatar"
@@ -63,7 +75,7 @@ import PageFooter from '@/components/PageFooter';
 import Vditor from 'vditor';
 import '@/assets/vditor.css';
 import { 
-  upLoadUserImage, 
+  upLoadUserImage, upLoadUserBackground,
   getEnterpriseInfo, updateEnterpriseInfo 
 } from '@/apis/users.js';
 
@@ -116,6 +128,15 @@ export default {
         const resp2 = await getEnterpriseInfo({ uid: uid, sid: uid }); // 得到新头像url
         this.userIconUrl = resp2.data.data.pictureUrl;
       }
+      else this.$message.error('上传失败!');
+    },
+    uploadBackground: async function(file) { // 上传背景图
+      let params = new FormData();
+      params.append('unifiedId', this.userBasicData.unifiedId);
+      params.append('file', file.raw, file.name);
+      
+      const resp = await upLoadUserBackground(params);
+      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('上传成功!');
       else this.$message.error('上传失败!');
     },
     submitBasicInfo: async function() { // 提交基本信息

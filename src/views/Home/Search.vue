@@ -45,7 +45,7 @@
 <script>
 import UserBriefDisp from '../../components/UserBriefDisp.vue';
 import { RefreshRight } from '@element-plus/icons';
-import {userSearch} from '@/apis/users.js';
+import { userSearch } from '@/apis/users.js';
 
 export default {
   components: { 

@@ -4,40 +4,55 @@
     <el-col :offset="3" :span="12" style="margin-right:20px">
       <!-- 公司信息卡片-->
       <el-card :body-style="{ padding: 0 }">
-        <el-row style="padding:20px">
-          <el-col :span="21">
-            <el-row>
-              <el-col>
-                <user-icon 
-                  :size="100" 
-                  :url="user.userIconUrl" 
-                  style="cursor:pointer"
-                />
-                </el-col>
-              <el-container direction="vertical" style="margin-left:5px">
-              <div id="userName">{{ user.userName }}</div>
-              <div id="briefInfo">{{ user.briefInfo }}</div>
-              <div style="display:flex">
-                <el-icon :size="16"><connection /></el-icon>
-                <div style="font-size: 13px">
-                  官方网站:&nbsp;
-                  <a :href="`https://${user.contactWay}`">{{ user.contactWay }}</a>
-                </div>
-              </div>
-              </el-container>
+
+        <el-image :src="user.backgroundUrl" style="height:150px; width:100%; margin-bottom:-20px">
+          <template #error>
+            <div style="background:#999; width:100%; height:150px" />
+          </template>
+        </el-image>
+
+        <el-row style="padding:0px 20px 20px 20px">
+          <el-col :span="5">
+            <div class="icon-area">
+              <user-icon 
+                :size="120" 
+                :url="user.userIconUrl" 
+              />
+            </div>
+          </el-col>
+          <el-col :span="19">
+            <el-row style="margin-top:30px">
+              <el-col :span="20">
+
+                <el-container direction="vertical" style="margin-left:20px">
+                  <div id="userName">{{ user.userName }}</div>
+                  <div id="briefInfo">{{ user.briefInfo }}</div>
+                  <div style="display:flex">
+                    <el-icon :size="16"><connection /></el-icon>
+                    <div style="font-size: 13px">
+                      官方网站:&nbsp;
+                      <a :href="`https://${user.contactWay}`">{{ user.contactWay }}</a>
+                    </div>
+                  </div>
+                </el-container>
+
+              </el-col>
+              <el-col :span="3">
+
+                <el-button
+                  v-show="!isSelf"
+                  :type="buttonType(user.ifFollowing)"
+                  @click="follow(index)"
+                  style="width:76px; padding:0px"
+                >
+                  {{ buttonText(user.ifFollowing) }}
+                </el-button>
+
+              </el-col>
             </el-row>
           </el-col>
-          <el-col :span="3">
-            <el-button
-              v-show="!isSelf"
-              :type="buttonType(user.ifFollowing)"
-              @click="follow(index)"
-              style="width:76px; padding:0px"
-            >
-              {{ buttonText(user.ifFollowing) }}
-            </el-button>
-          </el-col>
         </el-row>
+
         <el-divider style="margin:0px"/>
 
         <!-- 详情、动态、在招职位菜单 -->
@@ -148,14 +163,16 @@ export default {
     }
     const resp = await getEnterpriseInfo(params);
 
-    const datas = resp.data.data;
+    const companyData = resp.data.data;
+    console.log(companyData)
     this.user = {
-      unifiedId: datas.unifiedId,
-      userName: datas.trueName,
-      userIconUrl: datas.pictureUrl,
-      briefInfo: datas.briefInfo,
-      contactWay: datas.contactWay,
-      ifFollowing: datas.isSubscribed,
+      unifiedId: companyData.unifiedId,
+      userName: companyData.trueName,
+      userIconUrl: companyData.pictureUrl,
+      briefInfo: companyData.briefInfo,
+      contactWay: companyData.contactWay,
+      ifFollowing: companyData.isSubscribed,
+      backgroundUrl: companyData.background
     }
   }
 }
@@ -174,5 +191,11 @@ export default {
 }
 .el-menu--horizontal>.el-menu-item {
   height: 45px;
+}
+.icon-area {
+  width:120px; 
+  padding:5px; 
+  border-radius:5px; 
+  background:#ffffff;
 }
 </style>

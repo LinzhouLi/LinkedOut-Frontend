@@ -53,6 +53,18 @@ export function upLoadUserImage(params){
     });
 }
 
+//上传背景图
+export function upLoadUserBackground(params){
+    return axios({
+        method: 'post',
+        url: '/user/back',
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
+        data: params,
+    });
+}
+
 // 查找用户
 export function userSearch(params){
     return user.get('/user/search',{params})

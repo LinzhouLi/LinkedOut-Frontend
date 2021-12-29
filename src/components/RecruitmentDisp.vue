@@ -2,7 +2,14 @@
   <el-card>
     <template #header>
       <div style="padding:10px;">
-        <user-brief-disp v-bind="user" />
+        <el-row>
+          <el-col :span="22">
+            <user-brief-disp v-bind="user" />
+          </el-col>
+          <el-col :span="2">
+            <el-button v-if="ifSelf" type="text" @click="deleteThisRecuitment">删除</el-button>
+          </el-col>
+        </el-row>
       </div>
     </template>
     <div class="recruitment-div" @click="checkRecruitment">
@@ -21,6 +28,8 @@
 
 <script>
 import UserBriefDisp from './UserBriefDisp';
+import { deletePosition } from '@/apis/recruit.js';
+import { ElMessageBox } from 'element-plus';
 
 export default {
   components: {
@@ -75,9 +84,38 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      ifSelf: false
+    }
+  },
+  created() {
+    this.ifSelf = this.unifiedId == localStorage.getItem('unifiedId');
+  },
   methods: {
     checkRecruitment: function() {
       this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
+    },
+    deleteThisRecuitment: async function() {
+      ElMessageBox.confirm(
+        '确认删除?',
+        'Warning',
+        {
+          confirmButtonText: '删除',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).then(async () => {
+        const resp = await deletePosition({
+          unifiedId: localStorage.getItem('unifiedId'),
+          jobId: this.recruitmentId
+        });
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('删除成功!');
+          this.$emit('updateAfterDel');
+        }
+        else this.$message.error('删除失败!');
+      });
     }
   }
 }

@@ -74,7 +74,13 @@ export default {
   },
   methods: {
     checkUserInfo: function() {
-      this.$router.push({ name: 'userinfo', params: { uid: localStorage.getItem('unifiedId') }});
+      const uType = localStorage.getItem('userType');
+      if (uType == 'company') {
+        this.$router.push({ name: 'companyinfo', params: { cid: localStorage.getItem('unifiedId') }});
+      }
+      else if (uType == 'user') {
+        this.$router.push({ name: 'userinfo', params: { uid: localStorage.getItem('unifiedId') }});
+      }
     },
     setJobIntention: function() {
       this.showDialog = true;

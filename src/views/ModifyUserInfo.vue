@@ -3,22 +3,23 @@
   <el-row justify="center" style="margin-top:20px">
     <el-col :span="13">
       <!-- 个人信息卡片-->
-      <el-card style="margin-bottom:20px">
-        <template #header>
-          <div><b>基本信息</b></div>
-        </template>
+      <el-card style="margin-bottom:20px" :body-style="{ padding: 0 }" >
         <!-- 上传背景图 -->
         <el-upload
-          style="margin-left:30px"
+          style="width:100%;"
+          class="background"
           action=""
           ref="backgroundUploader"
           :auto-upload="false"
           :show-file-list="false"
           :on-change="uploadBackground"
         >
-          <el-button size="small" type="primary">点击上传名片背景图</el-button>
+          <el-image :src="backgroundUrl" style="height:150px; width:100%; margin-bottom:-50px;">
+            <template #error>
+              <div style="background:#999; width:100%; height:150px" />
+            </template>
+          </el-image>
         </el-upload>
-        <el-divider/>
         <!-- 上传头像 -->
         <el-upload
           action=""
@@ -27,45 +28,45 @@
           :show-file-list="false"
           :on-change="uploadAvatar"
         >
-          <user-icon 
-            :size="100" 
-            :url="userIconUrl" 
-            style="margin-left:30px; cursor:pointer"
-          />
+          <div class="icon-area">
+            <user-icon :size="120" :url="userIconUrl" />
+          </div>
         </el-upload>
         <!-- 基本信息 -->
         <el-divider/>
-        <el-form ref="form" :model="userBasicData" label-width="90px" size="small">
-          <el-form-item label="姓名">
-            <el-input style="width:150px" v-model="userBasicData.trueName"></el-input>
-          </el-form-item>
-          <el-form-item label="年龄">
-            <el-input style="width:100px" v-model="userBasicData.age"></el-input>
-          </el-form-item>
-          <el-form-item label="性别">
-            <el-radio-group v-model="userBasicData.gender">
-              <el-radio label="男"></el-radio>
-              <el-radio label="女"></el-radio>
-              <el-radio label="保密"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="身份描述">
-            <el-input style="width:300px" v-model="userBasicData.briefInfo"></el-input>
-          </el-form-item>
-          <el-form-item label="电话号码">
-            <el-input style="width:200px" v-model="userBasicData.phoneNum"></el-input>
-          </el-form-item>
-          <el-form-item label="意向职位">
-            <div>{{ userBasicData.prePosition }}</div>
-            <el-button type="text" @click="setJobIntention">点击选择</el-button>
-          </el-form-item>
-          <el-form-item label="我的位置">
-            <el-input style="width:200px" v-model="userBasicData.livePlace"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitBasicInfo">保存</el-button>
-          </el-form-item>
-        </el-form>
+        <div style="margin-left: 170px; padding: 20px">
+          <el-form ref="form" :model="userBasicData" label-position="left" label-width="80px" size="small">
+            <el-form-item label="姓名">
+              <el-input style="width:150px" v-model="userBasicData.trueName"></el-input>
+            </el-form-item>
+            <el-form-item label="年龄">
+              <el-input style="width:100px" v-model="userBasicData.age"></el-input>
+            </el-form-item>
+            <el-form-item label="性别">
+              <el-radio-group v-model="userBasicData.gender">
+                <el-radio label="男"></el-radio>
+                <el-radio label="女"></el-radio>
+                <el-radio label="保密"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <el-form-item label="身份描述">
+              <el-input style="width:300px" v-model="userBasicData.briefInfo"></el-input>
+            </el-form-item>
+            <el-form-item label="电话号码">
+              <el-input style="width:200px" v-model="userBasicData.phoneNum"></el-input>
+            </el-form-item>
+            <el-form-item label="意向职位">
+              <div>{{ userBasicData.prePosition }}</div>
+              <el-button type="text" @click="setJobIntention">点击选择</el-button>
+            </el-form-item>
+            <el-form-item label="我的位置">
+              <el-input style="width:200px" v-model="userBasicData.livePlace"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitBasicInfo">保存</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
       </el-card>
 
       <!-- 上传简历 -->
@@ -301,6 +302,7 @@ export default {
       briefInfo: data.briefInfo
     }
     this.userIconUrl = data.pictureUrl;
+    this.backgroundUrl = data.background;
 
     // 简历
     const resp2 = await getResume({ unifiedId: uid });
@@ -318,6 +320,7 @@ export default {
       showJobIntentionDialog: false, // 是否展示选择求职意向dialog
       userBasicData: { }, // 用户基础信息form
       userIconUrl: '', // 用户头像
+      backgroundUrl: '', // 用户背景图片
       resumeList: [], // 简历列表
 
       workDialogVisible: false,
@@ -410,8 +413,13 @@ export default {
       params.append('unifiedId', this.userBasicData.unifiedId);
       params.append('file', file.raw, file.name);
       
-      const resp = await upLoadUserBackground(params);
-      if (resp.status == 200 && resp.data.code == 'success') this.$message.success('上传成功!');
+      const resp1 = await upLoadUserBackground(params);
+      if (resp1.status == 200 && resp1.data.code == 'success') {
+        this.$message.success('上传成功!');
+        const uid = localStorage.getItem('unifiedId');
+        const resp2 = await getUserInfo({ uid: uid, sid: uid }); // 得到新背景图url
+        this.backgroundUrl = resp2.data.data.background;
+      }
       else this.$message.error('上传失败!');
     },
     submitBasicInfo: async function() { // 提交基本信息
@@ -595,5 +603,16 @@ export default {
 </script>
 
 <style scoped>
-
+.background :deep(.el-upload) {
+  width: 100%;
+}
+.icon-area {
+  margin-left: 30px;
+  width: 120px; 
+  padding: 5px; 
+  border-radius: 5px; 
+  background:#ffffff;
+  position: absolute;
+  z-index: 999;
+}
 </style>

@@ -67,9 +67,9 @@ const routes = [
     path: '/companyinfo/:cid',
     name: 'companyinfo',
     component: CompanyInfoPage,
-    redirect:{name:"companyPathHome"},
+    redirect: { name:'/companyinfo/:cid/home' },
     children: [
-      { path: 'home', name:"companyPathHome",component: CompanyHome},
+      { path: 'home', name: '/companyinfo/:cid/home', component: CompanyHome},
       { path: 'description', component: CompanyDescription },
       { path: 'tweets', component: CompanyTweet },
       { path: 'recruitments', component: CompanyRecruitment }

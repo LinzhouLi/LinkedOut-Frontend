@@ -29,7 +29,7 @@
       <!-- 加载完成的招聘信息 -->
       <template #default>
         <div v-for="(item,index) in recruitmentList" :key="index">
-          <recruitment-disp style="margin-bottom:20px" v-bind="item" />
+          <recruitment-disp @update-after-del="reloadInitialRecruitments" style="margin-bottom:20px" v-bind="item" />
         </div>
       </template>
     </el-skeleton>

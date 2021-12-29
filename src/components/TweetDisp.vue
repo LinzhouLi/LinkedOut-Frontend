@@ -319,7 +319,7 @@ export default {
           this.$emit('updateAfterDel');
         }
         else this.$message.error('删除失败!');
-      })
+      });
     }
   }
 }

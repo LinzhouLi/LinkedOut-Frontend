@@ -56,8 +56,8 @@
 
 <script>
 import TopNav from '@/components/TopNav';
-import { getEmailCode,userRegister } from '@/apis/users.js';
-import {RegisterRules as Rules} from '@/utils/loginPage';
+import { getEmailCode, userRegister } from '@/apis/users.js';
+import { RegisterRules as Rules } from '@/utils/loginPage';
 
 // import { Search } from '@element/icons-vue'
 export default {
@@ -75,14 +75,11 @@ export default {
       rules: Rules,
       loadingCode: false,
       validateCode:'',
+      haveCode: false,
     };
   },
   methods: {
     async register() {
-      // const valid = await this.$refs.form.validate();
-      // if (!valid) {
-      //   return;
-      // }
       if(this.validateCode !== this.model.validateCode){
         this.$message.error('验证码错误，请重新输入'); //验证码错误
         return;
@@ -102,23 +99,28 @@ export default {
       }catch(e) {
         this.$message.error('注册失败');
       }finally {
-        this.loading=false;
+        this.loading = false;
       }
 
     },
-    async sendCode() {
-      // 拿到code
-      this.loadingCode = true;
-      try {
-        const resp = await getEmailCode({mail:this.model.email});
-
-        this.validateCode=resp.data.data;
-        this.$message.success('成功发送验证码！');
-      }catch (e) {
-        console.log(e);
-      }finally {
-        this.loadingCode=false;
+    async sendCode() {  // 拿到code
+      if (this.haveCode == true) {
+        this.$message.warning('验证码已发送, 请稍等!');
+        return;
       }
+
+      this.loadingCode = true;
+      const resp = await getEmailCode({mail:this.model.email});
+      if (resp.status == 200 && resp.data.code == 'success') {
+        this.validateCode = resp.data.data;
+        this.$message.success('成功发送验证码!');
+        this.haveCode = true;
+        setTimeout(() => {
+          this.haveCode = false;
+        }, 30000);
+      }
+      else this.$message.error('发送验证码失败!');
+      this.loadingCode = false;
     },
   },
   components: {
@@ -127,7 +129,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .login {
   flex: 1;

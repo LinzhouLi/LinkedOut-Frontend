@@ -17,6 +17,7 @@ import CompanyRecruitment from '../views/CompanyInfo/CompanyRecruitment'
 import Search from '../views/Home/Search'
 import PostRecruitmentPage from '../views/PostRecruitmentPage'
 import RegisterPage from '../views/RegisterPage'
+import NotFoundPage from '../views/NotFoundPage'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -62,22 +63,32 @@ const routes = [
     name: 'modifyCompanyInfo',
     component: ModifyCompanyInfo
   },
-  { path: '/companyinfo/:cid',
-  name: 'companyinfo',
-  component: CompanyInfoPage,
-  redirect:{name:"companyPathHome"},
-  children: [
-    { path: 'home', name:"companyPathHome",component: CompanyHome},
-    { path: 'description', component: CompanyDescription },
-    { path: 'tweets', component: CompanyTweet },
-    { path: 'recruitments', component: CompanyRecruitment }
-  ]
-},
+  { 
+    path: '/companyinfo/:cid',
+    name: 'companyinfo',
+    component: CompanyInfoPage,
+    redirect:{name:"companyPathHome"},
+    children: [
+      { path: 'home', name:"companyPathHome",component: CompanyHome},
+      { path: 'description', component: CompanyDescription },
+      { path: 'tweets', component: CompanyTweet },
+      { path: 'recruitments', component: CompanyRecruitment }
+    ]
+  },
+
+  { path: '/:catchAll(.*)', name: '404', component: NotFoundPage}
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.path == '/login') return next();
+  const uid = localStorage.getItem('unifiedId');
+  if (!uid) return next('/login');
+  else next();
 })
 
 export default router

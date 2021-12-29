@@ -1,5 +1,5 @@
 <template>
-  <el-avatar :size="size" :src="iconUrl"></el-avatar>
+  <el-avatar shape="square" :size="size" :src="iconUrl" fit="cover"></el-avatar>
 </template>
 
 <script>

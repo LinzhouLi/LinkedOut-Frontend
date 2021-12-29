@@ -10,7 +10,7 @@
               <el-button
                 size="mini"
                 :type="buttonType(user.ifFollowing)"
-                style="width:65px"
+                style="width:65px; padding:0px"
                 @click="follow(index)"
               >
                 {{ buttonText(user.ifFollowing) }}
@@ -31,8 +31,9 @@
 </template>
 
 <script>
-import UserBriefDisp from './UserBriefDisp.vue';
+import UserBriefDisp from '@/components/UserBriefDisp.vue';
 import PageFooter from './PageFooter.vue';
+import { getRecommentList,updateFollow,deleteFollow } from '@/apis/tweet.js';
 
 export default {
   components: { 
@@ -40,38 +41,16 @@ export default {
     PageFooter
   },
   props: {
-    ifFooter: { // 是否在推荐关注卡片下面显示PageFooter
+    ifFooter: {
       type: Boolean,
-      default: true,
+      default: true
     }
   },
   data() {
     return {
       ADimgUrl: require('@/assets/ADimg.jpg'),
       logoUrl: require('@/assets/logo.png'),
-      userRecommendList: [
-        {
-          userId: 101,
-          userName: '字节跳动',
-          userBriefInfo: '互联网企业',
-          userType: 'company',
-          ifFollowing: false
-        },
-        {
-          userId: 102,
-          userName: '张三',
-          userBriefInfo: '同济大学学生',
-          userType: 'user',
-          ifFollowing: false
-        },
-        {
-          userId: 103,
-          userName: '李四',
-          userBriefInfo: '腾讯公司员工',
-          userType: 'user',
-          ifFollowing: false
-        },
-      ]
+      userRecommendList: [ ]
     }
   },
   methods: {
@@ -81,20 +60,56 @@ export default {
     buttonText: (flag) => {
       return flag ? '已关注' : '关注';
     },
-    follow: function(index) {
+    follow: async function(index) {
       // TODO
       const user = this.userRecommendList[index];
+      const myUnifiedId = localStorage.getItem("unifiedId");
       if(user.ifFollowing) { // 已关注
-        console.log(user.userId, '已关注, 将此用户取关');
-        this.userRecommendList[index].ifFollowing = false;
+        const params = { unifiedId: myUnifiedId, subscribeId: user.unifiedId }
+        const resp = await deleteFollow(params);
+        console.log(resp)
+        if(resp.status === 200 && resp.data.code == 'success'){
+          this.$message.success('取关成功!');
+          this.userRecommendList[index].ifFollowing = false;
+        }
+        else this.$message.error('取关失败!');
       }
       else { // 未关注
-        console.log(user.userId, '未关注, 关注此用户');
-        this.userRecommendList[index].ifFollowing = true;
+        const params = { unifiedId: myUnifiedId, subscribeId: user.unifiedId }
+        const resp = await updateFollow(params);
+        console.log(resp)
+        if(resp.status === 200 && resp.data.code == 'success'){
+          this.$message.success('关注成功!');
+          this.userRecommendList[index].ifFollowing = true;
+        }
+        else this.$message.error('关注失败!');
       }
     },
     toRecruitmentPage: function() {
       // this.$router.push('/home/recruitments');
+    }
+  },
+  created: async function(){
+    const unifiedId=localStorage.getItem("unifiedId");
+    try{
+      this.userRecommendList = [];
+      const resp = await getRecommentList(unifiedId);
+      const recommendList = resp.data.data;
+      
+      for(let item of recommendList) {
+        this.userRecommendList.push({
+          unifiedId: item.unifiedId,
+          userName: item.trueName || '匿名用户',
+          userBriefInfo: item.briefInfo || '',
+          userType: item.userType,
+          userIconUrl: item.pictureUrl,
+          ifFollowing: false
+        });
+      }
+    }catch(e){
+      console.log(e)
+    }finally{
+      
     }
   }
 }
@@ -104,5 +119,11 @@ export default {
 .el-divider {
   margin: 5px;
   margin: 5px 0px;
+}
+#text-div {
+  margin-top: 3px;
+  text-align: center;
+  font-size: 10px;
+  color: rgb(122 122 122);
 }
 </style>

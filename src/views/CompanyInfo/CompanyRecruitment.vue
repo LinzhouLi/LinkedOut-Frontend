@@ -1,62 +1,64 @@
 <template>
-  <el-container direction="vertical">
-    <!-- 分割线 -->
-    <el-row>
-      <el-col :offset="1" :span="19">
-        <el-divider style="margin: 18px 0px;"/>
-      </el-col>
-      <el-col :span="4">
-        <div 
-          class="refresh-div"
-          @click="reloadInitialRecruitments" 
-          style="margin:8px 10px 0px; display: flex;"
-        >
-          <el-icon :size="20"><refresh-right /></el-icon>
-          <div>刷新</div>
-        </div>
-      </el-col>
-    </el-row>
-    <el-skeleton :loading="loadingInitialRecruitments" animated :count="3">
-      <!-- 加载状态骨架屏 -->
-      <template #template>
-        <el-card style="margin-bottom:20px">
-          <el-skeleton-item variant="h3" style="width:20%" />
-          <el-skeleton-item/>
-          <el-skeleton-item/>
-          <el-skeleton-item style="width:30%"/>
-        </el-card>
-      </template>
-      <!-- 加载完成的招聘信息 -->
-      <template #default>
-        <div v-for="(item,index) in recruitmentList" :key="index">
-          <recruitment-disp @update-after-del="reloadInitialRecruitments" style="margin-bottom:20px" v-bind="item" />
-        </div>
-      </template>
-    </el-skeleton>
-    <!-- 没有招聘信息时的页面底部 -->
-    <div v-if="loadAll">
-      <el-divider style="margin: -5px 0px;" />
-      <div 
-        class="refresh-div" 
-        @click="reloadInitialRecruitments"
-        style="margin: 20px 0px"
-      >
-      没有更多招聘信息了, 点击刷新 :)
-      </div>
-    </div>
-    <!-- 正在加载更多招聘信息时的页面底部 -->
-    <div v-if="loadingMoreRecruitments">
-      <el-row justify="center" style="margin: -5px 0px 20px;">
-        <el-icon :size="20" class="is-loading"><loading /></el-icon>
+  <el-row>
+    <el-col :offset="2" :span="20">
+      <!-- 分割线 -->
+      <el-row>
+        <el-col :offset="1" :span="19">
+          <el-divider style="margin: 18px 0px;"/>
+        </el-col>
+        <el-col :span="4">
+          <div 
+            class="refresh-div"
+            @click="reloadInitialRecruitments" 
+            style="margin:8px 10px 0px; display: flex;"
+          >
+            <el-icon :size="20"><refresh-right /></el-icon>
+            <div>刷新</div>
+          </div>
+        </el-col>
       </el-row>
-    </div>
-  </el-container>
+      <el-skeleton :loading="loadingInitialRecruitments" animated :count="3">
+        <!-- 加载状态骨架屏 -->
+        <template #template>
+          <el-card style="margin-bottom:20px">
+            <el-skeleton-item variant="h3" style="width:20%" />
+            <el-skeleton-item/>
+            <el-skeleton-item/>
+            <el-skeleton-item style="width:30%"/>
+          </el-card>
+        </template>
+        <!-- 加载完成的招聘信息 -->
+        <template #default>
+          <div v-for="(item,index) in recruitmentList" :key="index">
+            <recruitment-disp style="margin-bottom:20px" @update-after-del="reloadInitialRecruitments" v-bind="item" />
+          </div>
+        </template>
+      </el-skeleton>
+      <!-- 没有招聘信息时的页面底部 -->
+      <div v-if="loadAll">
+        <el-divider style="margin: -5px 0px;" />
+        <div 
+          class="refresh-div" 
+          @click="reloadInitialRecruitments"
+          style="margin: 20px 0px"
+        >
+        没有更多招聘信息了, 点击刷新 :)
+        </div>
+      </div>
+      <!-- 正在加载更多招聘信息时的页面底部 -->
+      <div v-if="loadingMoreRecruitments">
+        <el-row justify="center" style="margin: -5px 0px 20px;">
+          <el-icon :size="20" class="is-loading"><loading /></el-icon>
+        </el-row>
+      </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
 import RecruitmentDisp from '@/components/RecruitmentDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
-import {getRecommendPositions} from '@/apis/recruit.js';
+import { getCompanyAllPosition } from '@/apis/recruit.js';
 
 export default {
   components: {
@@ -65,6 +67,7 @@ export default {
     RefreshRight
   },
   created() {
+    this.userId = this.$route.params['cid'];
     this.reloadInitialRecruitments();
   },
   mounted() {
@@ -84,7 +87,8 @@ export default {
       loadingInitialRecruitments: true, // 是否正在加载初始招聘信息
       loadingMoreRecruitments: false, // 是否正在加载更多招聘信息
       recruitmentList: [], // 是否加载结束
-      loadAll: false
+      loadAll: false,
+      userId: 0
     }
   },
   methods: {
@@ -93,8 +97,8 @@ export default {
       this.loadAll = false;
       this.loadingInitialRecruitments = true; // 开始加载
 
-      const params = { unifiedId: localStorage.getItem('unifiedId') };
-      const resp = await getRecommendPositions(params);
+      const params = { unifiedId: this.userId };
+      const resp = await getCompanyAllPosition(params);
       
       const recruitmentsData  = resp.data.data;
       for (let item of recruitmentsData) {
@@ -115,11 +119,11 @@ export default {
     loadMoreRecruitments: async function() { // 加载更多招聘信息
       this.loadingMoreRecruitments = true; // 开始加载
       
-      const params = {
-        unifiedId: localStorage.getItem("unifiedId"),
+      const params = { 
+        unifiedId: this.userId,
         momentId: this.recruitmentList[this.recruitmentList.length-1].recruitmentId
       }
-      const resp = await getRecommendPositions(params);
+      const resp = await getCompanyAllPosition(params);
       const recruitmentData = resp.data.data;
 
       if (recruitmentData.length === 0) { // 没有更多职位则加载完毕

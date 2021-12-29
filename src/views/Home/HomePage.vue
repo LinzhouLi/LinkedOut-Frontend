@@ -2,22 +2,25 @@
   <top-nav/>
   <el-row style="margin-top:20px">
     <el-col :offset="3" :span="4">
-      <user-info-card v-bind="defaultUser"/>
+      <user-info-card v-bind="user"/>
     </el-col>
     <el-col :span="9" style="margin:0px 20px">
-      <router-view/>
+      <router-view :key="$route.query" />
     </el-col>
     <el-col :span="5">
-      <user-recommend-card/>
+      <user-recommend-card :ifFooter="!footerDisp" />
     </el-col>
   </el-row>
+  <page-footer v-if="footerDisp"/>
+  <el-backtop />
 </template>
 
 <script>
 import TopNav from '@/components/TopNav';
 import UserInfoCard from '@/components/UserInfoCard';
 import UserRecommendCard from '@/components/UserRecommendCard';
-import PageFooter from '@/components/PageFooter.vue';
+import PageFooter from '@/components/PageFooter';
+import { getBasicInfo } from '@/apis/users.js';
 
 export default {
   components: {
@@ -28,16 +31,25 @@ export default {
   },
   data() {
     return{
-      defaultUser: {
-        userName: '李林洲',
-        userBriefInfo: '同济大学学生',
-        userIconUrl: ''
+      footerDisp: false,
+      user: {
+        userName: '',
+        userBriefInfo: '',
+        userIconUrl: '',
+        userType: 'user'
       }
     }
   },
-  methods: {
-    loadTweets: function() {
-      console.log(1)
+  mounted: async function(){
+    const uid = localStorage.getItem('unifiedId');
+    const resp = await getBasicInfo(uid);
+    const userData = resp.data.data;
+
+    this.user = {
+      userName: userData.trueName,
+      userBriefInfo: userData.briefInfo,
+      userIconUrl: userData.pictureUrl,
+      userType: userData.userType
     }
   }
 }

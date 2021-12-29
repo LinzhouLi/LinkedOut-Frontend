@@ -13,7 +13,7 @@
     <el-row>
       <el-col :span="6" v-for="(pic, index) in picList" :key="index">
         <el-container>
-          <el-image class="img-preview" :src="pic.url" fit="contain"/>
+          <el-image class="img-preview" :src="pic" fit="contain"/>
           <el-icon class="img-cross" @click="removePicture(index)"><close-bold /></el-icon>
         </el-container>
       </el-col>
@@ -28,22 +28,17 @@
           <emoji-picker class="light" id="tweet-emoji-picker"></emoji-picker>
         </el-popover>
       </el-col>
+      <!-- 选择图片 -->
       <el-col :span="3">
-        <el-popover placement="bottom" :width="146" trigger="click">
-          <template #reference>
-            <el-button :icon="PictureFilled" size="mini" circle></el-button>
-          </template>
-          <el-upload
-            action=""
-            ref="picUploader"
-            list-type="picture-card"
-            :auto-upload="false"
-            :show-file-list="false"
-            :on-change="Addpicture"
-          >
-            <el-icon><plus /></el-icon>
-          </el-upload>
-        </el-popover>
+        <el-upload
+          action=""
+          ref="picUploader"
+          :auto-upload="false"
+          :show-file-list="false"
+          :on-change="Addpicture"
+        >
+          <el-button :icon="PictureFilled" size="mini" circle></el-button>
+        </el-upload>
       </el-col>
       <el-col :offset="13" :span="4">
         <el-button size="mini" @click="uploadTweet">
@@ -58,6 +53,7 @@
 import 'emoji-picker-element';
 import { Eleme, PictureFilled, Plus, CloseBold } from '@element-plus/icons';
 import { ElMessage } from 'element-plus';
+import { addTweet } from '@/apis/tweet.js';
 
 export default {
   components: {
@@ -67,11 +63,16 @@ export default {
     CloseBold,
     ElMessage
   },
-    setup() {
+  setup () {
     return {
       Eleme,
-      PictureFilled,
-      Plus
+      PictureFilled
+    }
+  },
+  created() {
+    this.imgReader = new FileReader();
+    this.imgReader.onload = (event) => {
+      this.picList.push(event.target.result);
     }
   },
   mounted() {
@@ -86,10 +87,13 @@ export default {
   },
   data() {
     return {
-      picList: [],
+      imgReader: null,
+      imgPopoverVisible: true,
       tweetInputDom: null,
       showEmojiSelector: false,
       tweetText: '',
+      picList: [], // 用于展示图片
+      fileList: [], // 用于上传文件
     }
   },
   methods: {
@@ -98,7 +102,10 @@ export default {
     },
     Addpicture: function(file) { // 添加预览图片
       if(this.picList.length < 3) {
-        this.picList.push(file);
+        this.imgPopoverVisible = false;
+        this.imgReader.readAsDataURL(file.raw);
+        URL.revokeObjectURL(file.url);
+        this.fileList.push(file.raw);
       }
       else {
         ElMessage.error('最多上传3张图片!');
@@ -107,10 +114,29 @@ export default {
     },
     removePicture: function(index) { // 删除预览图片
       this.picList.splice(index, 1);
+      this.fileList.splice(index, 1);
     },
-    uploadTweet: function() { // 上传动态
-      // TODO
-      console.log('upload')
+    uploadTweet:async function() { // 上传动态
+      let date = new Date();
+      const trueDate = date.toJSON().split('T')[0]+' '+date.toJSON().split('T')[1].split('Z')[0];
+
+      let params = new FormData();
+      params.append('unifiedId', localStorage.getItem("unifiedId"));
+      params.append('content', this.tweetText);
+      params.append('recordTime', trueDate);
+      for (let file of this.fileList) {
+        params.append('files', file);
+      }
+      
+      const resq = await addTweet(params);
+      if (resq.status == 200 && resq.data.code == 'success') {
+        this.$message.success('发布成功!');
+        // 清空
+        this.picList = [];
+        this.fileList = [];
+        this.tweetText = '';
+      }
+      else this.$message.error('发布失败!');
     },
   }
 }

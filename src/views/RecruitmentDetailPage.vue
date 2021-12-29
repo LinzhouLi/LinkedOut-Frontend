@@ -5,17 +5,32 @@
     <el-col :offset="3" :span="12" style="margin-right:20px">
       <!-- 招聘名称卡片 -->
       <el-card>
-        <user-brief-disp v-bind="user" />
+        <user-brief-disp v-bind="companyUser" />
         <el-divider/>
         <div class="mini-text">招聘中</div>
         <h1 id="title">{{ recruitmentTitle }}</h1>
         <el-row>
-          <el-col :span="18">
+          <el-col :span="19">
             <div id="salary">{{ salary }}</div>
             <div class="medium-text">{{ limit }}</div>
           </el-col>
-          <el-col :span="6">
-            <el-button style="margin-top:10px;float:right;" @click="postResume">投递简历</el-button>
+          <el-col :span="5">
+            <div v-if="userType == 'user'">
+              <el-select 
+                @change="postResume"
+                :placeholder="ifApplied ? '简历已投递' : '投递简历'"
+                :disabled="ifApplied"
+              >
+              <!-- 普通且有简历用户且未申请过该岗位, 才可投递简历 -->
+                <el-option
+                  v-for="item in myResumeList"
+                  :key="item.resumeName"
+                  :label="item.resumeName"
+                  :value="item.resumeId"
+                >
+                </el-option>
+              </el-select>
+            </div>
           </el-col>
         </el-row>
       </el-card>
@@ -32,6 +47,27 @@
           <div style="font-size:15px;">{{ location }}</div>
         </div>
         <div id="map-container" @click="showFullMap" />
+      </el-card>
+      <!-- 职位申请人卡片 -->
+      <el-card v-if="ifSelf" style="margin-top:20px" :body-style="{ padding: '0px' }">
+        <template #header>
+          <div><b>职位申请人</b></div>
+        </template>
+        <el-row>
+          <el-col :span=12 v-for="(user, index) in candidates" :key="index">
+            <el-container style="padding:5px 10px">
+              <user-brief-disp v-bind="user"/>
+              <el-button 
+                type="text" 
+                size="mini"
+                style="padding-right:10px"
+                @click="openUrl(user.resume)"
+              >
+                查看简历
+              </el-button>
+            </el-container>
+          </el-col>
+        </el-row>
       </el-card>
     </el-col>
     <!-- 页面左部 -->
@@ -69,22 +105,11 @@ import '@/assets/vditor.css';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { LocationInformation } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter';
-// import Vditor from 'vditor';
+import { getPositionDetails, getAllApplicants, postPositionApplication } from '@/apis/recruit.js';
+import { getBasicInfo, getResume } from '@/apis/users.js';
+import { ElMessageBox } from 'element-plus';
 
 export default {
-  // mounted() {
-  //   console.log(this.$route.params.rid);
-  //   this.editor = new Vditor('text-area', {
-  //     width: 500,
-  //     height: 500,
-  //     toolbar: ['emoji', 'br', 'bold', '|', 'line'],
-  //     cache: {
-  //       enable: false,
-  //     },
-  //     blur: value => { console.log(value) },
-  //     mode: "wysiwyg"
-  //   })
-  // },
   components: {
     TopNav,
     UserRecommendCard,
@@ -92,74 +117,117 @@ export default {
     LocationInformation,
     PageFooter
   },
-  created() {
-    this.recruitmentTitle = '资深前端研发-到综商家';
-    this.salary = '20-40K·15薪';
-    this.limit = '上海 · 1-3年 · 本科';
-    this.user = {
-      userId: 123,
-      userName: '美团',
-      userType: 'company',
-      userIconUrl: '',
-      userBriefInfo: '互联网公司',
+  mounted: async function () {
+    this.rid = this.$route.params['rid']; // 获取页面参数
+    const uid = localStorage.getItem('unifiedId');
+    this.userType = localStorage.getItem('userType');
+
+    // 得到职位详情
+    const resp1 = await getPositionDetails({ unifiedId: uid, jobId: this.rid});
+    if(resp1.status != 200 || resp1.data.code != 'success') {
+      this.$message.error('招聘职位不存在!');
+      this.$router.go(-1);
+      return;
     }
-    this.location = '上海市长宁区申亚时代广场b'
-    this.detailedInfo = `# 职位描述
-## 招聘方向
-前端、安卓、IOS
-## 岗位职责
-- 业务需求：负责到综以及到店B端系统的前端技术方案设计、需求把控、核心功能开发，将业务需求拆解细化并实施；
-- 质量保障： 保障业务的技术质量，负责日常Case跟进，对问题进行原因分析，找到RootCause；
-- 终端平台化建设：配合终端平台化建设落地，基于业务实际情况反馈问题；
-- 业务技术建设：参与或主导团队内部重要技术项目的规划及落地；
-## 岗位基本要求：
-+ 研发经验： 2年以上互联网研发工作经验；
-+ 技术栈：对React/Vue、Webpack、组件库、动静分离，ESLint有深入的理解；
-+ 实战：对于业务需求有一定抽象能力，并且定期对自己工作进行复盘总结；
-# 公司介绍
-美团的使命是“帮大家吃得更好，生活更好”。作为一家生活服务电子商务平台，公司聚焦“Food +Platform”战略，以“吃”为核心，通过科技创新，和广大商户与各类合作伙伴一起，努力为消费者提供品质生活，推动生活服务业需求侧和供给侧数字化升级。
-2018年9月20日，美团正式在港交所挂牌上市。美团将始终坚持以客户为中心，不断加大在科技研发方面的投入，更好承担社会责任，更多创造社会价值，与广大合作伙伴一起发展共赢。`
-  },
-  mounted() {
+    const recruitment = resp1.data.data;
+    // 设置职位详情信息
+    this.recruitmentTitle = recruitment.jobName;
+    this.salary = recruitment.reward;
+    this.limit = recruitment.limitation;
+    this.jobType = recruitment.positionType;
+    this.location = recruitment.workPlace;
+    this.detailedInfo = recruitment.description;
+
+    // 得到职位发布者基础信息
+    const resp2 = await getBasicInfo(recruitment.unifiedId);
+    const companyData = resp2.data.data;
+    // 设置职位发布者信息
+    this.companyUser = {
+      unifiedId: companyData.unifiedId,
+      userName: companyData.trueName || "匿名用户",
+      userType: companyData.userType,
+      userIconUrl: companyData.pictureUrl,
+      userBriefInfo: companyData.briefInfo
+    }
+
+    // 普通用户查看招聘信息, 得到其简历供其选择
+    if (this.userType == 'user') {
+      const resp2 = await getResume({ unifiedId: uid });
+      this.myResumeList = resp2.data.data;
+      this.ifApplied = recruitment.ifApplied; // 是否申请过该岗位
+    }
+
+    // 查看招聘详情的用户是其发布公司
+    if (recruitment.unifiedId == uid) {
+      this.ifSelf = true;
+      // 调用查看申请者接口
+      const params = {
+        unifiedId: recruitment.unifiedId,
+        jobId: this.rid
+      }
+      const resp4 = await getAllApplicants(params);
+      const candidatesData = resp4.data.data;
+      // 设置申请人信息
+      for (let item of candidatesData) {
+        this.candidates.push({
+          unifiedId: item.unifiedId,
+          userName: item.trueName,
+          userType: item.userType,
+          userIconUrl: item.pictureUrl,
+          userBriefInfo: item.briefInfo,
+          resume: item.resumeUrl
+        });
+      }
+    }
+    else this.ifSelf = false;
+
     // markdown 渲染器
     VditorPreview.preview(document.getElementById('text-area'), this.detailedInfo);
+
     // 高德地图
-    AMapLoader.load({ // 地图加载器
+    const AMap = await AMapLoader.load({ // 地图加载器
       key: '7b0368f9798bd0bfe3d901a47f90f8f6',
       plugins: ['AMap.PlaceSearch']
-    }).then((AMap) => {
-      let placeSearch = new AMap.PlaceSearch(); // 创建位置搜索类
-      placeSearch.search(this.location, (status, result) => {
-        if(status == 'complete') {
-          this.pos = result.poiList.pois[0].location; // 搜索结果的第一个
-          this.map = new AMap.Map(document.getElementById('map-container'), { // 创建地图
-            zoom: 17,
-            center: [this.pos.lng, this.pos.lat],
-            zoomEnable: false,
-            dragEnable: false
-          });
-          let marker = new AMap.Marker({ // 创建标点
-            position: [this.pos.lng, this.pos.lat],
-            clickable: false,
-            title: result.poiList.pois[0].name
-          });
-          this.map.add(marker);
-        }
-      })
-    })
+    });
+    let placeSearch = new AMap.PlaceSearch(); // 创建位置搜索类
+    placeSearch.search(this.location, (status, result) => {
+      if(status == 'complete') {
+        this.pos = result.poiList.pois[0].location; // 搜索结果的第一个
+        this.map = new AMap.Map(document.getElementById('map-container'), { // 创建地图
+          zoom: 17,
+          center: [this.pos.lng, this.pos.lat],
+          zoomEnable: false,
+          dragEnable: false
+        });
+        let marker = new AMap.Marker({ // 创建标点
+          position: [this.pos.lng, this.pos.lat],
+          clickable: false,
+          title: result.poiList.pois[0].name
+        });
+        this.map.add(marker);
+      }
+    });
+
   },
   beforeDestroy() {
     this.map.destroy(); // 销毁地图
   },
   data() {
     return {
+      rid: null,
+      candidates: [],
+      ifSelf: false,
+      ifApplied: false,
+      userType: '',
       recruitmentTitle: '',
       salary: '',
       limit: '',
       detailedInfo: '',
-      type: '',
-      user: null,
+      jobType: '',
+      companyUser: null,
       location: '',
+      myResumeList: [],
+
       map: null,
       ifShowFullMap: false,
       fullMap: null,
@@ -167,8 +235,33 @@ export default {
     }
   },
   methods: {
-    postResume: function() {
+    openUrl: function(url) {
+      window.open(url, "_blank");
+    },
+    postResume: async function(resumeId) {
       // TODO
+      ElMessageBox.confirm(
+        '确定投递该岗位?',
+        this.recruitmentTitle,
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).then(async () => {
+        const params = {
+          userId: localStorage.getItem('unifiedId'),
+          enterpriseId: this.companyUser.unifiedId,
+          jobId: this.rid,
+          resumeId: resumeId
+        };
+        const resp = await postPositionApplication(params);
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('投递成功!');
+          this.ifApplied = true;
+        }
+        else this.$message.error('投递失败!');
+      });
     },
     showFullMap: function() {
       this.ifShowFullMap = true;

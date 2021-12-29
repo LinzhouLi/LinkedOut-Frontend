@@ -85,7 +85,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path == '/login') return next();
+  if (to.path == '/login' || to.path == '/register') return next();
   const uid = localStorage.getItem('unifiedId');
   if (!uid) return next('/login');
   else next();

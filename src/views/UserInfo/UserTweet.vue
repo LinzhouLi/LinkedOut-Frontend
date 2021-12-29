@@ -32,7 +32,7 @@
         <!-- 加载完成的动态 -->
         <template #default>
           <div v-for="(item,index) in tweetList" :key="index">
-            <tweet-disp style="margin-top:20px" v-bind="item" /> 
+            <tweet-disp style="margin-top:20px" @update-after-del="reloadInitialTweets" v-bind="item" /> 
           </div>
         </template>
       </el-skeleton>

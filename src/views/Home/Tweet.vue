@@ -33,7 +33,7 @@
       <!-- 加载完成的动态 -->
       <template #default>
         <div v-for="(item,index) in tweetList" :key="index">
-          <tweet-disp style="margin-top:20px" v-bind="item" /> 
+          <tweet-disp style="margin-top:20px" @update-after-del="reloadInitialTweets" v-bind="item" /> 
         </div>
       </template>
     </el-skeleton>
@@ -121,8 +121,6 @@ export default {
         });
       }
 
-
-
       this.loadingInitialTweets = false;
     },
     loadMoreTweets:async function() { // 加载更多动态
@@ -141,23 +139,24 @@ export default {
         return;
       }
 
-      for (let item of tweetData) {
-        this.tweetList.push({
-          tweetId: item.tweetId,
-          unifiedId: item.simpleUserInfo.unifiedId,
-          userName: item.simpleUserInfo.trueName,
-          userType: item.simpleUserInfo.userType,
-          userIconUrl: item.simpleUserInfo.pictureUrl,
-          userBriefInfo: item.simpleUserInfo.briefInfo,
-          praiseNum: item.praiseNum,
-          likeState: item.likeState == 0 ? false : true,
-          commentNum: item.commentNum,
-          contents: item.contents,
-          pictureList: item.pictureList,
-          recordTime: item.recordTime
-        });
+      if (tweetData.length > 0) {
+        for (let item of tweetData) {
+          this.tweetList.push({
+            tweetId: item.tweetId,
+            unifiedId: item.simpleUserInfo.unifiedId,
+            userName: item.simpleUserInfo.trueName,
+            userType: item.simpleUserInfo.userType,
+            userIconUrl: item.simpleUserInfo.pictureUrl,
+            userBriefInfo: item.simpleUserInfo.briefInfo,
+            praiseNum: item.praiseNum,
+            likeState: item.likeState == 0 ? false : true,
+            commentNum: item.commentNum,
+            contents: item.contents,
+            pictureList: item.pictureList,
+            recordTime: item.recordTime
+          });
+        }
       }
-
       
       this.loadingMoreTweets = false;
     }

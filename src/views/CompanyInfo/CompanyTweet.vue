@@ -18,7 +18,7 @@
         </el-col>
       </el-row>
       <!-- 动态展示区域 -->
-      <el-skeleton :loading="loadingInitialTweets" animated :count="1">
+      <el-skeleton :loading="loadingInitialTweets" @update-after-del="reloadInitialTweets" animated :count="1">
         <!-- 加载状态骨架屏 -->
         <template #template>
           <el-card style="margin-top: 20px">

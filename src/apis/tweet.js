@@ -65,7 +65,7 @@ export function addTweet(params){
     return axios({
         method: 'put',
         baseURL: tweetBaseUrl,
-        url: '/tweet',
+        url: '',
         headers: {
             'Content-Type': 'multipart/form-data'
         },
@@ -73,6 +73,6 @@ export function addTweet(params){
     });
 }
 
-export function deleteTweet(params){
-    return tweet.delete('/tweet'+params.id)//存疑
+export function deleteTweet(tweetId){
+    return tweet.delete('/' + tweetId)
 }

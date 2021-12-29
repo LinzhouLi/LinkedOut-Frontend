@@ -3,7 +3,14 @@
     <!-- 动态卡片头部 -->
     <template #header>
       <div style="padding:10px;">
-        <user-brief-disp v-bind="user" />
+        <el-row>
+          <el-col :span="22">
+            <user-brief-disp v-bind="user" />
+          </el-col>
+          <el-col :span="2">
+            <el-button v-if="ifSelf" type="text" @click="deleteThisTweet">删除</el-button>
+          </el-col>
+        </el-row>
       </div>
     </template>
     <!-- 动态文字与照片 -->
@@ -96,8 +103,9 @@ import 'emoji-picker-element';
 import UserBriefDisp from './UserBriefDisp';
 import VditorPreview from 'vditor/dist/method.min';
 import { Share, ChatLineSquare, Star, Eleme } from '@element-plus/icons';
-import { addLikes, deleteLikes, getAllComments, addComment, deleteComment, addTweet } from '@/apis/tweet.js';
-import { getProperTimeString } from '@/utils/utils.js'
+import { addLikes, deleteLikes, getAllComments, addComment, deleteComment, addTweet, deleteTweet } from '@/apis/tweet.js';
+import { getProperTimeString } from '@/utils/utils.js';
+import { ElMessageBox } from 'element-plus';
 
 export default {
   components: { 
@@ -164,6 +172,7 @@ export default {
     this.Eleme = Eleme;
   },
   mounted() {
+    this.ifSelf = this.unifiedId == localStorage.getItem('unifiedId');
     VditorPreview.preview(document.getElementById(`text-area-${this.tweetId}`), this.contents);
     this.likeDom = document.getElementById(`like-icon-${this.tweetId}`);
     if (this.likeState == true) this.likeDom.style.color = '#409eff'; // 已经点赞
@@ -192,6 +201,7 @@ export default {
       myCommentText: '',
       myCommentInputDom: null,
       Eleme: null,
+      ifSelf: false
     }
   },
   methods: {
@@ -232,7 +242,7 @@ export default {
       }
     },
     getCommentList: async function(){
-      this.commentList=[];
+      this.commentList = [];
       const resp = await getAllComments({tweetId:this.tweetId});
       this.commentList = resp.data.data;
       this.commentList.forEach(e => {
@@ -269,7 +279,7 @@ export default {
     },
     getProperTimeString: getProperTimeString,
     deleteComment: async function(item) {
-      const resp=await deleteComment({
+      const resp = await deleteComment({
         unifiedId: localStorage.getItem('unifiedId'),
         tweetId: this.tweetId,
         floor: item.floor
@@ -286,12 +296,30 @@ export default {
 
       let params = new FormData();
       params.append('unifiedId', localStorage.getItem("unifiedId"));
-      params.append('content', `> 转载于: ${this.userName}\n${this.contents}`);
+      params.append('content', `> 转载于: ${this.userName}  \n${this.contents}`);
       params.append('recordTime', trueDate);
 
       const resq = await addTweet(params);
       if (resq.status == 200 && resq.data.code == 'success') this.$message.success('分享成功!');
       else this.$message.error('分享失败!');
+    },
+    deleteThisTweet: async function() {
+      ElMessageBox.confirm(
+        '确认删除?',
+        'Warning',
+        {
+          confirmButtonText: '删除',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).then(async () => {
+        const resp = await deleteTweet(this.tweetId);
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('删除成功!');
+          this.$emit('updateAfterDel');
+        }
+        else this.$message.error('删除失败!');
+      })
     }
   }
 }

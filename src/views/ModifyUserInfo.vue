@@ -211,7 +211,7 @@
       <el-form-item label="学校" prop="college" required>
         <el-autocomplete
           v-model="educationForm.college"
-          :fetch-suggestions="searchCompany"
+          :fetch-suggestions="searchSchool"
           placeholder="例如: 同济大学"
           @select="item => { educationForm.college = item.value }"
         />
@@ -572,6 +572,18 @@ export default {
       let result = [];
       for (let item of dataList) {
         if (item.userType == 'company') {
+          result.push({ value: item.trueName });
+        }
+      }
+      cb(result);
+    },
+
+    searchSchool: async function(queryString, cb) {
+      const resp = await userSearch({ str: queryString });
+      const dataList = resp.data.data;
+      let result = [];
+      for (let item of dataList) {
+        if (item.userType == 'school') {
           result.push({ value: item.trueName });
         }
       }

@@ -103,7 +103,7 @@ export default {
     
     const resp = await getUserInfo(params);
     const userData = resp.data.data;
-    console.log(userData);
+    
     this.user = {
       unifiedId: userData.unifiedId,
       userName: userData.trueName,

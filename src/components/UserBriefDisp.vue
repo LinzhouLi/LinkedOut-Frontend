@@ -51,12 +51,14 @@ export default {
   },
   methods: {
     checkUser: function() {
-      //userType存疑
       if (this.userType == 'user') {
         this.$router.push({ name: 'userinfo', params: { uid: this.unifiedId }});
       }
-      else if(this.userType == 'company') {
+      else if (this.userType == 'company') {
         this.$router.push({ name: 'companyinfo', params: { cid: this.unifiedId }});
+      }
+      else if (this.userType == 'school') {
+        this.$message.warning('暂无学校详细信息!');
       }
     }
   }

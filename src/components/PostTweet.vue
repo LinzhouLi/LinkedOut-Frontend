@@ -116,7 +116,11 @@ export default {
       this.picList.splice(index, 1);
       this.fileList.splice(index, 1);
     },
-    uploadTweet:async function() { // 上传动态
+    uploadTweet: async function() { // 上传动态
+      if (this.tweetText.length == 0) {
+        this.$message.warning('动态内容为空!');
+        return;
+      }
       let date = new Date();
       const trueDate = date.toJSON().split('T')[0]+' '+date.toJSON().split('T')[1].split('Z')[0];
 
@@ -135,6 +139,7 @@ export default {
         this.picList = [];
         this.fileList = [];
         this.tweetText = '';
+        this.$emit('updateTweets');
       }
       else this.$message.error('发布失败!');
     },

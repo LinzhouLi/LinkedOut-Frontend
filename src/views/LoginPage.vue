@@ -42,7 +42,6 @@ import TopNav from '@/components/TopNav';
 import { userLogin, getBasicInfo } from '@/apis/users.js';
 import { LoginRules as Rules } from '@/utils/loginPage';
 
-// import { Search } from '@element/icons-vue'
 export default {
   name: 'login',
   data() {
@@ -55,6 +54,9 @@ export default {
       rules: Rules,
     };
   },
+  created() {
+    localStorage.clear();
+  },
   methods: {
     async login() {
       
@@ -64,7 +66,7 @@ export default {
         password:this.model.password,
       }
       const resp1=await userLogin(params);
-      // console.log(resp1)
+
       if (resp1.status == 200 && resp1.data.code == 'success') {
         this.$message.success('登陆成功!');
         const { unifiedId, userType } = resp1.data.data;

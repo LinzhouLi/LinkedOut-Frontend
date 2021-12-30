@@ -1,6 +1,4 @@
 import { UserInstance as user } from './axios';
-import axios from 'axios';
-import { userBaseUrl } from '@/config.js';
 
 export function getEmailCode(params){
     return user.post('/email',{...params},{params:{
@@ -43,28 +41,12 @@ export function updateEnterpriseInfo(params){
 
 //上传头像
 export function upLoadUserImage(params){
-    return axios({
-        method: 'post',
-        baseURL: userBaseUrl,
-        url: '/pic',
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        data: params,
-    });
+    return user.post('/pic', params);
 }
 
 //上传背景图
 export function upLoadUserBackground(params){
-    return axios({
-        method: 'post',
-        baseURL: userBaseUrl,
-        url: '/back',
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        data: params,
-    });
+    return user.post('/back', params);
 }
 
 // 查找用户
@@ -120,14 +102,6 @@ export function deleteResume(params){
 } 
 
 export function postResume(params){
-    return axios({
-        method: 'post',
-        baseURL: userBaseUrl,
-        url: '/resume',
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        data: params,
-    });
+    return user.post('/resume', params);
 } 
 

@@ -4,7 +4,7 @@ module.exports={
     devServer:{
         proxy:{
             '/user':{
-                target: 'http://175.24.202.178:8001',
+                target: 'http://175.24.202.178:9527',
                 changeOrigin: true,
                 secure: false,
                 ws: true,

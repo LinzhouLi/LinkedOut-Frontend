@@ -2,19 +2,21 @@
   <el-divider/>
   <el-row justify="center">
     <el-image :src="logoUrl" style="width: 21px"></el-image>
-    <div style="font-size:10px">LinkedOut © 2021</div>
+    <div style="font-size:10px">{{ AppTitle }} © 2021</div>
   </el-row>
   <el-row justify="center" style="margin-bottom:20px;">
-    <div id="text-div">同济大学软件工程课程项目</div>
+    <div id="text-div">{{ AppBriefInfo }}</div>
   </el-row>
 </template>
 
 <script>
+import { AppTitle, AppBriefInfo } from '@/config.js';
+
 export default {
   setup() {
     const logoUrl= require('@/assets/logo.png');
     return {
-      logoUrl
+      logoUrl, AppTitle, AppBriefInfo
     }
   }
 }

@@ -110,6 +110,12 @@ export default {
       const resp = await getSelfTweet(params);
 
       const tweetData = resp.data.data;
+      if (tweetData.length == 0) { // 没有动态则加载完毕
+        this.loadAll = true;
+        this.loadingInitialTweets = false;
+        return;
+      }
+      
       for (let item of tweetData) {
         this.tweetList.push({
           tweetId: item.tweetId,

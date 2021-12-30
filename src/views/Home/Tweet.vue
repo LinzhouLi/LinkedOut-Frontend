@@ -1,7 +1,7 @@
 <template>
   <el-container direction="vertical">
     <!-- 用户发布动态区域 -->
-    <post-tweet/>
+    <post-tweet @update-tweets="reloadInitialTweets"/>
     <!-- 分割线 -->
     <el-row style="margin-bottom: -20px;">
       <el-col :offset="1" :span="19">
@@ -33,7 +33,7 @@
       <!-- 加载完成的动态 -->
       <template #default>
         <div v-for="(item,index) in tweetList" :key="index">
-          <tweet-disp style="margin-top:20px" @update-after-del="reloadInitialTweets" v-bind="item" /> 
+          <tweet-disp style="margin-top:20px" @update-tweets="reloadInitialTweets" v-bind="item" /> 
         </div>
       </template>
     </el-skeleton>
@@ -104,6 +104,11 @@ export default {
       const resp = await getOtherTweet(params);
 
       const tweetData = resp.data.data;
+      if (tweetData.length == 0) { // 没有动态则加载完毕
+        this.loadAll = true;
+        this.loadingInitialTweets = false;
+        return;
+      }
       for (let item of tweetData) {
         this.tweetList.push({
           tweetId: item.tweetId,

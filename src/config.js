@@ -1,6 +1,9 @@
-const UserServiceURL = 'http://175.24.202.178:8001/user';
+const UserServiceURL = 'http://175.24.202.178:9527/user';
 const TweetServiceURL = 'http://175.24.202.178:8003/tweet';
 const RecruitmentServiceURL = 'http://175.24.202.178:8005/recruit';
+
+const AppTitle = 'LinkedOut';
+const AppBriefInfo = '同济大学SOA课程项目';
 
 let userBaseUrl, tweetBaseUrl, recruitmentBaseUrl;
 
@@ -15,4 +18,8 @@ else {
     recruitmentBaseUrl = RecruitmentServiceURL;
 }
 
-export { userBaseUrl, tweetBaseUrl, recruitmentBaseUrl, UserServiceURL, TweetServiceURL, RecruitmentServiceURL}
+export {
+    AppTitle, AppBriefInfo,
+    userBaseUrl, tweetBaseUrl, recruitmentBaseUrl, 
+    UserServiceURL, TweetServiceURL, RecruitmentServiceURL
+}

@@ -177,23 +177,16 @@
         />
       </el-form-item>
       
-      <el-form-item label="开始时间" prop="startTime" required>
-        <el-date-picker
-        v-model="workForm.startTime"
-        type="month"
-        placeholder="请选择开始时间"
-        >
-        </el-date-picker>
-      </el-form-item>
-      
-      <el-form-item label="结束时间" prop="endTime" required>
-        <el-date-picker
-        v-model="workForm.endTime"
-        type="month"
-        placeholder="请选择结束时间"
-        >
-        </el-date-picker>
-      </el-form-item>
+      <el-form-item label="起止时间" prop="times" required>
+               <el-date-picker
+              v-model="workForm.times"
+              type="monthrange"
+              range-separator="至"
+               start-placeholder="请选择开始时间"
+                end-placeholder="请选择结束时间"
+                value-format="YYYY年MM月">
+              </el-date-picker>
+              </el-form-item>
         
       <el-form-item label="描述" prop="description">
         <el-input v-model="workForm.description" type="textarea"></el-input>
@@ -230,24 +223,17 @@
         <el-option label="博士" value="博士"></el-option>
         </el-select>
       </el-form-item>
-      
-      <el-form-item label="开始时间" prop="startTime" required>
-        <el-date-picker
-          v-model="educationForm.startTime"
-          type="month"
-          placeholder="请选择开始时间"
-        >
-        </el-date-picker>
-      </el-form-item>
-      
-      <el-form-item label="结束时间" prop="endTime" required>
-        <el-date-picker
-          v-model="educationForm.endTime"
-          type="month"
-          placeholder="请选择结束时间"
-        >
-        </el-date-picker>
-      </el-form-item>
+
+      <el-form-item label="起止时间" prop="times" required>
+               <el-date-picker
+              v-model="educationForm.times"
+              type="monthrange"
+              range-separator="至"
+               start-placeholder="请选择开始时间"
+                end-placeholder="请选择结束时间"
+                value-format="YYYY年MM月">
+              </el-date-picker>
+              </el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="submitEducationForm('educationForm')">提交</el-button>
@@ -333,14 +319,16 @@ export default {
         enterprise: '',
         startTime: '',
         endTime: '',
-        description: ''
+        description: '',
+        times:[],
       },
       educationForm: {
         college: '',
         major: '',
         degree: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        times:[]
       },
 
       workFormRules: {
@@ -352,16 +340,15 @@ export default {
           required: true,
           message: '请输入公司名',
         },
-        startTime: {
-          type: 'date',
-          required: true,
-          message: '请选择开始时间',
-        },
-        endTime: {
-          type: 'date',
-          required: true,
-          message: '请选择结束时间',
-        },
+        times: [
+           {
+             type: 'array',
+             fields: {
+               0: {type: 'string', required: true, message: '请选择起止时间'},
+               1: {type: 'string', required: true, message: '请选择起止时间'}
+             }
+           }
+        ],
       },
       educationFormRules: {
         college: {
@@ -376,16 +363,15 @@ export default {
           required: true,
           message: '请选择学位',
         },
-        startTime: {
-          type: 'date',
-          required: true,
-          message: '请选择开始时间',
-        },
-        endTime: {
-          type: 'date',
-          required: true,
-          message: '请选择结束时间',
-        },
+        times: [
+           {
+             type: 'array',
+             fields: {
+               0: {type: 'string', required: true, message: '请选择起止时间'},
+               1: {type: 'string', required: true, message: '请选择起止时间'}
+             }
+           }
+        ],
       },
     }
   },
@@ -500,8 +486,8 @@ export default {
           this.educationDialogVisible = false;
           const params = {
             unifiedId: localStorage.getItem('unifiedId'),
-            startTime: this.educationForm.startTime,
-            endTime: this.educationForm.endTime,
+            startTime: this.educationForm.times[0],
+            endTime: this.educationForm.times[1],
             collegeName: this.educationForm.college,
             degree: this.educationForm.degree,
             major: this.educationForm.major
@@ -551,8 +537,8 @@ export default {
           this.workDialogVisible = false;
           const params = {
             unifiedId: localStorage.getItem('unifiedId'),
-            startTime: this.workForm.startTime,
-            endTime: this.workForm.endTime,
+            startTime: this.workForm.times[0],
+            endTime: this.workForm.times[1],
             enterpriseName: this.workForm.enterprise,
             positionType: this.workForm.position,
             description: this.workForm.description

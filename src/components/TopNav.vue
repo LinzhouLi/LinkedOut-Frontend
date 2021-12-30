@@ -8,7 +8,7 @@
               <el-image :src="logoUrl" style="width: 40px"></el-image>
             </el-col>
             <el-col :span="12">
-              <div><b>LinkedOut</b></div>
+              <div><b>{{ AppTitle }}</b></div>
             </el-col>
           </el-space>
         </el-col>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { AppTitle } from '@/config.js';
 import { Star, Briefcase, Avatar, Search } from "@element-plus/icons";
 
 export default {
@@ -73,6 +74,7 @@ export default {
       currentMenu: '',
       searchKey: '',
       logoUrl: require('@/assets/logo.png'),
+      AppTitle: AppTitle
     }
   },
   watch: {

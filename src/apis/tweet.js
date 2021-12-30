@@ -1,6 +1,4 @@
 import { TweetInstance as tweet } from './axios';
-import axios from 'axios';
-import { tweetBaseUrl } from '@/config.js';
 
 //关注用户
 export function updateFollow(params){
@@ -62,15 +60,7 @@ export function deleteComment(params){
 
 //发布动态
 export function addTweet(params){
-    return axios({
-        method: 'put',
-        baseURL: tweetBaseUrl,
-        url: '',
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        data: params,
-    });
+    return tweet.put('', params);
 }
 
 export function deleteTweet(tweetId){

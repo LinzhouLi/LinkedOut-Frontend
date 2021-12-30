@@ -49,15 +49,18 @@
     </el-row>
     <!-- 动态评论 -->
     <div v-if="commentState">
-      <el-divider style="margin: 0px;" />
       <div v-for="(item, index) in commentList" :key="`${tweetId}-${index}`">
+        <el-divider style="margin: 0px;" />
         <div style="margin:10px 0px">
           <div class="comment-area">
             <user-brief-disp v-bind="item.user"/>
             <el-button size="mini" type="text" 
-            v-show="item.unifiedId==this.unifiedId" 
-            class="comment-delete-button"
-            @click="deleteComment(item)">删除</el-button>
+              v-show="item.ifSelf" 
+              class="comment-delete-button"
+              @click="deleteComment(item)"
+            >
+              删除
+            </el-button>
           </div>
         <div style="padding-left:30px">{{ item.contents }}</div>
         <div class="comment-time-container">
@@ -65,7 +68,6 @@
         </div>
         </div>
       
-        <el-divider v-if="index!=commentList.length-1" style="margin: 0px 10px 0px 0px;" />
       </div>
       <el-divider style="margin: 0px;" />
       <!-- 用户评论输入区 -->
@@ -209,6 +211,11 @@ export default {
       this.myCommentInputDom.focus();
     },
     uploadMyComment: async function() { // 发表评论
+      if (this.myCommentText.length == 0) {
+        this.$message.warning('评论内容为空!');
+        return;
+      }
+
       const params = {
         unifiedId: localStorage.getItem('unifiedId'),
         tweetId: this.tweetId,
@@ -243,17 +250,25 @@ export default {
     },
     getCommentList: async function(){
       this.commentList = [];
+      const myUnifiedId = localStorage.getItem('unifiedId');
       const resp = await getAllComments({tweetId:this.tweetId});
-      this.commentList = resp.data.data;
-      this.commentList.forEach(e => {
-        e.user = {
-          unifiedId: e.simpleUserInfo.unifiedId,
-          userName: e.simpleUserInfo.trueName,
-          userType: e.simpleUserInfo.userType,
-          userBriefInfo: e.simpleUserInfo.briefInfo,
-          userIconUrl: e.simpleUserInfo.pictureUrl,
-        };
-      });
+      const commentData = resp.data.data;
+
+      for (let item of commentData) {
+        this.commentList.push({
+          user: {
+            unifiedId: item.simpleUserInfo.unifiedId,
+            userName: item.simpleUserInfo.trueName,
+            userType: item.simpleUserInfo.userType,
+            userBriefInfo: item.simpleUserInfo.briefInfo,
+            userIconUrl: item.simpleUserInfo.pictureUrl
+          },
+          contents: item.contents,
+          recordTime: item.recordTime,
+          floor: item.floor,
+          ifSelf: item.simpleUserInfo.unifiedId == myUnifiedId
+        })
+      }
     },
     foldCommentList: async function() { 
       if(this.commentState === false) {
@@ -300,7 +315,10 @@ export default {
       params.append('recordTime', trueDate);
 
       const resq = await addTweet(params);
-      if (resq.status == 200 && resq.data.code == 'success') this.$message.success('分享成功!');
+      if (resq.status == 200 && resq.data.code == 'success') {
+        this.$message.success('分享成功!');
+        this.$emit('updateTweets');
+      }
       else this.$message.error('分享失败!');
     },
     deleteThisTweet: async function() {
@@ -316,7 +334,7 @@ export default {
         const resp = await deleteTweet(this.tweetId);
         if (resp.status == 200 && resp.data.code == 'success') {
           this.$message.success('删除成功!');
-          this.$emit('updateAfterDel');
+          this.$emit('updateTweets');
         }
         else this.$message.error('删除失败!');
       });

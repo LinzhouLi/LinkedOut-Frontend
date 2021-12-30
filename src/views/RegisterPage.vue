@@ -75,12 +75,16 @@ export default {
       rules: Rules,
       loadingCode: false,
       validateCode:'',
-      haveCode: false,
+      haveSentCode: false,
+      storedEmail: '' // 防止用户获取验证码后更改Email
     };
   },
   methods: {
     async register() {
-      if(this.validateCode !== this.model.validateCode){
+      if (
+        this.validateCode !== this.model.validateCode ||
+        this.storedEmail !== this.model.email
+      ){
         this.$message.error('验证码错误，请重新输入'); //验证码错误
         return;
       }
@@ -104,22 +108,26 @@ export default {
 
     },
     async sendCode() {  // 拿到code
-      if (this.haveCode == true) {
+      if (this.haveSentCode == true) {
         this.$message.warning('验证码已发送, 请稍等!');
         return;
       }
+      this.storedEmail = this.model.email;
+      this.haveSentCode = true;
+      setTimeout(() => {
+        this.haveSentCode = false;
+      }, 30000);
 
       this.loadingCode = true;
-      const resp = await getEmailCode({mail:this.model.email});
+      const resp = await getEmailCode({ mail: this.model.email });
       if (resp.status == 200 && resp.data.code == 'success') {
         this.validateCode = resp.data.data;
         this.$message.success('成功发送验证码!');
-        this.haveCode = true;
-        setTimeout(() => {
-          this.haveCode = false;
-        }, 30000);
       }
-      else this.$message.error('发送验证码失败!');
+      else {
+        this.$message.error('发送验证码失败!');
+        this.haveSentCode = false;
+      }
       this.loadingCode = false;
     },
   },

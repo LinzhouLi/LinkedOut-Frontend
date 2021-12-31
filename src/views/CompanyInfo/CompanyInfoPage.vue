@@ -7,7 +7,7 @@
 
         <el-image :src="user.backgroundUrl" style="height:150px; width:100%; margin-bottom:-20px">
           <template #error>
-            <img src="defaultBackground" style="width:100%; height:150px" />
+            <img :src="defaultBackground" style="width:100%; height:150px" />
           </template>
         </el-image>
 

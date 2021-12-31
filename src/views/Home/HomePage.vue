@@ -44,7 +44,7 @@ export default {
     const uid = localStorage.getItem('unifiedId');
     const resp = await getBasicInfo(uid);
     const userData = resp.data.data;
-    
+    console.log(userData)
     this.user = {
       userName: userData.trueName,
       userBriefInfo: userData.briefInfo,

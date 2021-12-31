@@ -17,7 +17,7 @@
             >
               <el-image :src="backgroundUrl" style="height:150px; width:100%; margin-bottom:-50px;">
                 <template #error>
-                  <div style="background:#999; width:100%; height:150px" />
+                  <img :src="defaultBackground" style="width:100%; height:150px" />
                 </template>
               </el-image>
             </el-upload>
@@ -116,6 +116,7 @@ export default {
       userBasicData: { }, // 用户基础信息form
       userIconUrl: '', // 用户头像
       backgroundUrl: '', // 用户背景图片
+      defaultBackground: require('@/assets/background.png')
     }
   },
   methods: {
@@ -167,6 +168,6 @@ export default {
   border-radius: 5px; 
   background:#ffffff;
   position: absolute;
-  z-index: 999;
+  z-index: 10;
 }
 </style>

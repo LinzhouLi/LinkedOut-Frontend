@@ -117,6 +117,9 @@ export default {
 </script>
 
 <style scoped>
+#top-nav-card {
+  z-index: 50;
+}
 #top-nav-card :deep(.el-card__body) {
   padding: 0px;
 }

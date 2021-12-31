@@ -16,7 +16,7 @@
         >
           <el-image :src="backgroundUrl" style="height:150px; width:100%; margin-bottom:-50px;">
             <template #error>
-              <div style="background:#999; width:100%; height:150px" />
+              <img src="defaultBackground" style="width:100%; height:150px" />
             </template>
           </el-image>
         </el-upload>
@@ -313,6 +313,8 @@ export default {
       educationDialogVisible: false,
       workExperienceList:[],
       educationExperienceList:[],
+
+      defaultBackground: require('@/assets/background.png'),
 
       workForm: {
         position: '',

@@ -3,7 +3,7 @@ const TweetServiceURL = '/api/tweet';
 const RecruitmentServiceURL = '/api/recruit';
 
 const AppTitle = 'LinkedOut';
-const AppBriefInfo = '同济大学SOA课程项目';
+const AppBriefInfo = '同济大学软件工程课程项目';
 
 let userBaseUrl, tweetBaseUrl, recruitmentBaseUrl;
 

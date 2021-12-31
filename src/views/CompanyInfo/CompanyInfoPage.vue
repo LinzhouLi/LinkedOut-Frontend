@@ -7,7 +7,7 @@
 
         <el-image :src="user.backgroundUrl" style="height:150px; width:100%; margin-bottom:-20px">
           <template #error>
-            <div style="background:#999; width:100%; height:150px" />
+            <img src="defaultBackground" style="width:100%; height:150px" />
           </template>
         </el-image>
 
@@ -118,7 +118,8 @@ export default {
       currentMenu: '',
       user: { },
       userId: '',
-      isSelf: false
+      isSelf: false,
+      defaultBackground: require('@/assets/background.png')
     }
   },
   watch: {
@@ -164,7 +165,7 @@ export default {
     const resp = await getEnterpriseInfo(params);
 
     const companyData = resp.data.data;
-    console.log(companyData)
+    
     this.user = {
       unifiedId: companyData.unifiedId,
       userName: companyData.trueName,

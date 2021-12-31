@@ -7,7 +7,7 @@
 
         <el-image :src="user.backgroundUrl" style="height:150px; width:100%; margin-bottom:-20px">
           <template #error>
-            <div style="background:#999; width:100%; height:150px" />
+            <img src="defaultBackground" style="width:100%; height:150px" />
           </template>
         </el-image>
 
@@ -120,6 +120,7 @@ export default {
       user: { },
       userId: 0,
       isSelf: false,
+      defaultBackground: require('@/assets/background.png')
     }
   },
   watch: {

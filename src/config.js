@@ -1,6 +1,6 @@
-const UserServiceURL = 'http://175.24.202.178:9527/user';
-const TweetServiceURL = 'http://175.24.202.178:8003/tweet';
-const RecruitmentServiceURL = 'http://175.24.202.178:8005/recruit';
+const UserServiceURL = '/api/user';
+const TweetServiceURL = '/api/tweet';
+const RecruitmentServiceURL = '/api/recruit';
 
 const AppTitle = 'LinkedOut';
 const AppBriefInfo = '同济大学SOA课程项目';

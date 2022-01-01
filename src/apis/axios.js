@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus';
 import { userBaseUrl, tweetBaseUrl, recruitmentBaseUrl } from '@/config.js';
 
 // 用户模块
-const UserInstance = axios.create()
+const UserInstance = axios.create({ withCredentials: true })
 
 UserInstance.interceptors.request.use(config => {
     config.baseURL = userBaseUrl;
@@ -34,7 +34,7 @@ UserInstance.interceptors.response.use(response => {
     return Promise.reject(error);
 })
 
-const TweetInstance = axios.create()
+const TweetInstance = axios.create({ withCredentials: true })
   
 TweetInstance.interceptors.request.use(config => {
     config.baseURL = tweetBaseUrl;
@@ -64,7 +64,7 @@ TweetInstance.interceptors.response.use(response => {
     return Promise.reject(error);
 })
 
-const RecruitInstance = axios.create()
+const RecruitInstance = axios.create({ withCredentials: true })
 
 RecruitInstance.interceptors.request.use(config => {
     config.baseURL = recruitmentBaseUrl;

@@ -59,9 +59,8 @@ export default {
   },
   methods: {
     async login() {
-      
       this.loading = true;
-      const params={
+      const params = {
         userName:this.model.username,
         password:this.model.password,
       }

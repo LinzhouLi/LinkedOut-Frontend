@@ -8,11 +8,8 @@
     <el-container direction="vertical" style="margin:0px 0px 0px 5px" >
     <h1 class="recruitmentTitle">{{recruitmentTitle}}</h1>
     <a class="small-text">{{recruitmentType}}</a>
-    
-    
     </el-container>
   </el-container>
-
 
 </template>
 

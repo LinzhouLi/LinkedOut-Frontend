@@ -26,8 +26,10 @@
       <span style="font-size:18px"><b>职位</b></span>
     </template>
     <el-row>
-      <el-col :span="12" v-for="(recruitment,index) in recruitmentList" :key="index" style="width:50%"> 
-        <recruitment-brief-info v-bind="recruitment"/>
+      <el-col :span="12" v-for="(recruitment,index) in recruitmentList" :key="index" style="width:50%">
+        <div style="padding:5px">
+          <recruitment-brief-info v-bind="recruitment"/>
+        </div>
       </el-col>
     </el-row>
     <el-row justify="start">

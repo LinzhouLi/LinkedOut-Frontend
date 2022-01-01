@@ -8,9 +8,9 @@ const AppBriefInfo = '同济大学软件工程课程项目';
 let userBaseUrl, tweetBaseUrl, recruitmentBaseUrl;
 
 if (process.env.NODE_ENV === "development") {
-    userBaseUrl = '/user';
-    tweetBaseUrl = '/tweet';
-    recruitmentBaseUrl = '/recruit';
+    userBaseUrl = UserServiceURL;
+    tweetBaseUrl = TweetServiceURL;
+    recruitmentBaseUrl = RecruitmentServiceURL;
 }
 else {
     userBaseUrl = UserServiceURL;

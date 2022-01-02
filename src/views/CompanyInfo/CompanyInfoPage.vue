@@ -22,7 +22,7 @@
           </el-col>
           <el-col :span="19">
             <el-row style="margin-top:30px">
-              <el-col :span="20">
+              <el-col :span="19">
 
                 <el-container direction="vertical" style="margin-left:20px">
                   <div id="userName">{{ user.userName }}</div>
@@ -37,7 +37,7 @@
                 </el-container>
 
               </el-col>
-              <el-col :span="3">
+              <el-col :span="5">
 
                 <el-button
                   v-show="!isSelf"
@@ -47,6 +47,16 @@
                 >
                   {{ buttonText(user.ifFollowing) }}
                 </el-button>
+
+                <div @click="showFans = true" class="fans-text">
+                  关注者 &nbsp;
+                  <b>{{ user.fansNum }}</b>
+                </div>
+
+                <div @click="showFollowing = true" class="fans-text">
+                  关注了 &nbsp;
+                  <b>{{ user.followingNum }}</b>
+                </div>
 
               </el-col>
             </el-row>
@@ -86,6 +96,9 @@
     </el-col>
   </el-row>
   <page-footer/>
+
+  <fans-dialog :unifiedId="userId" :visible="showFans" @close="showFans=false" />
+  <following-dialog :unifiedId="userId" :visible="showFollowing" @close="showFollowing=false" />
 </template>
 
 <script>
@@ -97,6 +110,8 @@ import { Connection } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter.vue';
 import { getEnterpriseInfo } from '@/apis/users.js'
 import { updateFollow, deleteFollow } from '@/apis/tweet.js';
+import FansDialog from '@/components/FansDialog.vue';
+import FollowingDialog from '@/components/FollowingDialog.vue';
 
 
 export default {
@@ -106,15 +121,40 @@ export default {
     TopNav,
     UserRecommendCard,
     CompanyInfoCard,
-    PageFooter
+    PageFooter,
+    FollowingDialog,
+    FansDialog
   },
   created() {
     this.currentMenu = this.$route.path;
-    this.userId = this.$route.params['cid']; // 获取页面参数
-    this.isSelf = localStorage.getItem('unifiedId') === this.userId;
+    this.userId = Number(this.$route.params['cid']); // 获取页面参数
+    this.isSelf = localStorage.getItem('unifiedId') == this.userId;
+  },
+  mounted: async function(){
+    const params = {
+      uid: localStorage.getItem('unifiedId'),
+      sid: this.userId,
+    }
+    const resp = await getEnterpriseInfo(params);
+
+    const companyData = resp.data.data;
+    
+    this.user = {
+      unifiedId: companyData.unifiedId,
+      userName: companyData.trueName || '匿名用户',
+      briefInfo: companyData.briefInfo || '',
+      userIconUrl: companyData.pictureUrl,
+      contactWay: companyData.contactWay,
+      ifFollowing: companyData.isSubscribed,
+      backgroundUrl: companyData.background,
+      fansNum: companyData.fansNum,
+      followingNum: companyData.followNum
+    }
   },
   data() {
     return{
+      showFans: false,
+      showFollowing: false,
       currentMenu: '',
       user: { },
       userId: '',
@@ -157,25 +197,6 @@ export default {
       }
     },
   },
-  mounted: async function(){
-    const params = {
-      uid: localStorage.getItem('unifiedId'),
-      sid: this.userId,
-    }
-    const resp = await getEnterpriseInfo(params);
-
-    const companyData = resp.data.data;
-    
-    this.user = {
-      unifiedId: companyData.unifiedId,
-      userName: companyData.trueName,
-      userIconUrl: companyData.pictureUrl,
-      briefInfo: companyData.briefInfo,
-      contactWay: companyData.contactWay,
-      ifFollowing: companyData.isSubscribed,
-      backgroundUrl: companyData.background
-    }
-  }
 }
 </script>
 
@@ -198,5 +219,14 @@ export default {
   padding:5px; 
   border-radius:5px; 
   background:#ffffff;
+}
+.fans-text {
+  margin: 5px 0px 5px 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: rgb(122, 122, 122);
+}
+.fans-text:hover {
+  color: #409eff;
 }
 </style>

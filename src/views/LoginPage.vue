@@ -61,10 +61,10 @@ export default {
     async login() {
       this.loading = true;
       const params = {
-        userName:this.model.username,
-        password:this.model.password,
+        userName: this.model.username,
+        password: this.model.password,
       }
-      const resp1=await userLogin(params);
+      const resp1 = await userLogin(params);
 
       if (resp1.status == 200 && resp1.data.code == 'success') {
         this.$message.success('登陆成功!');

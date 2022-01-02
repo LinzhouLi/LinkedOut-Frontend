@@ -10,11 +10,7 @@ export function deleteFollow(params){
     return tweet.delete('/subscription',{params})
 }
 
-export function getFollow(params){
-    return tweet.get('/subscription',{params})
-}
-
-export function getAllFollow(uid){
+export function getAllSubscriptionList(uid){
     return tweet.get('/subscriptionList/' + uid)
 }
 
@@ -63,6 +59,17 @@ export function addTweet(params){
     return tweet.put('', params);
 }
 
+// 删除动态
 export function deleteTweet(tweetId){
     return tweet.delete('/' + tweetId)
+}
+
+// 获取粉丝列表
+export function getFansList(uid) {
+    return tweet.get('/fans/' + uid)
+}
+
+// 获取关注列表
+export function getFollowingList(uid) {
+    return tweet.get('/follow/' + uid)
 }

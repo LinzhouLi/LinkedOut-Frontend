@@ -22,7 +22,7 @@
           </el-col>
           <el-col :span="19">
             <el-row style="margin-top:30px">
-              <el-col :span="20">
+              <el-col :span="19">
 
                 <el-container direction="vertical" style="margin-left:20px">
                   <div id="userName">{{ user.userName }}</div>
@@ -31,7 +31,7 @@
                 </el-container>
 
               </el-col>
-              <el-col :span="3">
+              <el-col :span="5">
 
                 <el-button
                   v-show="!isSelf"
@@ -41,6 +41,16 @@
                 >
                   {{ buttonText(user.ifFollowing) }}
                 </el-button>
+
+                <div @click="showFans = true" class="fans-text">
+                  关注者 &nbsp;
+                  <b>{{ user.fansNum }}</b>
+                </div>
+
+                <div @click="showFollowing = true" class="fans-text">
+                  关注了 &nbsp;
+                  <b>{{ user.followingNum }}</b>
+                </div>
 
               </el-col>
             </el-row>
@@ -73,27 +83,34 @@
     </el-col>
   </el-row>
   <page-footer />
+
+  <fans-dialog :unifiedId="userId" :visible="showFans" @close="showFans=false" />
+  <following-dialog :unifiedId="userId" :visible="showFollowing" @close="showFollowing=false" />
 </template>
 
 <script>
 import TopNav from '@/components/TopNav';
 import UserIcon from '@/components/UserIcon';
 import UserRecommendCard from '@/components/UserRecommendCard';
-import PageFooter from '../../components/PageFooter.vue';
+import PageFooter from '@/components/PageFooter.vue';
 import {getUserInfo} from '@/apis/users.js';
 import {updateFollow,deleteFollow} from '@/apis/tweet.js';
+import FansDialog from '@/components/FansDialog.vue';
+import FollowingDialog from '@/components/FollowingDialog.vue';
 
 export default {
   components: {
     TopNav,
     UserIcon,
     UserRecommendCard,
-    PageFooter
+    PageFooter,
+    FollowingDialog,
+    FansDialog
   },
   created: async function() {
     this.currentMenu = this.$route.path;
-    this.userId = this.$route.params['uid']; // 获取页面参数
-    this.isSelf = localStorage.getItem('unifiedId') === this.userId;
+    this.userId = Number(this.$route.params['uid']); // 获取页面参数
+    this.isSelf = localStorage.getItem('unifiedId') == this.userId;
   },
   mounted: async function() {
     const params = {
@@ -106,16 +123,20 @@ export default {
     
     this.user = {
       unifiedId: userData.unifiedId,
-      userName: userData.trueName,
-      briefInfo: userData.briefInfo,
+      userName: userData.trueName || '匿名用户',
+      briefInfo: userData.briefInfo || '',
       livePlace: userData.livePlace,
       ifFollowing: userData.isSubscribed,
       userIconUrl: userData.pictureUrl,
-      backgroundUrl: userData.background
+      backgroundUrl: userData.background,
+      fansNum: userData.fansNum,
+      followingNum: userData.followNum
     }
   },
   data() {
     return{
+      showFans: false,
+      showFollowing: false,
       currentMenu: '',
       user: { },
       userId: 0,
@@ -157,7 +178,7 @@ export default {
         else this.$message.error('关注失败!');
       }
     },
-  },
+  }
 }
 </script>
 
@@ -189,5 +210,14 @@ export default {
   padding:5px; 
   border-radius:5px; 
   background:#ffffff;
+}
+.fans-text {
+  margin: 5px 0px 5px 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: rgb(122, 122, 122);
+}
+.fans-text:hover {
+  color: #409eff;
 }
 </style>

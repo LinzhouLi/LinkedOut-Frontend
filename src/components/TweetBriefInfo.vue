@@ -2,7 +2,7 @@
 <!--显示动态的第一张图片（如果有）-->
   <el-container direction="horizontal" style="height:50px;" >
     <div v-if="havePicture">
-      <el-image :src="tweetPics[0]" style="width:50px; height:50px;" fit="cover"/>
+      <el-image :src="tweetPics[0].pictureUrl" style="width:50px; height:50px;" fit="cover"/>
     </div>
     <el-container direction="vertical" style="margin:0px 0px 0px 5px">
       <span class="tweetText">{{ contents }}</span>
@@ -12,7 +12,7 @@
     </el-container>
   </el-container>
   <div style="margin: 10px 25px 10px 0px">
-  <el-divider style="margin: 0px"/>
+    <el-divider style="margin: 0px"/>
   </div>
 </template>
 

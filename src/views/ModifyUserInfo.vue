@@ -112,7 +112,7 @@
               <education-experience :modifiable="false" v-bind="item"/> 
             </el-col>
             <el-col :span="2">
-              <el-button type="text" @click="deleteEduExp(item.numId)">删除</el-button>
+              <el-button type="text" @click="deleteEduExp(item.educationExperienceId)">删除</el-button>
             </el-col>
           </el-row>
           <el-divider v-if="index!=educationExperienceList.length-1"/>
@@ -138,7 +138,7 @@
               <work-experience :modifiable="false" v-bind="item"/>
             </el-col>
             <el-col :span="2">
-              <el-button type="text" @click="deleteWorkExp(item.numId)">删除</el-button>
+              <el-button type="text" @click="deleteWorkExp(item.workExperienceId)">删除</el-button>
             </el-col>
           </el-row> 
           <el-divider v-if="index!=workExperienceList.length-1"/>
@@ -575,6 +575,7 @@ export default {
     },
 
     searchSchool: async function(queryString, cb) {
+      console.log(queryString)
       const resp = await userSearch({ str: queryString });
       const dataList = resp.data.data;
       let result = [];

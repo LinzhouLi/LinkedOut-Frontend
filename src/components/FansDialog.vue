@@ -2,7 +2,7 @@
   <el-dialog
     custom-class="fans-dialog"
     v-model="visible" 
-    width="35%"
+    :width="dialogWidth('35%')"
     :center="true" 
     :before-close="closeDialog"
     title="关注者列表"
@@ -17,6 +17,7 @@
 
 <script>
 import { getFansList } from '@/apis/tweet.js';
+import { dialogWidth } from '@/utils/utils.js';
 
 import UserBriefDisp from './UserBriefDisp.vue'
 export default {
@@ -52,6 +53,7 @@ export default {
     }
   },
   methods: {
+    dialogWidth: dialogWidth,
     closeDialog: function(done) {
       this.$emit('close');
       done();

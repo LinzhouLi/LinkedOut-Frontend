@@ -12,7 +12,7 @@
         </el-image>
 
         <el-row style="padding:0px 20px 20px">
-          <el-col :span="5">
+          <el-col :sm="5" :xs="8">
             <div class="icon-area">
               <user-icon 
                 :size="120" 
@@ -20,9 +20,9 @@
               />
             </div>
           </el-col>
-          <el-col :span="19">
+          <el-col :sm="19" :xs="16">
             <el-row style="margin-top:30px">
-              <el-col :span="19">
+              <el-col :sm="19" :xs="15">
 
                 <el-container direction="vertical" style="margin-left:20px">
                   <div id="userName">{{ user.userName }}</div>
@@ -31,7 +31,7 @@
                 </el-container>
 
               </el-col>
-              <el-col :span="5">
+              <el-col :sm="5" :xs="{ offset: 1, span: 8 }">
 
                 <el-button
                   v-show="!isSelf"

@@ -80,7 +80,7 @@
   <!-- fullMap弹出窗口 -->
   <el-dialog
     v-model="ifShowFullMap"
-    width="60%"
+    :width="dialogWidth('60%')"
     custom-class="map-dialog"
     :before-close="fullMapClose"
     destroy-on-close
@@ -108,6 +108,7 @@ import PageFooter from '@/components/PageFooter';
 import { getPositionDetails, getAllApplicants, postPositionApplication } from '@/apis/recruit.js';
 import { getBasicInfo, getResume } from '@/apis/users.js';
 import { ElMessageBox } from 'element-plus';
+import { dialogWidth } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -235,6 +236,7 @@ export default {
     }
   },
   methods: {
+    dialogWidth: dialogWidth,
     openUrl: function(url) {
       window.open(url, "_blank");
     },

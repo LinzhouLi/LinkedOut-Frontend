@@ -3,7 +3,7 @@
     custom-class="following-dialog"
     v-model="visible" 
     :center="true" 
-    width="35%"
+    :width="dialogWidth('35%')"
     :before-close="closeDialog"
     title="关注列表"
   >
@@ -17,6 +17,7 @@
 
 <script>
 import { getFollowingList } from '@/apis/tweet.js';
+import { dialogWidth } from '@/utils/utils.js';
 
 import UserBriefDisp from './UserBriefDisp.vue'
 export default {
@@ -52,6 +53,7 @@ export default {
     }
   },
   methods: {
+    dialogWidth: dialogWidth,
     closeDialog: function(done) {
       this.$emit('close');
       done();

@@ -1,6 +1,6 @@
 <template>
-  <el-row>
-    <el-col :offset="2" :span="20">
+  <el-row justify="center">
+    <el-col :sm="20" :xs="24">
       <!-- 分割线 -->
       <el-row>
         <el-col :offset="1" :span="19">

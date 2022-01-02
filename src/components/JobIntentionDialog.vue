@@ -3,6 +3,7 @@
     custom-class="job-dialog"
     v-model="visible" 
     :center="true" 
+    :width="dialogWidth('582px')"
     :before-close="closeDialog"
     title="选择求职意向"
   >
@@ -25,7 +26,9 @@
 
 <script>
 import _ from "lodash";
-import {updateUserInfo} from '@/apis/users.js'
+import {updateUserInfo} from '@/apis/users.js';
+import { dialogWidth } from '@/utils/utils.js';
+
 export default {
   props: {
     visible: {
@@ -43,6 +46,7 @@ export default {
     }
   },
   methods: {
+    dialogWidth: dialogWidth,
     closeDialog: function(done) {
       this.$emit('close');
       done();
@@ -81,7 +85,6 @@ export default {
   height: 260px;
 }
 .job-dialog {
-  width: 582px;
   --el-dialog-padding-primary: 20px;
 }
 .job-dialog .el-dialog__body {

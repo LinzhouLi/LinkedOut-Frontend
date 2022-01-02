@@ -33,8 +33,7 @@
           </div>
         </el-upload>
         <!-- 基本信息 -->
-        <el-divider/>
-        <div style="margin-left: 170px; padding: 20px">
+        <div class="basic-info">
           <el-form ref="form" :model="userBasicData" label-position="left" label-width="80px" size="small">
             <el-form-item label="姓名">
               <el-input style="width:150px" v-model="userBasicData.trueName"></el-input>
@@ -603,5 +602,18 @@ export default {
   background:#ffffff;
   position: absolute;
   z-index: 10;
+}
+@media only screen and (min-width: 769px){
+  .basic-info {
+    margin-top: 30px;
+    margin-left: 170px; 
+    padding: 20px
+  }
+}
+@media only screen and (max-width: 768px){
+  .basic-info {
+    margin-top: 120px;
+    padding: 20px
+  }
 }
 </style>

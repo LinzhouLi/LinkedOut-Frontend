@@ -1,22 +1,20 @@
 <template>
   <el-container direction="horizontal">
-    <el-col :span="2">
-      <user-icon :url="picUrl" :size="50" />
-    </el-col>
-    <el-container direction="vertical" style="margin:0px 0px 0px 20px">
+    <user-icon :url="picUrl" :size="50" />
+    <el-container direction="vertical" style="margin:0px 0px 20px 10px">
       <el-row>
         <el-col :span="20">
-          <h1 style="font-size:16px; margin:0px 0px 5px 0px">{{ enterprise }}</h1>
+          <div style="font-size:16px; margin-bottom:5px"><b>{{ enterprise }}</b></div>
         </el-col>
         <el-col :span="4">
           <el-button @click="dialogVisible=true" type="mini" v-if="modifiable">修改</el-button>
         </el-col>
       </el-row>
   
-      <p style="font-size:15px; margin:0px 0px 5px 0px">{{ position }}</p>
-      <p style="font-size:12px; color:rgb(122,122,122); margin:0px 0px 5px 0px">{{startTime}}-{{endTime}}</p>
+      <div style="font-size:15px; margin-bottom:5px">{{ position }}</div>
+      <div style="font-size:12px; color:rgb(122,122,122); margin-bottom:5px">{{startTime}}-{{endTime}}</div>
   
-      <div style="font-size:13px">{{ description }}</div>
+      <div style="font-size:13px;">{{ description }}</div>
     
     </el-container>
   </el-container>
@@ -174,5 +172,7 @@ export default {
 </script>
 
 <style>
-
+.el-divider {
+  margin: 10px 0px;
+}
 </style>

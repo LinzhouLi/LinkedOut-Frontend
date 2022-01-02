@@ -1,7 +1,7 @@
 <template>
   <top-nav/>
   <el-row justify="center" style="margin-top:20px">
-    <el-col :span="15">
+    <el-col :sm="15" :xs="24">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <!-- 职位基础信息 -->
         <el-card>

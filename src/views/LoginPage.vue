@@ -41,6 +41,7 @@
 import TopNav from '@/components/TopNav';
 import { userLogin, getBasicInfo } from '@/apis/users.js';
 import { LoginRules as Rules } from '@/utils/loginPage';
+import { delCookie } from '@/utils/cookie.js';
 
 export default {
   name: 'login',
@@ -55,6 +56,7 @@ export default {
     };
   },
   created() {
+    delCookie('token');
     localStorage.clear();
   },
   methods: {

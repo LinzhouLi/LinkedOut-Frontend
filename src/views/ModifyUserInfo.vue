@@ -1,7 +1,7 @@
 <template>
   <top-nav/>
   <el-row justify="center" style="margin-top:20px">
-    <el-col :span="13">
+    <el-col :sm="13" :xs="24">
       <!-- 个人信息卡片-->
       <el-card style="margin-bottom:20px" :body-style="{ padding: 0 }" >
         <!-- 上传背景图 -->

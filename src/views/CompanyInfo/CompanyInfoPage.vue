@@ -1,7 +1,7 @@
 <template>
   <top-nav/>
   <el-row style="margin-top:20px">
-    <el-col :offset="3" :span="12" style="margin-right:20px">
+    <el-col :sm="{ offset: 3, span: 12 }" style="margin-right:20px">
       <!-- 公司信息卡片-->
       <el-card :body-style="{ padding: 0 }">
 
@@ -91,7 +91,7 @@
     
     </el-col>
     <!-- 页面左部 -->
-    <el-col :span="5">
+    <el-col :sm="5" :xs="0">
       <user-recommend-card :ifFooter="false" />
     </el-col>
   </el-row>

@@ -1,7 +1,7 @@
 <template>
   <top-nav/>
   <el-row justify="center" style="margin-top:20px">
-    <el-col :span="13">
+    <el-col :sm="13" :xs="24">
       <el-form ref="form" :model="userBasicData" label-width="90px" size="small">
         <!-- 公司信息卡片-->
         <el-card style="margin-bottom:20px" :body-style="{ padding: 0 }">

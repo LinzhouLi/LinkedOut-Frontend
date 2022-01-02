@@ -2,7 +2,7 @@
   <top-nav/>
   <el-row style="margin-top:20px">
     <!-- 页面右部主体部分 -->
-    <el-col :offset="3" :span="12" style="margin-right:20px">
+    <el-col :sm="{ offset: 3, span: 12 }" :xs="24" style="margin-right:20px">
       <!-- 招聘名称卡片 -->
       <el-card>
         <user-brief-disp v-bind="companyUser" />
@@ -71,7 +71,7 @@
       </el-card>
     </el-col>
     <!-- 页面左部 -->
-    <el-col :span="5">
+    <el-col :sm="5" :xs="0">
       <user-recommend-card :ifFooter="false" />
     </el-col>
   </el-row>

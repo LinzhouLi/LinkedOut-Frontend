@@ -2,7 +2,7 @@
   <el-affix>
     <el-card id="top-nav-card" shadow="always" style="border-radius: 0px;">
       <el-row>
-        <el-col class="nav-text-area" :offset="2" :span="3" @click="$router.push('/home')">
+        <el-col class="nav-text-area" :sm="{ offset: 2, span: 3 }" :xs="{ offset: 1, span: 8 }" @click="$router.push('/home')">
           <el-space>
             <el-col :span="12">
               <el-image :src="logoUrl" style="width: 40px"></el-image>
@@ -12,7 +12,7 @@
             </el-col>
           </el-space>
         </el-col>
-        <el-col class="nav-text-area" :offset="4" :span="6">
+        <el-col class="nav-text-area" :sm="{ offset: 4, span: 6 }" :xs="{ offset: 1, span: 11 }">
           <el-input
             ref="searchInput"
             v-model="searchKey"
@@ -25,10 +25,10 @@
             </template>
           </el-input>
         </el-col>
-        <el-col :offset="1" :span="5">
+        <el-col :sm="{ offset: 1, span: 8 }" :xs="{ span: 3 }">
           <el-menu
             :default-active="currentMenu"
-            :ellipsis="false"
+            
             mode="horizontal"
             @select="gotoPath"
           >
@@ -47,8 +47,6 @@
               <el-menu-item index="logout">注销</el-menu-item>
             </el-sub-menu>
           </el-menu>
-        </el-col>
-        <el-col :span="2">
         </el-col>
       </el-row>
     </el-card>

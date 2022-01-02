@@ -23,6 +23,9 @@
           </el-col>
         </el-row>
     </div>
+    <div class="recruitment-time">
+      发布于{{ getProperTimeString(recordTime) }}
+    </div>
   </el-card>
 </template>
 
@@ -30,6 +33,7 @@
 import UserBriefDisp from './UserBriefDisp';
 import { deletePosition } from '@/apis/recruit.js';
 import { ElMessageBox } from 'element-plus';
+import { getProperTimeString } from '@/utils/utils.js';
 
 export default {
   components: {
@@ -71,6 +75,10 @@ export default {
     salary: {
       type: String,
       required: true
+    },
+    recordTime: {
+      type: String,
+      required: true
     }
   },
   computed: {
@@ -93,6 +101,7 @@ export default {
     this.ifSelf = this.unifiedId == localStorage.getItem('unifiedId');
   },
   methods: {
+    getProperTimeString: getProperTimeString,
     checkRecruitment: function() {
       this.$router.push({ name: 'recruitment', params: { rid: this.recruitmentId }});
     },
@@ -141,5 +150,10 @@ export default {
   color: rgb(73 120 206);
   float: right;
   font-size: 20px;
+}
+.recruitment-time {
+  margin: 5px 10px;
+  font-size: 12px;
+  color: rgba(0,0,0,0.4);
 }
 </style>

@@ -32,8 +32,17 @@
       </template>
       <!-- 加载完成的动态 -->
       <template #default>
-        <div v-for="(item,index) in tweetList" :key="index">
-          <tweet-disp style="margin-top:20px" @update-tweets="reloadInitialTweets" v-bind="item" /> 
+        <div v-for="(item,index) in tweetList" :key="index" style="margin-top:20px" >
+          <tweet-disp 
+            v-if="item.type=='tweet'"
+            @update-tweets="reloadInitialTweets" 
+            v-bind="item" 
+          /> 
+          <recruitment-disp 
+            v-if="item.type=='position'" 
+            @update-after-del="reloadInitialTweets"
+            v-bind="item" 
+          />
         </div>
       </template>
     </el-skeleton>
@@ -62,14 +71,16 @@ import 'emoji-picker-element';
 import TweetDisp from '@/components/TweetDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';
-import {getOtherTweet} from '@/apis/tweet.js'
+import { getOtherTweet } from '@/apis/tweet.js';
+import RecruitmentDisp from '@/components/RecruitmentDisp';
 
 export default {
   components: {
     TweetDisp,
     PostTweet,
     Loading,
-    RefreshRight
+    RefreshRight,
+    RecruitmentDisp
   },
   created() {
     this.reloadInitialTweets();
@@ -110,43 +121,9 @@ export default {
         return;
       }
       for (let item of tweetData) {
-        this.tweetList.push({
-          tweetId: item.tweetId,
-          unifiedId: item.simpleUserInfo.unifiedId,
-          userName: item.simpleUserInfo.trueName,
-          userType: item.simpleUserInfo.userType,
-          userIconUrl: item.simpleUserInfo.pictureUrl,
-          userBriefInfo: item.simpleUserInfo.briefInfo,
-          praiseNum: item.praiseNum,
-          likeState: item.likeState == 0 ? false : true,
-          commentNum: item.commentNum,
-          contents: item.contents,
-          pictureList: item.pictureList,
-          recordTime: item.recordTime
-        });
-      }
-
-      this.loadingInitialTweets = false;
-    },
-    loadMoreTweets:async function() { // 加载更多动态
-      this.loadingMoreTweets = true; // 开始加载
-
-      const params = { 
-        unifiedId: localStorage.getItem("unifiedId"),
-        momentId: this.tweetList[this.tweetList.length-1].tweetId
-      }
-      const resp = await getOtherTweet(params);
-      const tweetData = resp.data.data;
-
-      if (tweetData.length === 0) { // 没有动态则加载完毕
-        this.loadAll = true;
-        this.loadingMoreTweets = false;
-        return;
-      }
-
-      if (tweetData.length > 0) {
-        for (let item of tweetData) {
+        if (item.type == 'tweet') {
           this.tweetList.push({
+            type: 'tweet',
             tweetId: item.tweetId,
             unifiedId: item.simpleUserInfo.unifiedId,
             userName: item.simpleUserInfo.trueName,
@@ -160,6 +137,77 @@ export default {
             pictureList: item.pictureList,
             recordTime: item.recordTime
           });
+        }
+        else if (item.type == 'position') {
+          this.tweetList.push({
+            type: 'position',
+            recruitmentId: item.jobId,
+            unifiedId: item.simpleUserInfo.unifiedId,
+            userName: item.simpleUserInfo.trueName,
+            userType: item.simpleUserInfo.userType,
+            userIconUrl: item.simpleUserInfo.pictureUrl,
+            userBriefInfo: item.simpleUserInfo.briefInfo,
+            recruitmentTitle: item.jobName,
+            recruitmentType: item.positionType,
+            salary: item.reward,
+            recordTime: item.recordTime
+          });
+        }
+      }
+
+      this.loadingInitialTweets = false;
+    },
+    loadMoreTweets:async function() { // 加载更多动态
+      this.loadingMoreTweets = true; // 开始加载
+
+      const params = { 
+        unifiedId: localStorage.getItem("unifiedId"),
+        momentId: this.tweetList[this.tweetList.length-1].tweetId,
+        type: this.tweetList[this.tweetList.length-1].type
+      }
+      const resp = await getOtherTweet(params);
+      const tweetData = resp.data.data;
+
+      if (tweetData.length === 0) { // 没有动态则加载完毕
+        this.loadAll = true;
+        this.loadingMoreTweets = false;
+        return;
+      }
+
+      if (tweetData.length > 0) {
+        for (let item of tweetData) {
+          if (item.type == 'tweet') {
+            this.tweetList.push({
+              type: 'tweet',
+              tweetId: item.tweetId,
+              unifiedId: item.simpleUserInfo.unifiedId,
+              userName: item.simpleUserInfo.trueName,
+              userType: item.simpleUserInfo.userType,
+              userIconUrl: item.simpleUserInfo.pictureUrl,
+              userBriefInfo: item.simpleUserInfo.briefInfo,
+              praiseNum: item.praiseNum,
+              likeState: item.likeState == 0 ? false : true,
+              commentNum: item.commentNum,
+              contents: item.contents,
+              pictureList: item.pictureList,
+              recordTime: item.recordTime
+            });
+          }
+          else if (item.type == 'position') {
+            this.tweetList.push({
+              type: 'position',
+              recruitmentId: item.jobId,
+              unifiedId: item.simpleUserInfo.unifiedId,
+              userName: item.simpleUserInfo.trueName,
+              userType: item.simpleUserInfo.userType,
+              userIconUrl: item.simpleUserInfo.pictureUrl,
+              userBriefInfo: item.simpleUserInfo.briefInfo,
+              recruitmentTitle: item.jobName,
+              recruitmentType: item.positionType,
+              salary: item.reward,
+              recordTime: item.recordTime
+            });
+          }
         }
       }
       

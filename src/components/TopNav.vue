@@ -34,7 +34,7 @@
           >
             <el-menu-item index="/home/tweets">
               <el-icon><star /></el-icon>
-              动态
+              关注
             </el-menu-item>
             <el-menu-item index="/home/recruitments">
               <el-icon><briefcase /></el-icon>

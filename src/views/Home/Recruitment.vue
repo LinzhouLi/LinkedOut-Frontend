@@ -56,7 +56,7 @@
 <script>
 import RecruitmentDisp from '@/components/RecruitmentDisp';
 import { Loading, RefreshRight } from '@element-plus/icons';
-import {getRecommendPositions} from '@/apis/recruit.js';
+import { getRecommendPositions } from '@/apis/recruit.js';
 
 export default {
   components: {
@@ -108,6 +108,7 @@ export default {
           recruitmentTitle: item.jobName,
           recruitmentType: item.positionType,
           salary: item.reward,
+          recordTime: item.recordTime
         });
       }
       this.loadingInitialRecruitments = false; // 加载结束
@@ -139,6 +140,7 @@ export default {
           recruitmentTitle: item.jobName,
           recruitmentType: item.positionType,
           salary: item.reward,
+          recordTime: item.recordTime
         })
       }
 

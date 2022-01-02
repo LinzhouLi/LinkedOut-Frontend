@@ -21,7 +21,11 @@ const RegisterRules= {
     ],
     email: [
       { required: true, message: '请输入邮箱', trigger: 'blur'},
-      {pattern:/^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,message:'邮箱格式错误',trigger:'blur'}
+      { 
+        pattern:/^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+        message:'邮箱格式错误',
+        trigger:'blur'
+      }
     ],
     validateCode: [
       { required: true, message: '请输入验证码', trigger: 'blur' },

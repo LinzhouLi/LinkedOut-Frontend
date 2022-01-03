@@ -51,7 +51,7 @@
         <!-- 公司介绍 -->
         <el-card style="margin-top: 20px">
           <template #header>
-            <span><b>职位详情</b></span>
+            <span><b>公司介绍</b></span>
             <span style="margin-left:10px; font-size:10px; color: rgb(122 122 122);">
               (支持markdown语法编辑)
             </span>

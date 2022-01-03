@@ -1,4 +1,4 @@
-# linkout_front
+# LinkedOut-Frontend
 
 ## Project setup
 ```

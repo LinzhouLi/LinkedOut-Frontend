@@ -73,6 +73,7 @@ import { Loading, RefreshRight } from '@element-plus/icons';
 import PostTweet from '@/components/PostTweet';
 import { getOtherTweet } from '@/apis/tweet.js';
 import RecruitmentDisp from '@/components/RecruitmentDisp';
+import { computed } from 'vue-demi';
 
 export default {
   components: {
@@ -113,7 +114,7 @@ export default {
 
       const params= { unifiedId: localStorage.getItem("unifiedId")}
       const resp = await getOtherTweet(params);
-
+      
       const tweetData = resp.data.data;
       if (tweetData.length == 0) { // 没有动态则加载完毕
         this.loadAll = true;
@@ -159,11 +160,11 @@ export default {
     },
     loadMoreTweets:async function() { // 加载更多动态
       this.loadingMoreTweets = true; // 开始加载
-
+      const lastTweet = this.tweetList[this.tweetList.length-1];
       const params = { 
         unifiedId: localStorage.getItem("unifiedId"),
-        momentId: this.tweetList[this.tweetList.length-1].tweetId,
-        type: this.tweetList[this.tweetList.length-1].type
+        momentId: lastTweet.type == 'tweet' ? lastTweet.tweetId : lastTweet.recruitmentId,
+        type: lastTweet.type
       }
       const resp = await getOtherTweet(params);
       const tweetData = resp.data.data;

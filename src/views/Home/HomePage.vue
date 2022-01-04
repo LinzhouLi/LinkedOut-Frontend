@@ -1,13 +1,19 @@
 <template>
   <top-nav/>
   <el-row style="margin-top:20px">
-    <el-col :sm="{ offset: 3, span: 4 }" :xs="{ span: 0 }">
+    <el-col 
+      :xs="0"
+      :sm="6" 
+      :md="{ offset: 1, span: 5 }" 
+      :lg="{ offset: 3, span: 4 }" 
+      style="padding-left:20px"
+    >
       <user-info-card v-bind="user"/>
     </el-col>
-    <el-col :sm="{ span: 9 }" :xs="{ span: 24 }" style="padding:0px 20px">
+    <el-col :xs="24" :sm="11" :md="11" :lg="9" style="padding:0px 20px">
       <router-view :key="$route.query" />
     </el-col>
-    <el-col :sm="{ span: 5 }" :xs="{ span: 0 }">
+    <el-col :xs="0" :sm="7" :md="6" :lg="5" style="padding-right:20px">
       <user-recommend-card :ifFooter="!footerDisp" />
     </el-col>
   </el-row>

@@ -4,8 +4,7 @@ const getProperTimeString = (str) => {
 
 const dialogWidth = (str) => {
     let val = document.body.clientWidth;
-    const def = 768; // xs
-    if (val < def) {
+    if (val < 768) { // xs
       return '98%'
     } else {
       return str;

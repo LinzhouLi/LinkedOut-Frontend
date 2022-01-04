@@ -1,7 +1,7 @@
 <template>
   <top-nav/>
   <el-row justify="center" style="margin-top:20px">
-    <el-col :sm="13" :xs="24">
+    <el-col :xs="24" :sm="19" :md="15" :lg="13"  style="padding: 0px 20px">
       <el-form ref="form" :model="userBasicData" label-width="90px" size="small">
         <!-- 公司信息卡片-->
         <el-card style="margin-bottom:20px" :body-style="{ padding: 0 }">
@@ -35,12 +35,12 @@
             </el-upload>
           <!-- 基本信息 -->
           <el-divider/>
-          <div style="margin-left: 170px; padding: 20px">
+          <div class="basic-info">
             <el-form-item label="公司名称">
               <el-input style="width:150px" v-model="userBasicData.trueName"></el-input>
             </el-form-item>
             <el-form-item label="所属行业">
-              <el-input style="width:300px" v-model="userBasicData.briefInfo"></el-input>
+              <el-input style="width:270px" v-model="userBasicData.briefInfo"></el-input>
             </el-form-item>
             <el-form-item label="官方网站">
               <el-input style="width:200px" v-model="userBasicData.contactWay"></el-input>
@@ -169,5 +169,18 @@ export default {
   background:#ffffff;
   position: absolute;
   z-index: 10;
+}
+@media only screen and (min-width: 993px){
+  .basic-info {
+    margin-top: 30px;
+    margin-left: 170px; 
+    padding: 20px
+  }
+}
+@media only screen and (max-width: 992px){
+  .basic-info {
+    margin-top: 120px;
+    padding: 20px
+  }
 }
 </style>

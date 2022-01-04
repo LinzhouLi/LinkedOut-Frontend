@@ -112,6 +112,7 @@ export default {
           recruitmentTitle: item.jobName,
           recruitmentType: item.positionType,
           salary: item.reward,
+          recordTime: item.recordTime
         });
       }
       this.loadingInitialRecruitments = false; // 加载结束

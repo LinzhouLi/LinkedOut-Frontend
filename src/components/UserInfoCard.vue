@@ -89,8 +89,7 @@ export default {
       this.$router.push({ path: '/postRecruitment' });
     },
     postTweet: function() {
-      //TODO
-      console.log("postTweet");
+      window.scrollTo(0, 0);
     }
   }
 }

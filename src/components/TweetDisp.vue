@@ -213,7 +213,7 @@ export default {
       this.myCommentInputDom.focus();
     },
     uploadMyComment: async function() { // 发表评论
-      if (this.myCommentText.length == 0) {
+      if (this.myCommentText.match(/^\s*$/)) { // 匹配空格/空/换行
         this.$message.warning('评论内容为空!');
         return;
       }

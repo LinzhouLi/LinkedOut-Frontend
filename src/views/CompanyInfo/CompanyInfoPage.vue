@@ -136,9 +136,9 @@ export default {
       sid: this.userId,
     }
     const resp = await getEnterpriseInfo(params);
-
-    const companyData = resp.data.data;
     
+    const companyData = resp.data.data;
+
     this.user = {
       unifiedId: companyData.unifiedId,
       userName: companyData.trueName || '匿名用户',

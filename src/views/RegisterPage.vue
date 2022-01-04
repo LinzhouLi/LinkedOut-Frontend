@@ -81,11 +81,17 @@ export default {
   },
   methods: {
     async register() {
+      const reg = /(^\s+)|(\s+$)|\s+/g;
+      if (reg.test(this.model.username)) {
+        this.$message.warning('用户名不能包含空格，请重新输入'); //验证码错误
+        return;
+      }
+
       if (
         this.validateCode !== this.model.validateCode ||
         this.storedEmail !== this.model.email
       ){
-        this.$message.error('验证码错误，请重新输入'); //验证码错误
+        this.$message.warning('验证码错误，请重新输入'); //验证码错误
         return;
       }
       

@@ -117,7 +117,7 @@ export default {
       this.fileList.splice(index, 1);
     },
     uploadTweet: async function() { // 上传动态
-      if (this.tweetText.length == 0) {
+      if (this.tweetText.match(/^\s*$/)) { // 匹配空格/空/换行
         this.$message.warning('动态内容为空!');
         return;
       }

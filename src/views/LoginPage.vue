@@ -66,26 +66,29 @@ export default {
         userName: this.model.username,
         password: this.model.password,
       }
-      const resp1 = await userLogin(params);
 
-      if (resp1.status == 200 && resp1.data.code == 'success') {
-        this.$message.success('登陆成功!');
-        const { unifiedId, userType } = resp1.data.data;
-        localStorage.setItem("unifiedId",unifiedId);
-        localStorage.setItem("userType",userType);
+      try {
+        const resp1 = await userLogin(params);
+        if (resp1.status == 200 && resp1.data.code == 'success') {
+          this.$message.success('登陆成功!');
+          const { unifiedId, userType } = resp1.data.data;
+          localStorage.setItem("unifiedId",unifiedId);
+          localStorage.setItem("userType",userType);
 
-        const resp2 = await getBasicInfo(unifiedId);
-        if (!resp2.data.data.trueName) { // 用户信息不完善, 跳转页面完善信息
-          this.$message.info('请完善用户信息');
-          if (userType == 'user') this.$router.push({ name: 'modifyUserInfo' });
-          else if (userType == 'company') this.$router.push({ name: 'modifyCompanyInfo' });
+          const resp2 = await getBasicInfo(unifiedId);
+          if (!resp2.data.data.trueName) { // 用户信息不完善, 跳转页面完善信息
+            this.$message.info('请完善用户信息!');
+            if (userType == 'user') this.$router.push({ name: 'modifyUserInfo' });
+            else if (userType == 'company') this.$router.push({ name: 'modifyCompanyInfo' });
+          }
+          else this.$router.push('/home');
         }
-        else this.$router.push('/home');
-      }
-      else {
-        const reason = resp1.data.message || '登陆失败'; // 登录失败原因
-        this.$message.error(reason + ', 请重新登录');
-        this.loading=false;
+        else throw new Error(resp1.data.message);
+      } catch(e) {
+        const reason = e.message || '登陆失败!'; // 登录失败原因
+        this.$message.error(reason + ', 请重新登录!');
+      } finally {
+        this.loading = false;
       }
 
     },

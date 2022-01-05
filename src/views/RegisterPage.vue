@@ -102,13 +102,18 @@ export default {
         email: this.model.email,
         userType: this.model.userType
       }
-      try{
+      
+      try {
         const resp = await userRegister(params);
-        this.$message.success('注册成功!');
-        this.$router.push('/login');
-      }catch(e) {
-        this.$message.error('注册失败');
-      }finally {
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('注册成功!');
+          this.$router.push('/login');
+        }
+        else throw new Error(resp.data.message);
+      } catch(e) {
+        const reason = e.message || '验证码发送失败!';
+        this.$message.error(reason);
+      } finally {
         this.loading = false;
       }
 
@@ -125,13 +130,17 @@ export default {
       }, 30000);
 
       this.loadingCode = true;
-      const resp = await getEmailCode({ mail: this.model.email });
-      if (resp.status == 200 && resp.data.code == 'success') {
-        this.validateCode = resp.data.data;
-        this.$message.success('成功发送验证码!');
-      }
-      else {
-        this.$message.error('发送验证码失败!');
+
+      try {
+        const resp = await getEmailCode({ mail: this.model.email });
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.validateCode = resp.data.data;
+          this.$message.success('成功发送验证码!');
+        }
+        else throw new Error(resp.data.message);
+      } catch(e) {
+        const reason = e.message || '验证码发送失败!';
+        this.$message.error(reason);
         this.haveSentCode = false;
       }
       this.loadingCode = false;

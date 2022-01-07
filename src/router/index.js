@@ -7,6 +7,7 @@ import RecruitmentDetailPage from '../views/RecruitmentDetailPage'
 import UserInfoPage from '../views/UserInfo/UserInfoPage'
 import UserTweet from '../views/UserInfo/UserTweet'
 import UserHome from '../views/UserInfo/UserHome'
+import UserRecruitment from '../views/UserInfo/UserRecruitment'
 import ModifyUserInfo from '../views/ModifyUserInfo'
 import ModifyCompanyInfo from '../views/ModifyCompanyInfo'
 import CompanyInfoPage from '../views/CompanyInfo/CompanyInfoPage'
@@ -46,6 +47,7 @@ const routes = [
     children: [
       { path: 'home', name:'/userinfo/:uid/home', component: UserHome },
       { path: 'tweets', component: UserTweet },
+      { path: 'recruitments', component: UserRecruitment }
     ]
   },
   {

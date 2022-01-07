@@ -15,11 +15,10 @@
             <div class="medium-text">{{ limit }}</div>
           </el-col>
           <el-col :span="5">
-            <div v-if="userType == 'user'">
+            <div v-if="userType == 'user' && !ifApplied">
               <el-select 
                 @change="postResume"
                 :placeholder="ifApplied ? '简历已投递' : '投递简历'"
-                :disabled="ifApplied"
               >
               <!-- 普通且有简历用户且未申请过该岗位, 才可投递简历 -->
                 <el-option
@@ -31,6 +30,12 @@
                 </el-option>
               </el-select>
             </div>
+            <el-button 
+              v-if="userType == 'user' &&ifApplied"
+              @click="canclePostResume"
+            >
+              撤销申请
+            </el-button>
           </el-col>
         </el-row>
       </el-card>
@@ -105,7 +110,7 @@ import '@/assets/vditor.css';
 import AMapLoader from '@amap/amap-jsapi-loader';
 import { LocationInformation } from '@element-plus/icons';
 import PageFooter from '@/components/PageFooter';
-import { getPositionDetails, getAllApplicants, postPositionApplication } from '@/apis/recruit.js';
+import { getPositionDetails, getAllApplicants, postPositionApplication, deletePositionApplication } from '@/apis/recruit.js';
 import { getBasicInfo, getResume } from '@/apis/users.js';
 import { ElMessageBox } from 'element-plus';
 import { dialogWidth } from '@/utils/utils.js';
@@ -241,7 +246,6 @@ export default {
       window.open(url, "_blank");
     },
     postResume: async function(resumeId) {
-      // TODO
       ElMessageBox.confirm(
         '确定投递该岗位?',
         this.recruitmentTitle,
@@ -263,6 +267,28 @@ export default {
           this.ifApplied = true;
         }
         else this.$message.error('投递失败!');
+      });
+    },
+    canclePostResume() {
+      ElMessageBox.confirm(
+        '确定撤销申请该岗位?',
+        this.recruitmentTitle,
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).then(async () => {
+        const params = {
+          userId: localStorage.getItem('unifiedId'),
+          jobId: this.rid,
+        };
+        const resp = await deletePositionApplication(params);
+        if (resp.status == 200 && resp.data.code == 'success') {
+          this.$message.success('撤销成功!');
+          this.ifApplied = false;
+        }
+        else this.$message.error('撤销失败!');
       });
     },
     showFullMap: function() {

@@ -78,6 +78,9 @@
           <el-menu-item :index="`/userinfo/${userId}/tweets`">
             动态
           </el-menu-item>
+          <el-menu-item v-if="isSelf" :index="`/userinfo/${userId}/recruitments`">
+            已申请职位
+          </el-menu-item>
         </el-menu>
       </el-card>
       
@@ -99,8 +102,8 @@ import TopNav from '@/components/TopNav';
 import UserIcon from '@/components/UserIcon';
 import UserRecommendCard from '@/components/UserRecommendCard';
 import PageFooter from '@/components/PageFooter.vue';
-import {getUserInfo} from '@/apis/users.js';
-import {updateFollow,deleteFollow} from '@/apis/tweet.js';
+import { getUserInfo } from '@/apis/users.js';
+import { updateFollow, deleteFollow } from '@/apis/tweet.js';
 import FansDialog from '@/components/FansDialog.vue';
 import FollowingDialog from '@/components/FollowingDialog.vue';
 

@@ -41,3 +41,8 @@ export function getAllApplicationPosition(params){
 export function getAllApplicants(params){
     return recruit.get('/applicants',{params})
 }
+
+// 得到申请过的信息
+export function getPostedRecruitments(params){
+    return recruit.get('/application', {params})
+}

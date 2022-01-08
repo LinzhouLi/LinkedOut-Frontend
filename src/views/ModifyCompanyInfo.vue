@@ -143,7 +143,7 @@ export default {
       if (resp1.status == 200 && resp1.data.code == 'success') {
         this.$message.success('上传成功!');
         const uid = localStorage.getItem('unifiedId');
-        const resp2 = await getUserInfo({ uid: uid, sid: uid }); // 得到新背景图url
+        const resp2 = await getEnterpriseInfo({ uid: uid, sid: uid }); // 得到新背景图url
         this.backgroundUrl = resp2.data.data.background;
       }
       else this.$message.error('上传失败!');

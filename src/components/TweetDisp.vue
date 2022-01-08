@@ -16,10 +16,13 @@
     <!-- 动态文字与照片 -->
     <div>
       <div style="padding:5px 15px;"><span :id="`text-area-${tweetId}`"/></div>
-      <el-carousel :autoplay="false" v-if="pictureList.length != 0" >
-        <el-carousel-item v-for="(item,index) in pictureList" :key="index">
-          <el-image :src="item.pictureUrl" style="width:100%;" fit="cover" />
-        </el-carousel-item>
+      <el-carousel :autoplay="false" v-if="pictureList.length != 0" height="auto">
+        <div v-for="(item,index) in pictureList" :key="index" >
+          <el-carousel-item >
+            <el-image :src="item.pictureUrl" style="width:100%;" fit="cover" />
+          </el-carousel-item>
+          <img :src="item.pictureUrl" style="width:100%; opacity:0;"/>
+        </div>
       </el-carousel>
     </div>
     <div class="tweet-time">
@@ -191,7 +194,7 @@ export default {
         userIconUrl: this.$props.userIconUrl,
         userBriefInfo: this.$props.userBriefInfo
       }
-    }
+    },
   },
   data() {
     return {
@@ -389,7 +392,4 @@ export default {
   padding: 5px 15px;
   display: flex;
 }
-/* .comment-delete-button{
-
-} */
 </style>

@@ -155,7 +155,7 @@ export default {
           });
         }
       }
-
+      if (this.tweetList.length == 0) this.loadAll == true; // 相当于加载结束
       this.loadingInitialTweets = false;
     },
     loadMoreTweets:async function() { // 加载更多动态

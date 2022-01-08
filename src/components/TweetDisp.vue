@@ -16,14 +16,26 @@
     <!-- 动态文字与照片 -->
     <div>
       <div style="padding:5px 15px;"><span :id="`text-area-${tweetId}`"/></div>
-      <el-carousel :autoplay="false" v-if="pictureList.length != 0" height="auto">
+      <!-- <el-carousel :autoplay="false" v-if="pictureList.length != 0" height="auto">
         <div v-for="(item,index) in pictureList" :key="index" >
           <el-carousel-item >
-            <el-image :src="item.pictureUrl" style="width:100%;" fit="cover" />
+            <el-image
+              :preview-src-list="item.pictureUrl"
+              :src="item.pictureUrl" 
+              style="width:100%;" 
+              fit="cover" 
+            />
           </el-carousel-item>
           <img :src="item.pictureUrl" style="width:100%; opacity:0;"/>
         </div>
-      </el-carousel>
+      </el-carousel> -->
+      <el-image
+        v-if="pictureList.length != 0"
+        :preview-src-list="pictureList.map(i => i.pictureUrl)"
+        :src="pictureList[0].pictureUrl" 
+        style="width:100%;" 
+        fit="cover" 
+      />
     </div>
     <div class="tweet-time">
       发表于{{getProperTimeString(recordTime)}}

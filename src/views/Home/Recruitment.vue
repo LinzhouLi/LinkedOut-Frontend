@@ -111,6 +111,7 @@ export default {
           recordTime: item.recordTime
         });
       }
+      if (this.recruitmentList.length == 0) this.loadAll == true; // 相当于加载结束
       this.loadingInitialRecruitments = false; // 加载结束
     },
     loadMoreRecruitments: async function() { // 加载更多招聘信息

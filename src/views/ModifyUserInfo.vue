@@ -92,6 +92,7 @@
         <el-upload
           action=""
           ref="picUploader"
+          accept=".pdf, .md, .doc, .docx, .png, .jpg"
           :auto-upload="false"
           :show-file-list="false"
           :on-change="uploadResume"
@@ -427,9 +428,24 @@ export default {
 
     uploadResume: async function(file) { // 上传简历文件
       if (this.resumeList.length >= 3) { // 限制简历数量
-        this.$message.warning('最多上传3份简历!');
+        this.$message.error('最多上传3份简历!');
         return;
       }
+
+      const whiteList = ["pdf", "md", "doc", "docx", "png", "jpg"];
+      const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);
+      if (whiteList.indexOf(fileSuffix) === -1) { // 限制简历格式
+        this.$message.error(`仅接受${whiteList.join(', ')}格式的文件!`);
+        return;
+      }
+
+      const maxFileSize = 20;
+      const fileSize = Number(file.size / 1024 / 1024);
+      if (fileSize > maxFileSize) {
+        this.$message.error(`文件大小不得超过${maxFileSize}MB!`);
+        return;
+      }
+
       let params = new FormData();
       params.append('unifiedId', this.userBasicData.unifiedId);
       params.append('file', file.raw, file.name);

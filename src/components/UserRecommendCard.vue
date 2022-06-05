@@ -14,7 +14,7 @@
       style="margin-top:15px; cursor:pointer"
       @click="toRecruitmentPage"
     >
-      <el-image :src="ADimgUrl" fit="cover"/>
+      <el-image :src="ADimg" fit="cover"/>
     </el-card>
     <page-footer v-if="ifFooter" />
   </el-affix>
@@ -24,7 +24,6 @@
 import UserBriefDisp from '@/components/UserBriefDisp.vue';
 import PageFooter from './PageFooter.vue';
 import { getRecommentList } from '@/apis/tweet.js';
-import { AppLogo } from '@/config.js';
 import { ADimg } from '@/assets/ADimg.jpg';
 
 export default {
@@ -41,7 +40,6 @@ export default {
   data() {
     return {
       ADimgUrl: ADimg,
-      logoUrl: AppLogo,
       userRecommendList: [ ]
     }
   },

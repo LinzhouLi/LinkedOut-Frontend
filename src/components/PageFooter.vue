@@ -14,7 +14,7 @@ import { AppTitle, AppBriefInfo, AppLogoUrl } from '@/config.js';
 
 export default {
   setup() {
-    const logoUrl= require(AppLogoUrl);
+    const logoUrl= require(`${AppLogoUrl}`);
     return {
       logoUrl, AppTitle, AppBriefInfo
     }

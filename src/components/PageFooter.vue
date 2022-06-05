@@ -1,7 +1,7 @@
 <template>
   <el-divider/>
   <el-row justify="center">
-    <el-image :src="logoUrl" style="width: 21px"></el-image>
+    <el-image :src="AppLogo" style="width: 21px"></el-image>
     <div style="font-size:10px">{{ AppTitle }} © 2021</div>
   </el-row>
   <el-row justify="center" style="margin-bottom:20px;">
@@ -10,13 +10,12 @@
 </template>
 
 <script>
-import { AppTitle, AppBriefInfo, AppLogoUrl } from '@/config.js';
+import { AppTitle, AppBriefInfo, AppLogo } from '@/config.js';
 
 export default {
   setup() {
-    const logoUrl= require(`${AppLogoUrl}`);
     return {
-      logoUrl, AppTitle, AppBriefInfo
+      AppLogo, AppTitle, AppBriefInfo
     }
   }
 }

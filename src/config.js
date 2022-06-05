@@ -21,6 +21,6 @@ else {
 
 export {
     AppTitle, AppBriefInfo,
-    userBaseUrl, tweetBaseUrl, recruitmentBaseUrl, 
+    userBaseUrl, tweetBaseUrl, recruitmentBaseUrl,
     UserServiceURL, TweetServiceURL, RecruitmentServiceURL
 }

@@ -25,6 +25,7 @@ import UserBriefDisp from '@/components/UserBriefDisp.vue';
 import PageFooter from './PageFooter.vue';
 import { getRecommentList } from '@/apis/tweet.js';
 import { AppLogo } from '@/config.js';
+import { ADimg } from '@/assets/ADimg.jpg';
 
 export default {
   components: { 
@@ -39,7 +40,7 @@ export default {
   },
   data() {
     return {
-      ADimgUrl: require('@/assets/ADimg.jpg'),
+      ADimgUrl: ADimg,
       logoUrl: AppLogo,
       userRecommendList: [ ]
     }

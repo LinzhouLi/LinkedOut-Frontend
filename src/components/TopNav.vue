@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { AppTitle, AppLogoUrl } from '@/config.js';
+import { AppTitle, AppLogo } from '@/config.js';
 import { Star, Briefcase, Avatar, Search } from "@element-plus/icons";
 
 export default {
@@ -71,7 +71,7 @@ export default {
     return {
       currentMenu: '',
       searchKey: '',
-      logoUrl: require(`${AppLogoUrl}`),
+      logoUrl: AppLogo,
       AppTitle: AppTitle
     }
   },

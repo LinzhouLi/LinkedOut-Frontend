@@ -1,10 +1,10 @@
+import AppLogo from '@/assets/tongji.png';
+const AppTitle = 'iCampus';
+const AppBriefInfo = '用户交互技术Lab4';
+
 const UserServiceURL = '/api/user';
 const TweetServiceURL = '/api/tweet';
 const RecruitmentServiceURL = '/api/recruit';
-
-const AppTitle = 'iCampus';
-const AppLogoUrl = '@/assets/tongji.png';
-const AppBriefInfo = '同济大学软件工程用户交互技术';
 
 let userBaseUrl, tweetBaseUrl, recruitmentBaseUrl;
 
@@ -20,7 +20,7 @@ else {
 }
 
 export {
-    AppTitle, AppBriefInfo, AppLogoUrl,
+    AppTitle, AppBriefInfo, AppLogo,
     userBaseUrl, tweetBaseUrl, recruitmentBaseUrl,
     UserServiceURL, TweetServiceURL, RecruitmentServiceURL
 }

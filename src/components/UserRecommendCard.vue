@@ -14,7 +14,7 @@
       style="margin-top:15px; cursor:pointer"
       @click="toRecruitmentPage"
     >
-      <el-image :src="ADimg" fit="cover"/>
+      <el-image :src="ADimgUrl" fit="cover"/>
     </el-card>
     <page-footer v-if="ifFooter" />
   </el-affix>

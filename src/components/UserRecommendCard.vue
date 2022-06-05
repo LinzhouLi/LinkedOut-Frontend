@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       ADimgUrl: require('@/assets/ADimg.jpg'),
-      logoUrl: require(AppLogoUrl),
+      logoUrl: require(`${AppLogoUrl}`),
       userRecommendList: [ ]
     }
   },

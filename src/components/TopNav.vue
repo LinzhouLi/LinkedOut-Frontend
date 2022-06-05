@@ -71,7 +71,7 @@ export default {
     return {
       currentMenu: '',
       searchKey: '',
-      logoUrl: require(AppLogoUrl),
+      logoUrl: require(`${AppLogoUrl}`),
       AppTitle: AppTitle
     }
   },

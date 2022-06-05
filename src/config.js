@@ -20,7 +20,7 @@ else {
 }
 
 export {
-    AppTitle, AppBriefInfo,
+    AppTitle, AppBriefInfo, AppLogoUrl,
     userBaseUrl, tweetBaseUrl, recruitmentBaseUrl,
     UserServiceURL, TweetServiceURL, RecruitmentServiceURL
 }

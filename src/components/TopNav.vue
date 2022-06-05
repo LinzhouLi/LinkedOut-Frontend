@@ -71,7 +71,7 @@ export default {
     return {
       currentMenu: '',
       searchKey: '',
-      logoUrl: require('@/assets/logo.png'),
+      logoUrl: require('@/assets/tongji.png'),
       AppTitle: AppTitle
     }
   },

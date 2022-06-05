@@ -2,7 +2,7 @@
   <top-nav/>
   <div class="login">
     <el-card>
-      <h2>欢迎注册 LinkedOut</h2>
+      <h2>欢迎注册 {{ appName }}</h2>
       <el-form
         class="login-form"
         :model="model"
@@ -58,12 +58,13 @@
 import TopNav from '@/components/TopNav';
 import { getEmailCode, userRegister } from '@/apis/users.js';
 import { RegisterRules as Rules } from '@/utils/loginPage';
+import { AppTitle } from '@/config.js';
 
-// import { Search } from '@element/icons-vue'
 export default {
   name: 'login',
   data() {
     return {
+      appName: AppTitle,
       model: {
         username: '',
         password: '',

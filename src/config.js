@@ -2,8 +2,8 @@ const UserServiceURL = '/api/user';
 const TweetServiceURL = '/api/tweet';
 const RecruitmentServiceURL = '/api/recruit';
 
-const AppTitle = 'LinkedOut';
-const AppBriefInfo = '同济大学软件工程课程项目';
+const AppTitle = 'iCampus';
+const AppBriefInfo = '同济大学软件工程用户交互技术';
 
 let userBaseUrl, tweetBaseUrl, recruitmentBaseUrl;
 

@@ -2,7 +2,7 @@
   <top-nav/>
   <div class="login">
     <el-card>
-      <h2>欢迎登陆 LinkedOut</h2>
+      <h2>欢迎登陆 {{ appName }}</h2>
       <el-form
         class="login-form"
         :model="model"
@@ -42,11 +42,13 @@ import TopNav from '@/components/TopNav';
 import { userLogin, getBasicInfo } from '@/apis/users.js';
 import { LoginRules as Rules } from '@/utils/loginPage';
 import { delCookie } from '@/utils/cookie.js';
+import { AppTitle } from '@/config.js';
 
 export default {
   name: 'login',
   data() {
     return {
+      appName: AppTitle,
       model: {
         username: '',
         password: '',

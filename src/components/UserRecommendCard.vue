@@ -24,7 +24,7 @@
 import UserBriefDisp from '@/components/UserBriefDisp.vue';
 import PageFooter from './PageFooter.vue';
 import { getRecommentList } from '@/apis/tweet.js';
-import { ADimg } from '@/assets/ADimg.jpg';
+import ADimg from '@/assets/ADimg.jpg';
 
 export default {
   components: { 
@@ -48,7 +48,8 @@ export default {
       // this.$router.push('/home/recruitments');
     }
   },
-  created: async function(){
+  created: async function() {
+    console.log(ADimg)
     const unifiedId = localStorage.getItem("unifiedId");
     try{
       this.userRecommendList = [];

@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { AppTitle } from '@/config.js';
+import { AppTitle, AppLogoUrl } from '@/config.js';
 import { Star, Briefcase, Avatar, Search } from "@element-plus/icons";
 
 export default {
@@ -71,7 +71,7 @@ export default {
     return {
       currentMenu: '',
       searchKey: '',
-      logoUrl: require('@/assets/tongji.png'),
+      logoUrl: require(AppLogoUrl),
       AppTitle: AppTitle
     }
   },

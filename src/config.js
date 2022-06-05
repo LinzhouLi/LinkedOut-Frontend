@@ -3,6 +3,7 @@ const TweetServiceURL = '/api/tweet';
 const RecruitmentServiceURL = '/api/recruit';
 
 const AppTitle = 'iCampus';
+const AppLogoUrl = '@/assets/tongji.png';
 const AppBriefInfo = '同济大学软件工程用户交互技术';
 
 let userBaseUrl, tweetBaseUrl, recruitmentBaseUrl;

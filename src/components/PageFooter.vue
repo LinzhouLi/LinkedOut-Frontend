@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import { AppTitle, AppBriefInfo } from '@/config.js';
+import { AppTitle, AppBriefInfo, AppLogoUrl } from '@/config.js';
 
 export default {
   setup() {
-    const logoUrl= require('@/assets/logo.png');
+    const logoUrl= require(AppLogoUrl);
     return {
       logoUrl, AppTitle, AppBriefInfo
     }

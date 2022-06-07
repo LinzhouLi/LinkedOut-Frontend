@@ -2,7 +2,7 @@
   <el-divider/>
   <el-row justify="center">
     <el-image :src="AppLogo" style="width: 21px"></el-image>
-    <div style="font-size:10px">{{ AppTitle }} © 2021</div>
+    <div style="font-size:10px">{{ AppTitle }} © 2022</div>
   </el-row>
   <el-row justify="center" style="margin-bottom:20px;">
     <div id="text-div">{{ AppBriefInfo }}</div>

@@ -1,6 +1,6 @@
-import AppLogo from '@/assets/tongji.png';
-const AppTitle = 'iCampus';
-const AppBriefInfo = '用户交互技术Lab4';
+import AppLogo from '@/assets/logo.png';
+const AppTitle = 'LinkedOut';
+const AppBriefInfo = '软件测试项目';
 
 const UserServiceURL = '/api/user';
 const TweetServiceURL = '/api/tweet';
